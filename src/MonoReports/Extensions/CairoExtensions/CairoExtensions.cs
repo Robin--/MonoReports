@@ -55,7 +55,6 @@ namespace MonoReports.Extensions.CairoExtensions
 	{
 		
 		static Cairo.Color gripperColor = new Cairo.Color(1,0.2,0.2);
-		static int gripperSize = 6;
 		
 		public static PointD ToCairoPointD(this MonoReports.Model.Point p){
 			return new PointD(p.X,p.Y);
@@ -86,6 +85,10 @@ namespace MonoReports.Extensions.CairoExtensions
 			return dirty;
 		}
 		
+		public static void DrawGripperWithLocationInUnit(this Context g,double x, double y, int gripperSize){
+			DrawGripper(g,new PointD(x * UnitMultiplier, y * UnitMultiplier),gripperSize);
+		}
+		
 		public static void DrawGripper(this Context g,PointD r, int gripperSize){
 			g.Save ();			 
 			g.Color = gripperColor;
@@ -100,8 +103,11 @@ namespace MonoReports.Extensions.CairoExtensions
 			g.Restore();
 		}
 		
+		public static Rectangle DrawSelectBoxInUnits (this Context g, Rectangle r, double gripperSize){
+			return DrawSelectBox (g, new Rectangle(r.X * UnitMultiplier,r.Y * UnitMultiplier,r.Width * UnitMultiplier,r.Height * UnitMultiplier),  gripperSize);
+		}
 		
-		public static Rectangle DrawSelectBox (this Context g, Rectangle r)
+		public static Rectangle DrawSelectBox (this Context g, Rectangle r, double gripperSize)
 		{
  
 			g.Save ();
@@ -157,6 +163,13 @@ namespace MonoReports.Extensions.CairoExtensions
 			g.LineTo (r.X, r.Y);
 			g.Clip ();
 			
+		}				
+		
+		public static void DrawInsideBorderInUnit(this Context g,Rectangle r,Border b, bool render) {
+			DrawInsideBorder(g,new Rectangle(r.X * UnitMultiplier,
+				r.Y* UnitMultiplier,
+				r.Width* UnitMultiplier,
+				r.Height* UnitMultiplier),b, render);
 		}
 		
 		public static void DrawInsideBorder(this Context g,Rectangle r,Border border, bool render){
@@ -196,6 +209,61 @@ namespace MonoReports.Extensions.CairoExtensions
 			
 		}
 		
+		
+		public static void DrawInsideSelectorInUnits(this Context g,Rectangle r,Border border, double w){
+			DrawInsideSelector(g,
+				new Rectangle(r.X * UnitMultiplier,r.Y * UnitMultiplier,r.Width * UnitMultiplier,r.Height * UnitMultiplier),
+				 border,  w);
+		}
+		
+		public static void DrawInsideSelector(this Context g,Rectangle r,Border border, double w){
+			
+			g.Save ();
+		
+			g.Color = border.Color.ToCairoColor();
+			g.LineWidth = border.TopWidth;
+			g.LineCap = LineCap.Butt;
+			double newUpperY = (r.Y + border.TopWidth / 2);			
+			g.MoveTo (r.X, newUpperY);
+			g.LineTo (r.X + w, newUpperY);
+			g.Stroke ();
+			g.MoveTo (r.X + r.Width-w, newUpperY);
+			g.LineTo (r.X + r.Width, newUpperY);
+			g.Stroke ();
+			g.LineWidth = border.RightWidth;			
+			double rightX = r.X + r.Width-border.RightWidth/2;
+			
+			g.MoveTo (rightX, r.Y);
+			g.LineTo (rightX, r.Y + w);
+			g.Stroke ();
+			
+			g.MoveTo (rightX, r.Y + r.Height-w);
+			g.LineTo (rightX, r.Y + r.Height);
+			g.Stroke ();
+			
+			double bottomY = r.Y + r.Height - border.BottomWidth /2;
+			g.MoveTo(r.X + r.Width, bottomY);
+			g.LineWidth = border.BottomWidth;			
+			g.LineTo (r.X + r.Width - w ,bottomY);
+			g.Stroke ();
+			g.MoveTo (r.X + w ,bottomY);
+			g.LineTo (r.X,bottomY);
+			g.Stroke ();
+		
+			g.LineWidth = border.LeftWidth;	
+			double leftX = r.X + border.LeftWidth / 2;
+			g.MoveTo(leftX, r.Y + r.Height);
+			g.LineTo (leftX, r.Y + r.Height -w);
+			g.Stroke ();			
+			
+			g.MoveTo(leftX, r.Y + w);
+			g.LineTo (leftX, r.Y);
+			g.Stroke ();
+			
+			g.Restore ();
+			
+		}
+		
 	
 		
 		public static Path CreateRectanglePath (this Context g, Rectangle r)
@@ -212,6 +280,11 @@ namespace MonoReports.Extensions.CairoExtensions
 			g.Restore ();
 			
 			return path;
+		}
+		
+		public static Rectangle FillRectangleInUnit (this Context g, Rectangle inputRect, Cairo.Color color)
+		{			
+			return FillRectangle(g,new Rectangle(inputRect.X * UnitMultiplier, inputRect.Y* UnitMultiplier, inputRect.Width* UnitMultiplier, inputRect.Height* UnitMultiplier),color);			
 		}
 
 		public static Rectangle FillRectangle (this Context g, Rectangle r, Cairo.Color color)
@@ -234,9 +307,14 @@ namespace MonoReports.Extensions.CairoExtensions
 			return dirty;
 		}
 
+		public static Rectangle FillRectangleInUnit (this Context g, Rectangle inputRect, Pattern pattern)
+		{			
+			return FillRectangle(g,new Rectangle(inputRect.X * UnitMultiplier, inputRect.Y* UnitMultiplier, inputRect.Width* UnitMultiplier, inputRect.Height* UnitMultiplier),pattern);			
+		}
+		
 		public static Rectangle FillRectangle (this Context g, Rectangle r, Pattern pattern)
 		{
-			g.Save ();			
+			g.Save ();				
 			g.MoveTo (r.X, r.Y);
 			g.LineTo (r.X + r.Width, r.Y);
 			g.LineTo (r.X + r.Width, r.Y + r.Height);
@@ -252,6 +330,10 @@ namespace MonoReports.Extensions.CairoExtensions
 
 			return dirty;
 		}
+				
+		
+				
+	
 
 		public static Rectangle DrawPolygonal (this Context g, PointD[] points, Cairo.Color color)
 		{
@@ -597,6 +679,9 @@ namespace MonoReports.Extensions.CairoExtensions
 		}
 		
 		
+		public static Rectangle DrawLineWithLocationInUnit (this Context g, double x1,double y1,double x2,double y2, Cairo.Color color, double lineWidth, LineType lineType, bool render){
+		   return DrawLine (g,new PointD(x1 * UnitMultiplier,y1* UnitMultiplier), new PointD(x2* UnitMultiplier,y2* UnitMultiplier), color, lineWidth,  lineType,  render);
+		}
 
 		public static Rectangle DrawLine (this Context g, PointD p1, PointD p2, Cairo.Color color, double lineWidth, LineType lineType, bool render)
 		{
@@ -706,32 +791,37 @@ namespace MonoReports.Extensions.CairoExtensions
 			
 			g.Restore ();
 			
-			return new Rectangle( p.X + unused.X / Pango.Scale.PangoScale, p.Y + unused.Y / Pango.Scale.PangoScale, (unused.Width / Pango.Scale.PangoScale) , (unused.Height/ Pango.Scale.PangoScale) );
+			return new Rectangle( p.X + te.X / Pango.Scale.PangoScale, p.Y + unused.Y / Pango.Scale.PangoScale, (unused.Width / Pango.Scale.PangoScale) , (unused.Height/ Pango.Scale.PangoScale) );
 						
 		}
+		
+		public static double RealFontMultiplier = 1;
+		
+		public static double UnitMultiplier = 1;
 		
 		static Pango.Layout createLayoutFromTextBlock (Context g, TextBlock tb) {
 			double leftRightSpan = tb.Padding.Left + tb.Padding.Right;
 			Pango.Layout layout = Pango.CairoHelper.CreateLayout (g);
 			
 			layout.Wrap = Pango.WrapMode.Word;
-			layout.Width = (int)((tb.Width - leftRightSpan) * Pango.Scale.PangoScale);
+			layout.Width = (int)((tb.Width - leftRightSpan) * UnitMultiplier * Pango.Scale.PangoScale);
 			Pango.FontDescription fd = new Pango.FontDescription ();			
 			fd.Family = tb.FontName;
-		
+			layout.Ellipsize = Pango.EllipsizeMode.None;
 			
 			fd.Style = ReportToPangoSlant (tb.FontSlant);
 			fd.Weight = ReportToPangoWeight (tb.FontWeight);
-			
-			fd.AbsoluteSize = tb.FontSize * Pango.Scale.PangoScale;
+		
+			fd.AbsoluteSize = tb.FontSize *  RealFontMultiplier ;
 			layout.FontDescription = fd;
 		 
-			layout.Spacing = (int)(tb.LineSpan * Pango.Scale.PangoScale);
-			//layout.Indent = (int)(0 * Pango.Scale.PangoScale);			
+			layout.Spacing = (int)(tb.LineSpan * UnitMultiplier* Pango.Scale.PangoScale);			
 			layout.Alignment = ReportToPangoAlignment (tb.HorizontalAlignment);  
 			layout.SetText (tb.Text);
 			return layout;
 		}
+		
+		
 		
 		
 		public static Rectangle DrawTextBlock (this Context g, TextBlock tb, bool render) {
@@ -746,21 +836,26 @@ namespace MonoReports.Extensions.CairoExtensions
 			Pango.Rectangle unused;
 			Pango.Rectangle te;			
 			layout.GetExtents (out unused, out te);
-			double measuredHeight = te.Height / Pango.Scale.PangoScale;
+			double measuredHeight = te.Height / (Pango.Scale.PangoScale * UnitMultiplier);
 			
 			if(tb.VerticalAlignment != VerticalAlignment.Top)
 				vertAlgSpan = measureVerticlaSpan(tb,measuredHeight);
 			
-			g.MoveTo (tb.Left + tb.Padding.Left, tb.Top + tb.Padding.Top + vertAlgSpan);
+			g.MoveTo ((tb.Left + tb.Padding.Left) * UnitMultiplier, (tb.Top + tb.Padding.Top + vertAlgSpan) * UnitMultiplier);
 			
-			if (render) {
+			if (render) {				
 				Pango.CairoHelper.ShowLayout(g, layout);						
 			}
 			
 			layout.GetExtents (out unused, out te);
+			measuredHeight = te.Height / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredWidth = te.Width / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredX = te.X / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredY = te.Y / (Pango.Scale.PangoScale * UnitMultiplier);
+			
 			(layout as IDisposable).Dispose();
 			g.Restore ();
-			return new Rectangle( tb.Left - tb.Padding.Left + te.X / Pango.Scale.PangoScale, tb.Top - tb.Padding.Top + te.Y / Pango.Scale.PangoScale, (te.Width / Pango.Scale.PangoScale) + leftRightSpan , (te.Height/ Pango.Scale.PangoScale) + topBottomSpan);
+			return new Rectangle( tb.Left - tb.Padding.Left + measuredX, tb.Top - tb.Padding.Top + measuredY, measuredWidth + leftRightSpan , measuredHeight + topBottomSpan);
 						
 		}
 		

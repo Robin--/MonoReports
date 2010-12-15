@@ -42,9 +42,7 @@ namespace MonoReports.Renderers
 		public void Render (Cairo.Context c, Control control)
 		{
 			Line line = control as Line;
-			Cairo.PointD p1 = new Cairo.PointD (line.Location.X ,line.Location.Y);
-			Cairo.PointD p2 = new Cairo.PointD (line.End.X, line.End.Y);
-			c.DrawLine (p1, p2, line.BackgroundColor.ToCairoColor (), line.LineWidth, line.LineType, true);
+			c.DrawLineWithLocationInUnit (line.Location.X, line.Location.Y,line.End.X,line.End.Y, line.BackgroundColor.ToCairoColor (), line.LineWidth, line.LineType, true);
 		}
 
 		public Size Measure (Cairo.Context c, Control control)

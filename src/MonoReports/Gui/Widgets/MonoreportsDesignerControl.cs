@@ -55,14 +55,13 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	DesignService designService;
 	ToolBoxService toolBoxService;
 	WorkspaceService workspaceService;
-	CompilerService compilerService;
-	double dpi;
-	
+	CompilerService compilerService;	 
+	PixbufRepository pixbufRepository;
 
 	public MonoreportsDesignerControl ()  
 	{
 		Build ();
-		dpi =   Gdk.Screen.Default.Resolution;
+  
 		
 		Report startReport = new Report(){ 
 			DataScript = @"
@@ -98,26 +97,26 @@ public sealed class GenerateDataSource {{
 		
 		
 		compilerService = new CompilerService(template);
+		pixbufRepository = new PixbufRepository () { Report = startReport };			
 		workspaceService = new WorkspaceService (this,maindesignview1.DesignDrawingArea,maindesignview1.PreviewDrawingArea,mainPropertygrid, StatusBarLabel);
+		var reportRenderer = new ReportRenderer(){ Resolution =  Gdk.Screen.Default.Resolution, Unit = startReport.Unit};
+		reportRenderer.RegisterRenderer(typeof(Controls.TextBlock), new TextBlockRenderer());
+        reportRenderer.RegisterRenderer(typeof(Controls.Line), new LineRenderer());
+		reportRenderer.RegisterRenderer(typeof(MonoReports.Model.Controls.Image),
+				new ImageRenderer(){ PixbufRepository = pixbufRepository});
+		SectionRenderer sr = new SectionRenderer();
+		reportRenderer.RegisterRenderer(typeof(Controls.ReportHeaderSection), sr);
+		reportRenderer.RegisterRenderer(typeof(Controls.ReportFooterSection), sr);
+		reportRenderer.RegisterRenderer(typeof(Controls.DetailSection), sr);
+		reportRenderer.RegisterRenderer(typeof(Controls.PageHeaderSection), sr);
+		reportRenderer.RegisterRenderer(typeof(Controls.PageFooterSection), sr);	
+		designService = new DesignService (workspaceService,reportRenderer,pixbufRepository,startReport);
 		
-		designService = new DesignService (workspaceService,compilerService,startReport);
 		toolBoxService = new ToolBoxService ();
 		designService.ToolBoxService = toolBoxService;
 		maindesignview1.DesignService = designService;
 		maindesignview1.WorkSpaceService = workspaceService;
 		maindesignview1.Compiler = compilerService;
-		
-		var reportRenderer = new ReportRenderer();
-        reportRenderer.RegisterRenderer(typeof(Controls.TextBlock), new TextBlockRenderer(){ DPI = dpi});
-        reportRenderer.RegisterRenderer(typeof(Controls.Line), new LineRenderer(){ DPI = dpi});
-		reportRenderer.RegisterRenderer(typeof(MonoReports.Model.Controls.Image), new ImageRenderer(){ PixbufRepository = designService.PixbufRepository, DPI = dpi});
-		SectionRenderer sr = new SectionRenderer() { DPI = dpi};
-		reportRenderer.RegisterRenderer(typeof(Controls.ReportHeaderSection), sr);
-		reportRenderer.RegisterRenderer(typeof(Controls.ReportFooterSection), sr);
-		reportRenderer.RegisterRenderer(typeof(Controls.DetailSection), sr);
-		reportRenderer.RegisterRenderer(typeof(Controls.PageHeaderSection), sr);
-		reportRenderer.RegisterRenderer(typeof(Controls.PageFooterSection), sr);
-			
 		maindesignview1.ReportRenderer = reportRenderer;
 		workspaceService.InvalidateDesignArea ();		
 		reportExplorer.DesignService = designService;

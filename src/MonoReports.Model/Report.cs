@@ -37,9 +37,10 @@ namespace MonoReports.Model
 
 		public Report ()
 		{
-			Width = 538.582677165354; // 210 - 20  = 190 mm (-20mm for marings)
-			Height = 785.196850393701;//297 - 20 = 277 mm (-20mm for marings)
-			Margin = new Thickness(28.3464566929134);
+			Unit = UnitType.mm;
+			Width = 190; 
+			Height = 277;			
+			Margin = new Thickness(1);
 			Groups = new List<Group> ();			
 			Parameters = new List<Field> ();
 			DataFields = new List<Field> ();
@@ -47,11 +48,11 @@ namespace MonoReports.Model
 			GroupFooterSections = new List<GroupFooterSection> ();
 			Pages = new List<Page> ();
 			ResourceRepository = new Dictionary<string,byte[]> ();
-			ReportHeaderSection = new Controls.ReportHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 50) };
-			PageHeaderSection = new Controls.PageHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 30) };
-			DetailSection = new Controls.DetailSection { Location = new Point (0, 150), Size = new Model.Size (Width, 50) };
-			PageFooterSection = new Controls.PageFooterSection { Location = new Point (0, 300), Size = new Model.Size (Width, 30) };
-			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 300), Size = new Model.Size (Width, 30) };
+			ReportHeaderSection = new Controls.ReportHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 2) };
+			PageHeaderSection = new Controls.PageHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 3) };
+			DetailSection = new Controls.DetailSection { Location = new Point (0, 9), Size = new Model.Size (Width, 5) };
+			PageFooterSection = new Controls.PageFooterSection { Location = new Point (0, 13), Size = new Model.Size (Width, 3) };
+			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 16), Size = new Model.Size (Width, 3) };
 		}
 
 		public string Title { get; set; }

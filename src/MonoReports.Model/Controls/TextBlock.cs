@@ -39,10 +39,10 @@ namespace MonoReports.Model.Controls
 			Border = new Border() {WidthAll = 0, Color = new Color(0,0,0)};
 			FontName = "Helvetica";
 			FontColor = new Color(0,0,0);
-			FontSize = 12;
+			FontSize = 11;
 			FieldName = String.Empty;
-			Padding = new Thickness(1,1,1,1);
-			CanGrow = true;
+			Padding = new Thickness(1,1,0,0);
+			CanGrow = true;						
 		}	
 		
 		

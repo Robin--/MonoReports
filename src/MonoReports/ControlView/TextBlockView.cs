@@ -57,12 +57,11 @@ namespace MonoReports.ControlView
 		
 		public TextBlockRenderer TextBlockRenderer {get;set;}
 
-		public TextBlockView (TextBlock textBlock,SectionView parentSection):base(textBlock)
+		public TextBlockView (TextBlock textBlock,TextBlockRenderer textBlockRenderer, SectionView parentSection):base(textBlock)
 		{
 			this.ParentSection = parentSection;
-			AbsoluteBound = new Rectangle (parentSection.AbsoluteDrawingStartPoint.X + textBlock.Location.X,
-			                                parentSection.AbsoluteDrawingStartPoint.Y + textBlock.Location.Y, textBlock.Width, textBlock.Height);
-			TextBlockRenderer = new TextBlockRenderer(){ DesignMode = true};
+			TextBlockRenderer = textBlockRenderer;
+			invaildateBound();
 		}
 		
 		#region implemented abstract members of MonoReport.ControlView.ControlViewBase
@@ -76,12 +75,19 @@ namespace MonoReports.ControlView
 		public override void Render (Context c)
 		{
 	
+			TextBlockRenderer.DesignMode = true;
 			TextBlockRenderer.Render(c,textBlock);
-			AbsoluteBound = new Rectangle (ParentSection.AbsoluteDrawingStartPoint.X + textBlock.Location.X , 
-			                               ParentSection.AbsoluteDrawingStartPoint.Y + textBlock.Location.Y, textBlock.Width, textBlock.Height);		
+			invaildateBound();
 		}
 
 		 
+		void invaildateBound(){
+			
+			AbsoluteBound = new Rectangle (ParentSection.AbsoluteDrawingStartPoint.X + textBlock.Location.X, 
+			                               ParentSection.AbsoluteDrawingStartPoint.Y + textBlock.Location.Y, textBlock.Width, textBlock.Height);		
+			
+		}
+		
 		public override bool ContainsPoint (double x, double y)
 		{
 			return AbsoluteBound.ContainsPoint(x,y);

@@ -42,7 +42,7 @@ namespace MonoReports.Tools
 		protected bool endPointHit;
 		protected Line line;
 		protected SectionView currentSection = null;
-		double lineDistance = 6;							
+		double lineDistance = 2;							
 
 		public LineTool (DesignService designService) : base(designService)
 		{		
@@ -165,8 +165,8 @@ namespace MonoReports.Tools
 					.SelectedControl
 					.ParentSection
 					.AbsolutePointByLocalPoint (line.End.X, line.End.Y);
-                c.DrawGripper(p1, (int) lineDistance);
-                c.DrawGripper(p2, (int) lineDistance);
+                c.DrawGripperWithLocationInUnit(p1.X,p1.Y, 3);
+                c.DrawGripperWithLocationInUnit(p2.X,p2.Y, 3);
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace MonoReports.Tools
             
 			currentSection = designService.SelectedControl != null ? designService.SelectedControl.ParentSection : null;
 			if (designService.SelectedControl != null) {
-                lineDistance = 6 - designService.Zoom;
+                
 				line = designService.SelectedControl.ControlModel as Line;
 				var location = line.Location;
 				var startPoint = currentSection.PointInSectionByAbsolutePoint (designService.StartPressPoint);

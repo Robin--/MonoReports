@@ -37,16 +37,16 @@ namespace MonoReports.Renderers
 		public SectionRenderer ()
 		{
 		}
- 
+ 		
 
 		public void Render (Cairo.Context c, MonoReports.Model.Controls.Control control)
 		{
 			Section section = control as Section;
 			Rectangle borderRect;
 			c.Save ();
-			borderRect = new Rectangle (section.Location.X, section.Location.Y, section.Width, section.Height);
-			c.ClipRectangle (borderRect);
-			borderRect = new Rectangle (section.Location.X, section.Location.Y, section.Width, section.Height);
+			borderRect = new Rectangle (section.Location.X * unitMulitipier , section.Location.Y * unitMulitipier , section.Width * unitMulitipier, section.Height * unitMulitipier);
+			c.ClipRectangle (borderRect); 
+			//borderRect = new Rectangle (section.Location.X, section.Location.Y, section.Width, section.Height);
 			c.FillRectangle (borderRect, section.BackgroundColor.ToCairoColor ());
 			 		
 			c.Restore (); 

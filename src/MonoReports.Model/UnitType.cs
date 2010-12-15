@@ -28,7 +28,7 @@ namespace MonoReports.Model
 {
 	public enum UnitType
 	{
-		mm = 1, inch = 2
+		mm = 1, cm = 2,  inch = 3
 	}
 }
 

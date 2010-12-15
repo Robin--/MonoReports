@@ -92,11 +92,17 @@ namespace MonoReports.Model
 		}
 		
 		public static void ExportToPdf(this Report report ,string path) {
-			using (PdfSurface pdfSurface = new PdfSurface (
-				path,report.WidthWithMargins,report.HeightWithMargins)) {
+			
+			ReportRenderer renderer = new ReportRenderer (){ Resolution = 72};
+			renderer.Unit = report.Unit;
+			
+			using (PdfSurface pdfSurface = new PdfSurface (				
+				path,report.WidthWithMargins * renderer.UnitMultipilier,
+				report.HeightWithMargins * renderer.UnitMultipilier)) {
+				
+				 
 				Cairo.Context cr = new Cairo.Context (pdfSurface);
-				cr.Translate(report.Margin.Left,report.Margin.Top);
-				ReportRenderer renderer = new ReportRenderer (){ Context = cr};
+				renderer.Context = cr;
 				renderer.RegisterRenderer (typeof(TextBlock), new TextBlockRenderer ());
 				renderer.RegisterRenderer (typeof(Line), new LineRenderer ());
 				renderer.RegisterRenderer (typeof(Image), new ImageRenderer (){ PixbufRepository = new PixbufRepository(report.ResourceRepository)});
@@ -106,6 +112,7 @@ namespace MonoReports.Model
 				renderer.RegisterRenderer(typeof(DetailSection), sr);
 				renderer.RegisterRenderer(typeof(PageHeaderSection), sr);
 				renderer.RegisterRenderer(typeof(PageFooterSection), sr);
+				cr.Translate(report.Margin.Left * renderer.UnitMultipilier,report.Margin.Top * renderer.UnitMultipilier);
 				MonoReports.Model.Engine.ReportEngine engine = new MonoReports.Model.Engine.ReportEngine (report,renderer);
 				engine.Process ();
 				for (int i = 0; i < report.Pages.Count; ++i) {

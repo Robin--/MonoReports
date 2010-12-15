@@ -30,6 +30,7 @@ using MonoReports.Model.Controls;
 using MonoReports.Core;
 using System.Linq;
 using MonoReports.Services;
+using MonoReports.Renderers;
 
 
 namespace MonoReports.Core
@@ -37,19 +38,28 @@ namespace MonoReports.Core
 	public class ControlViewFactory : IControlViewFactory
 	{
 	
-		DesignService designService = null;
-			
-		public ControlViewFactory (DesignService designService)
+		ReportRenderer reportRenderer = null;
+		
+		public ReportRenderer ReportRenderer {
+			get {
+				return this.reportRenderer;
+			}
+			set {
+				reportRenderer = value;
+			}
+		}
+
+		public ControlViewFactory (ReportRenderer reportRenderer)
 		{
-				
-			this.designService = designService;
+			this.reportRenderer = reportRenderer;
 			controlViewDictionary = new Dictionary<System.Type, Func<MonoReports.Model.Controls.Control,SectionView,ControlViewBase> >();
 			
 			controlViewDictionary
 				.Add(
 				     typeof(TextBlock),
 				     	(ctrl, section) => {
-			                    return new TextBlockView(ctrl as TextBlock,section);
+							 	var renderer = reportRenderer.RenderersDictionary[typeof(TextBlock)] as TextBlockRenderer;
+			                    return new TextBlockView(ctrl as TextBlock,renderer,section);
 						}
 				);
 			
@@ -57,7 +67,8 @@ namespace MonoReports.Core
 				.Add(
 				     typeof(Line),
 				     	(ctrl, section) => {
-			                    return new LineView(ctrl as Line,section);
+								var renderer = reportRenderer.RenderersDictionary[typeof(Line)] as LineRenderer;
+			                    return new LineView(ctrl as Line,renderer,section);
 						}
 				);
 			
@@ -65,10 +76,9 @@ namespace MonoReports.Core
 				.Add(
 				     typeof(Image),
 				     	(ctrl, section) => {
-								var image = ctrl as Image;		
-								if(!string.IsNullOrEmpty(image.ImageKey))
-									designService.PixbufRepository.AddOrUpdatePixbufByName(image.ImageKey);													
-			                    return new ImageView(image,section,designService.PixbufRepository);
+								var renderer = reportRenderer.RenderersDictionary[typeof(Image)] as ImageRenderer;
+								var image = ctrl as Image;																			
+			                    return new ImageView(image,renderer,section);
 						}
 				);
 			
@@ -76,8 +86,9 @@ namespace MonoReports.Core
 				.Add(
 				     typeof(SubReport),
 				     	(ctrl, section) => {
+								var renderer = reportRenderer.RenderersDictionary[typeof(Image)] as SubreportRenderer;
 								var subreport = ctrl as SubReport;					
-								return new SubreportView(subreport,section);
+								return new SubreportView(subreport,renderer,section);
 						}
 				);
 			

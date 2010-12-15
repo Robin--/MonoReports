@@ -32,7 +32,7 @@ namespace MonoReports.Model.Controls
 		public Line ():base()
 		{			
 			BackgroundColor =  new Color(0,0,0);			
-			LineWidth = 2;
+			LineWidth = 1;
 		}				
 		
 		public Point End { get; set; }

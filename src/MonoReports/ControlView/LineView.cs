@@ -29,6 +29,7 @@ using MonoReports.Extensions.CairoExtensions;
 using Cairo;
 using MonoReports.Model;
 using System;
+using MonoReports.Renderers;
 
 namespace MonoReports.ControlView
 {
@@ -53,9 +54,15 @@ namespace MonoReports.ControlView
 			}
 		 
 		}		
+		
+		public LineRenderer LineRenderer {
+			get;
+			set;
+		}
 
-		public LineView (Line line,SectionView parentSection):base(line)
+		public LineView (Line line,LineRenderer renderer,SectionView parentSection):base(line)
 		{
+			this.LineRenderer = renderer;
 			this.ParentSection = parentSection;			
 		}
 		
@@ -85,11 +92,7 @@ namespace MonoReports.ControlView
 		public override  void Render ( Context c)
 		{				
 			c.Save();
-			if(true){
-				Cairo.PointD p1 = new Cairo.PointD(line.Location.X ,line.Location.Y);
-				Cairo.PointD p2 = new Cairo.PointD(line.End.X, line.End.Y);
-		 		c.DrawLine(p1,p2,line.BackgroundColor.ToCairoColor(), line.LineWidth,line.LineType,true);
-			}
+			LineRenderer.Render(c,line);			
 			c.Restore();			
 		}
 		
@@ -97,7 +100,7 @@ namespace MonoReports.ControlView
 	 
 		public override bool ContainsPoint (double x, double y)
 		{
-			double span = line.LineWidth / 2 + 8;
+			double span = line.LineWidth / 2 + 1 ;
 			Cairo.PointD p1 = ParentSection.AbsolutePointByLocalPoint(line.Location.X,line.Location.Y);
 			Cairo.PointD p2 = ParentSection.AbsolutePointByLocalPoint(line.End.X, line.End.Y);
 			Cairo.PointD hitPoint = new Cairo.PointD(x,y);

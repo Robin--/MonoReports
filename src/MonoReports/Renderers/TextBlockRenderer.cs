@@ -34,7 +34,7 @@ namespace MonoReports.Renderers
 {
 	public class TextBlockRenderer:  ControlRendererBase, IControlRenderer
 	{
-		public TextBlockRenderer ()
+		public TextBlockRenderer ():base()
 		{
 			
 		}
@@ -44,20 +44,24 @@ namespace MonoReports.Renderers
             TextBlock textBlock = control as TextBlock;
 			Rectangle borderRect;			
 			c.Save();
-			borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, textBlock.Height);	 
+			borderRect = new Rectangle (textBlock.Location.X * unitMulitipier , textBlock.Location.Y  * unitMulitipier, textBlock.Width  * unitMulitipier, textBlock.Height  * unitMulitipier);	 
 			if(!textBlock.CanGrow || DesignMode)
 				c.ClipRectangle(borderRect);
 			
 			var rect = c.DrawTextBlock (textBlock,false);
-			if(!DesignMode && (textBlock.CanGrow && rect.Height > textBlock.Height || textBlock.CanShrink && rect.Height < textBlock.Height)){
+			if(!DesignMode && (textBlock.CanGrow && rect.Height > textBlock.Height  || textBlock.CanShrink && rect.Height < textBlock.Height )){
 				borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, rect.Height);				
 			} else {
-				borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, textBlock.Height);								
+				borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, textBlock.Height);												
 			}
 		
-			c.FillRectangle(borderRect,textBlock.BackgroundColor.ToCairoColor());
+			c.FillRectangleInUnit(borderRect,textBlock.BackgroundColor.ToCairoColor());
+			if(DesignMode){
+					
+					c.DrawInsideSelectorInUnits  (borderRect, new Border(1),4);
+			}
 			c.DrawTextBlock (textBlock,true);
-			c.DrawInsideBorder  (borderRect, textBlock.Border,true);	
+			c.DrawInsideBorderInUnit  (borderRect, textBlock.Border,true);	
 			c.Restore();
 		}
 
@@ -96,7 +100,7 @@ namespace MonoReports.Renderers
             controls[1] = textBlock;
             var newTextBlock = control.CreateControl() as TextBlock;
             textBlock.Top = 0;
-			int charNumber = c.GetBreakLineCharacterIndexbyMaxHeight (textBlock,height);
+			int charNumber = c.GetBreakLineCharacterIndexbyMaxHeight ( textBlock,height);
 			
 			if (charNumber > 0) {
 				newTextBlock.Text = textBlock.Text.Substring (0,charNumber-1);

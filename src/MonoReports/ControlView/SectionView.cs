@@ -31,29 +31,33 @@ using Cairo;
 using MonoReports.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MonoReports.Renderers;
 
 namespace MonoReports.ControlView
 {
 	public class SectionView : ControlViewBase
 	{
 		
-		public static double SectionheaderHeight = 20;
-		public static double SectionGripperHeight = 4;
+		public static double SectionheaderHeight = 7;
+		public static double SectionGripperHeight = 1;
 		static Cairo.Color blackColor = new Cairo.Color (0, 0, 0);
 		static Cairo.Color yellowColor = new Cairo.Color (1, 1, 0);
 		static Cairo.Color sectionHeaderColor = new Cairo.Color (0.85, 0.85, 0.91);
 		static Cairo.Color sectionHeaderColor1 = new Cairo.Color (0.56, 0.56, 0.61);
 		public Cairo.Color SectionGripperColor;
+
 		public bool IsCollapsed { get; set; }
+
 		public Cairo.PointD SectionSpan { get; set; }
+
 		public Cairo.PointD AbsoluteDrawingStartPoint { get; set; }
+
 		public Rectangle HeaderAbsoluteBound { get; set; }
 
 		public Rectangle GripperAbsoluteBound { get; set; }
 
 		IControlViewFactory controlViewFactory;
 		Report parentReport;
-
 
 		public bool AllowCrossSectionControl { get; private set; }
 
@@ -89,9 +93,17 @@ namespace MonoReports.ControlView
 			get;
 			set;
 		}
+ 
+		SectionRenderer sectionRenderer;
+			
+		public SectionRenderer SectionRenderer {
+			get { return sectionRenderer;}
+			set { sectionRenderer = value;}
+		}
 
 		public SectionView (Report parentReport,IControlViewFactory controlViewFactory,Section section,Cairo.PointD sectionSpan) : base(section)
 		{
+			sectionRenderer = controlViewFactory.ReportRenderer.RenderersDictionary[section.GetType()] as SectionRenderer;
 			DesignCrossSectionControlsToAdd = new List<ControlViewBase> ();
 			DesignCrossSectionControlsToRemove = new List<ControlViewBase> ();
 			this.controlViewFactory = controlViewFactory;
@@ -138,9 +150,11 @@ namespace MonoReports.ControlView
 
 		public void InvalidateBound ()
 		{
-			AbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y, section.Width, section.Height + SectionheaderHeight + SectionGripperHeight);
-			GripperAbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y + section.Height + SectionheaderHeight, section.Width, SectionGripperHeight);
-			HeaderAbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y,  section.Width, SectionheaderHeight);
+			double sectionWidth =  section.Width;
+			double sectionHeight =  section.Height ;
+			AbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y , sectionWidth , sectionHeight  + SectionheaderHeight  + SectionGripperHeight);
+			GripperAbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y + sectionHeight + SectionheaderHeight, sectionWidth, SectionGripperHeight);
+			HeaderAbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y,  sectionWidth, SectionheaderHeight);
 			AbsoluteDrawingStartPoint = new Cairo.PointD (AbsoluteBound.X, AbsoluteBound.Y + SectionheaderHeight);
 		}
 
@@ -154,28 +168,22 @@ namespace MonoReports.ControlView
 
 		public override void Render (Cairo.Context c)
 		{
-			
-	
-				
-			InvalidateBound ();
-			
-			c.Save ();
-			c.FillRectangle (AbsoluteBound, section.BackgroundColor.ToCairoColor ());
-				
-				
-			
-			Rectangle r = new Rectangle (AbsoluteBound.X, AbsoluteBound.Y, parentReport.Width, SectionheaderHeight);
-			Cairo.Gradient pat = new Cairo.LinearGradient (0, AbsoluteBound.Y, 0, AbsoluteBound.Y + SectionheaderHeight);
+
+			InvalidateBound ();			
+			c.Save ();						 			
+			c.FillRectangleInUnit (AbsoluteBound, section.BackgroundColor.ToCairoColor ());					
+			Cairo.Gradient pat = new Cairo.LinearGradient (0, AbsoluteBound.Y * SectionRenderer.UnitMulitipier, 0, (AbsoluteBound.Y + SectionheaderHeight) * SectionRenderer.UnitMulitipier);
 			pat.AddColorStop (0, sectionHeaderColor);
 			pat.AddColorStop (1, sectionHeaderColor1);
-			c.FillRectangle (r, pat);
-			c.DrawText (new Cairo.PointD (r.X + 3, r.Y + 3), "Tahoma", Cairo.FontSlant.Normal, Cairo.FontWeight.Normal, 11, blackColor, 600, Section.Name);
-			c.FillRectangle (GripperAbsoluteBound, SectionGripperColor);
-			c.Translate (AbsoluteDrawingStartPoint.X, AbsoluteDrawingStartPoint.Y);
+			c.FillRectangleInUnit (HeaderAbsoluteBound, pat);
+			
+			c.DrawText (new Cairo.PointD (HeaderAbsoluteBound.X * SectionRenderer.UnitMulitipier + 2, HeaderAbsoluteBound.Y * SectionRenderer.UnitMulitipier + 2), "Tahoma", Cairo.FontSlant.Normal, Cairo.FontWeight.Normal, 10, blackColor, 600, Section.Name);
+			c.FillRectangleInUnit (GripperAbsoluteBound, SectionGripperColor);
+			c.Translate (AbsoluteDrawingStartPoint.X, AbsoluteDrawingStartPoint.Y * SectionRenderer.UnitMulitipier);
 			
 			for (int j = 0; j < Controls.Count; j++) {
-					var ctrl = Controls [j];
-					ctrl.Render (c);
+				var ctrl = Controls [j];
+				ctrl.Render (c);
 			}
 
 			c.Restore ();

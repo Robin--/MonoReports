@@ -62,7 +62,8 @@ namespace MonoReports.Gui.Widgets
 
 		void HandleDesignServiceOnReportChanged (object sender, EventArgs e)
 		{
-		   codeTextview.Buffer.Text = designService.Report.DataScript;
+			codeTextview.Buffer.Text = designService.Report.DataScript;
+			ReportRenderer.Unit = designService.Report.Unit;
 		}
 
 		ReportRenderer reportRenderer;
@@ -156,24 +157,29 @@ namespace MonoReports.Gui.Widgets
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
 				cr.Antialias = Cairo.Antialias.None;
 				designService.RedrawReport (cr);
-				area.SetSizeRequest ((int)designService.Width, (int)designService.Height);
+				area.SetSizeRequest ((int)(designService.Width* ReportRenderer.UnitMultipilier+3), (int)(designService.Height* ReportRenderer.UnitMultipilier+3));
 				(cr as IDisposable).Dispose ();
 			}
 		}
 
 		protected virtual void OnPreviewDrawingareaExposeEvent (object o, Gtk.ExposeEventArgs args)
 		{
-			
+	
 			DrawingArea area = (DrawingArea)o;
 			if (designService.Report.Pages.Count > 0) {
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
 				cr.Antialias = Cairo.Antialias.None;								 				 
 				reportRenderer.Context  = cr;
-				Cairo.Rectangle r = new Cairo.Rectangle(0,0,designService.Report.WidthWithMargins,designService.Report.HeightWithMargins);
-				cr.FillRectangle(r,backgroundPageColor);
-				cr.Translate(designService.Report.Margin.Left,designService.Report.Margin.Top);
+				Cairo.Rectangle r = new Cairo.Rectangle (
+					0,
+					0,
+					reportRenderer.UnitMultipilier * designService.Report.WidthWithMargins,
+					reportRenderer.UnitMultipilier * designService.Report.HeightWithMargins
+					);
+				cr.FillRectangle (r,backgroundPageColor);				
+				cr.Translate (designService.Report.Margin.Left * reportRenderer.UnitMultipilier ,designService.Report.Margin.Top * reportRenderer.UnitMultipilier  );
 				reportRenderer.RenderPage (designService.Report.Pages [pageNumber]);
-				area.SetSizeRequest ((int)designService.Report.HeightWithMargins,(int) designService.Report.HeightWithMargins+5);
+				area.SetSizeRequest ((int)(designService.Report.HeightWithMargins * ReportRenderer.UnitMultipilier),(int) (designService.Report.HeightWithMargins* ReportRenderer.UnitMultipilier)+5);
 			
 				(cr as IDisposable).Dispose ();
 			}
@@ -201,7 +207,8 @@ namespace MonoReports.Gui.Widgets
 			
 			if (designService.IsDesign) {
 				designService.MouseMove (args.Event.X, args.Event.Y);
-				workSpaceService.Status (String.Format ("move x:{0} y:{1}", args.Event.X, args.Event.Y));
+				workSpaceService.Status (String.Format ("move x:{0:N2} y:{1:N2}",
+					args.Event.X / designService.Renderer.UnitMultipilier, args.Event.Y  / designService.Renderer.UnitMultipilier));
 			}
 			
 		}
@@ -217,7 +224,7 @@ namespace MonoReports.Gui.Widgets
 		{
 			if (designService != null) {
 				if (args.PageNum == 1) {
-					designService.IsDesign = false;		
+					designService.IsDesign = false;
 					evaluate ();
 
 					ImageSurface imagesSurface = new ImageSurface (Format.Argb32, (int)designService.Report.Width, (int)designService.Report.Height);

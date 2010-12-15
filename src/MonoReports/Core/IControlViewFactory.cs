@@ -29,7 +29,7 @@ namespace MonoReports.Core
 {
 	public interface IControlViewFactory
 	{
-		
+		 ReportRenderer ReportRenderer {get;set;}
 		 ControlViewBase CreateControlView (MonoReports.Model.Controls.Control control, SectionView sectionView);
 	}
 	

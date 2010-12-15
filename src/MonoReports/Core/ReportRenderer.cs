@@ -30,12 +30,34 @@ using System.Collections.Generic;
 using MonoReports.Model;
 using MonoReports.Services;
 using Cairo;
+using MonoReports.Extensions.CairoExtensions;
 
 namespace MonoReports.Core
 {
 	public class ReportRenderer : IReportRenderer
 	{
 		Dictionary<Type, object> renderersDictionary;
+
+		public Dictionary<Type, object> RenderersDictionary {
+			get {
+				return this.renderersDictionary;
+			}
+			set {
+				renderersDictionary = value;
+			}
+		}
+		
+		
+		bool isDesign;
+		public bool IsDesign {
+			get { return isDesign; }
+			set { isDesign = value; 
+				foreach (KeyValuePair<Type, object> kvp in renderersDictionary) {
+					(kvp.Value as IControlRenderer).DesignMode = isDesign;
+				}
+			}
+		}
+
 		Cairo.Context context;		
 		
 		public Cairo.Context Context {
@@ -46,15 +68,63 @@ namespace MonoReports.Core
 				context = value;
 			}
 		}
-
-		public void RegisterRenderer(Type t,IControlRenderer renderer){
-			renderersDictionary.Add(t,renderer);
+		
+		double resolution;
+		public double Resolution {
+			get { return resolution; }
+			set { 
+				resolution = value; 
+			    CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolution / 72;
+			}
 		}
+		
+		double unitMultipilier;
+		public double UnitMultipilier {
+			get { return unitMultipilier; }
+			set { 
+				unitMultipilier = value;
+				CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolution / 72;
+			}
+		}
+		
+		
+		UnitType unitType;
+		
+		public UnitType Unit {
+			get { return unitType; }
+			set 
+			{ 
+				unitType = value;
+				switch (unitType) {
+				case UnitType.mm:
+						UnitMultipilier = Resolution / 25.4;
+					break;
+				case UnitType.cm:
+						UnitMultipilier = Resolution / 2.54;
+					break;
+				case UnitType.inch:
+						UnitMultipilier = Resolution / 25.4;
+					break;
+				default:						
+					break;
+				}	
+				
+				CairoExtensions.UnitMultiplier = UnitMultipilier;
+			}
+			
+		}
+		
 		
 		public ReportRenderer ()
 		{
 			renderersDictionary = new Dictionary<Type, object>();
+			unitMultipilier = 1;
 		} 
+
+		public void RegisterRenderer(Type t,IControlRenderer renderer) {	
+			renderer.UnitMulitipier = unitMultipilier;
+			renderersDictionary.Add(t,renderer);
+		}
 
 		public void RenderPage (Page p)
 		{			 			

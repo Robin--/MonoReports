@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using MonoReports.Model;
 
 namespace MonoReports.Core
 {
@@ -31,9 +32,15 @@ namespace MonoReports.Core
 	{
 		public ControlRendererBase ()
 		{
+
 		}
 		
-		public double DPI {get;set;}
+		protected double unitMulitipier;
+		
+		public double UnitMulitipier {
+			get { return unitMulitipier; }
+			set { unitMulitipier = value; }
+		}
 		
 		public bool DesignMode {get;set;}
 	}

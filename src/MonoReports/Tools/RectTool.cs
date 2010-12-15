@@ -45,7 +45,7 @@ namespace MonoReports.Tools
 	public class RectTool : BaseTool
 	{
 
-		const int gripSize = 10;
+		double gripSize = 4;
 		bool isResizing;
 		Border selectBorder;
 		GripperType gripperType;
@@ -54,7 +54,8 @@ namespace MonoReports.Tools
 		{
 			selectBorder = new Border ();
 			selectBorder.Color = new MonoReports.Model.Color(0,0,0);
-			selectBorder.WidthAll = 1;
+			selectBorder.WidthAll = 1 ;
+		
 		}
 
 		public override void OnBeforeDraw (Context c)
@@ -63,46 +64,54 @@ namespace MonoReports.Tools
 			
 		}
 		
+		double cx,cy,cw,ch,sw, sh;
+		
 		public override void OnMouseMove ()
 		{
 			if (designService.IsPressed && designService.IsMoving && designService.SelectedControl != null) {
 				var control = designService.SelectedControl;
 				var location = control.ControlModel.Location;
-				
+				cx = location.X;
+				cy = location.Y;
+				cw = control.ControlModel.Size.Width;
+				ch = control.ControlModel.Size.Height;
+				sw = control.ParentSection.Section.Width;
+				sh = control.ParentSection.Section.Height;			
+					
 				if (designService.IsMoving) {
 					double w,h,x,y;
 					if (!isResizing) {
-						x = Math.Max(0, location.X + designService.DeltaPoint.X);
-						y = Math.Max(0, location.Y + designService.DeltaPoint.Y);
-						x = Math.Min(control.ParentSection.Section.Width - control.ControlModel.Width, x);
-						y = Math.Min(control.ParentSection.Section.Height - control.ControlModel.Height,y);						
+						x = Math.Max(0, cx + designService.DeltaPoint.X);
+						y = Math.Max(0, cy + designService.DeltaPoint.Y);
+						x = Math.Min(sw- cw, x);
+						y = Math.Min(sh- ch,y);						
 						var point = new MonoReports.Model.Point (x,y);
 						control.ControlModel.Location = point;
 					} else {
 						
 						switch (gripperType) {
 						case GripperType.NE:
-							w = Math.Min( Math.Abs (control.ControlModel.Size.Width + designService.DeltaPoint.X) , control.ParentSection.Section.Width);
-							h = Math.Min( Math.Abs (control.ControlModel.Size.Height - designService.DeltaPoint.Y) , control.ParentSection.Section.Height);
-							y = Math.Max( location.Y + designService.DeltaPoint.Y,0);
+							w = Math.Min( Math.Abs (cw + designService.DeltaPoint.X) , sw);
+							h = Math.Min( Math.Abs (ch - designService.DeltaPoint.Y) , sh);
+							y = Math.Max( cy + designService.DeltaPoint.Y,0);
 							control.ControlModel.Size = new Size (w, h);
-							control.ControlModel.Location = new MonoReports.Model.Point (location.X, y);
+							control.ControlModel.Location = new MonoReports.Model.Point (cx, y);
 							break;
 						case GripperType.SE:
-							w = Math.Min( Math.Abs (control.ControlModel.Size.Width + designService.DeltaPoint.X) , control.ParentSection.Section.Width);
-							h = Math.Min( Math.Abs (control.ControlModel.Size.Height + designService.DeltaPoint.Y) , control.ParentSection.Section.Height - control.ControlModel.Location.Y);
+							w = Math.Min( Math.Abs (cw + designService.DeltaPoint.X) , sw);
+							h = Math.Min( Math.Abs (ch + designService.DeltaPoint.Y) , sh - cy);
 							control.ControlModel.Size = new Size (w,h);
 							break;
 						case GripperType.SW:
-							w = Math.Min( Math.Abs (control.ControlModel.Size.Width - designService.DeltaPoint.X) , control.ParentSection.Section.Width);
-							h = Math.Min( Math.Abs (control.ControlModel.Size.Height + designService.DeltaPoint.Y) , control.ParentSection.Section.Height- control.ControlModel.Location.Y);
+							w = Math.Min( Math.Abs (cw - designService.DeltaPoint.X) , sw);
+							h = Math.Min( Math.Abs (ch + designService.DeltaPoint.Y) , sh - cy);
 							x = Math.Max( location.X + designService.DeltaPoint.X,0);
 							control.ControlModel.Size = new Size (w,h);
 							control.ControlModel.Location = new MonoReports.Model.Point (x, location.Y);
 							break;
 						case GripperType.NW:
-							w = Math.Min( Math.Abs (control.ControlModel.Size.Width - designService.DeltaPoint.X) , control.ParentSection.Section.Width);
-							h = Math.Min( Math.Abs (control.ControlModel.Size.Height - designService.DeltaPoint.Y) , control.ParentSection.Section.Height- control.ControlModel.Location.Y);
+							w = Math.Min( Math.Abs (cw - designService.DeltaPoint.X) , sw);
+							h = Math.Min( Math.Abs (ch - designService.DeltaPoint.Y) , sh - cy);
 							x = Math.Max( location.X + designService.DeltaPoint.X,0);
 							y = Math.Max( location.Y + designService.DeltaPoint.Y,0);
 							control.ControlModel.Size = new Size (w,h);
@@ -131,9 +140,9 @@ namespace MonoReports.Tools
 		{
 			if (designService.SelectedControl != null && designService.IsDesign) {
 				c.Save ();
-				c.SetDash (new double[] { 1.0 ,3,2}, 5);
-				c.DrawInsideBorder (designService.SelectedControl.AbsoluteBound, selectBorder, true);
-				c.DrawSelectBox (designService.SelectedControl.AbsoluteBound);
+				c.SetDash (new double[] { 1.0 ,1,1}, 2);
+				c.DrawInsideBorderInUnit (designService.SelectedControl.AbsoluteBound, selectBorder, true);
+				c.DrawSelectBoxInUnits (designService.SelectedControl.AbsoluteBound,gripSize);
 				c.Restore ();
 			}
 		}
@@ -143,23 +152,27 @@ namespace MonoReports.Tools
 			if (designService.SelectedControl != null) {
 				
 				var control = designService.SelectedControl;
+				double cw = control.ControlModel.Size.Width;
+				double ch = control.ControlModel.Size.Height;
 				var pointInSection = control.ParentSection.PointInSectionByAbsolutePoint (designService.MousePoint);
 				var location = control.ControlModel.Location;
 				isResizing = false;
+				
+				
 				if (pointInSection.Y > location.Y && pointInSection.Y < location.Y + gripSize) {
 					if (pointInSection.X > location.X && location.X + gripSize > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.NW;
-					} else if (pointInSection.X > location.X + control.ControlModel.Size.Width - gripSize && location.X + control.ControlModel.Size.Width > pointInSection.X) {
+					} else if (pointInSection.X > location.X + cw - gripSize && location.X + cw > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.NE;
 					}
 					
-				} else if (pointInSection.Y > location.Y + control.ControlModel.Size.Height - gripSize && pointInSection.Y < location.Y + control.ControlModel.Size.Height) {
+				} else if (pointInSection.Y > location.Y + ch - gripSize && pointInSection.Y < location.Y + ch) {
 					if (pointInSection.X > location.X && location.X + gripSize > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.SW;
-					} else if (pointInSection.X > location.X + control.ControlModel.Size.Width - gripSize && location.X + control.ControlModel.Size.Width > pointInSection.X) {
+					} else if (pointInSection.X > location.X + cw - gripSize && location.X + cw > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.SE;
 					}

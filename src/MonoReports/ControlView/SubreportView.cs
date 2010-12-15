@@ -56,12 +56,12 @@ namespace MonoReports.ControlView
 			get { return subreport; }
 		}
 
-		public SubreportView (MonoReports.Model.Controls.SubReport subreport, SectionView parentSection): base(subreport)
+		public SubreportView (MonoReports.Model.Controls.SubReport subreport,SubreportRenderer renderer, SectionView parentSection): base(subreport)
 		{			
 			this.subreport = subreport;
 			this.ParentSection = parentSection;
 			AbsoluteBound = new Rectangle (parentSection.AbsoluteDrawingStartPoint.X + subreport.Location.X, parentSection.AbsoluteDrawingStartPoint.Y + subreport.Location.Y, subreport.Width, subreport.Height);			
-			SubreportRenderer = new SubreportRenderer(){  DesignMode = true};
+			SubreportRenderer = renderer;
 		}
 
 		

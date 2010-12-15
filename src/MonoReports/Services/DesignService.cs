@@ -40,11 +40,22 @@ namespace MonoReports.Services
 {
 	public class DesignService
 	{
-		public double Zoom { get; set; }
+		double zoom;
+		public double Zoom { 
+			get { return zoom; } 
+			set { 
+				zoom = value; 
+				if (Report != null) {
+					width = (int)(Report.Width * Zoom);
+					height = (int)(Report.Height * Zoom);
+				}
+			} }
 
-		public double Width { get; set; }
+		double width;
+		public double Width { get { return width; } set { width = value; } }
 
-		public double Height { get; set; }
+		double height;
+		public double Height { get { return height; } set { height = value; } }
 
 		public BaseTool SelectedTool {
 			get { return ToolBoxService.SelectedTool; } 
@@ -70,16 +81,32 @@ namespace MonoReports.Services
 
 		public bool IsMoving { get; private set; }
 
-		public bool IsDesign { get; set; }
+		bool isDesign;
+		public bool IsDesign { 
+			get { return isDesign; } 
+			set { 
+				isDesign = value;
+				if(renderer != null)
+					renderer.IsDesign = isDesign;
+			} 
+		}
 
 		public bool Render { get; private set; }
+		
+		private ReportRenderer renderer;
+
+		public ReportRenderer Renderer {
+			get {
+				return this.renderer;
+			}
+			set {
+				renderer = value;
+			}
+		}
 
 		public IWorkspaceService WorkspaceService { get; set; }
 
 		public ToolBoxService ToolBoxService{get; set;}
-
-		CompilerService compilerService;
-
 		public event SelectedControlChanged OnSelectedControlChanged;		
 		public event ReportDataFieldsRefreshed OnReportDataFieldsRefreshed;				
 		public event ReportChanged OnReportChanged;
@@ -125,21 +152,23 @@ namespace MonoReports.Services
 
 		public PixbufRepository PixbufRepository {get; set;}
 
-		public DesignService (IWorkspaceService workspaceService, CompilerService compilerService,Report report)
+		public DesignService (IWorkspaceService workspaceService,ReportRenderer renderer,PixbufRepository pixbufRepository, Report report)
 		{		
+			this.PixbufRepository = pixbufRepository;
 			this.WorkspaceService = workspaceService;
-			this.compilerService = compilerService;
-			controlViewFactory = new ControlViewFactory (this);
-			PixbufRepository = new PixbufRepository (){ Report = report};
+			this.renderer = renderer;
+			controlViewFactory = new ControlViewFactory (renderer);			
 			IsDesign = true;
+			Report = report;
 			Zoom = 1;
 			Render = true;		
-			Report = report;
+			
 		}
 
 		void initReport ()
 		{
-			PixbufRepository.Report = report;
+			
+			PixbufRepository.Report = report;			
 			sectionViews = new List<SectionView> ();
 			addSectionView (report.ReportHeaderSection);
 			addSectionView (report.PageHeaderSection);
@@ -153,17 +182,13 @@ namespace MonoReports.Services
 			
 			addSectionView (report.PageFooterSection);
 			addSectionView (report.ReportFooterSection);
-			
-				
-		
+
 		}
 
 		public void RedrawReport (Context c)
 		{
 			if (Zoom != 1) {
-				c.Scale (Zoom, Zoom);
-				Width = (int)(Report.Width * Zoom);
-				Height = (int)(Report.Height * Zoom);
+				c.Scale (Zoom, Zoom);				
 			}			
 			
 			if (SelectedTool != null) {
@@ -181,7 +206,7 @@ namespace MonoReports.Services
 
 		public void CreateTextBlockAtXY (string text, string fieldName, FieldKind fieldKind, double x, double y)
 		{			
-			var point = new Cairo.PointD (x / Zoom, y / Zoom);
+			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 			var sectionView = getSectionViewByXY (x, y);
 			
 			if (sectionView != null) {
@@ -199,9 +224,9 @@ namespace MonoReports.Services
 
 		public void CreateImageAtXY (string imageKey,double x, double y)
 		{
-			
+
+			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 			PixbufRepository.AddOrUpdatePixbufByName(imageKey);
-			var point = new Cairo.PointD (x / Zoom, y / Zoom);
 			var sectionView = getSectionViewByXY (x, y);
 			var localpoint = sectionView.PointInSectionByAbsolutePoint (point);
 			ToolBoxService.SetToolByName ("ImageTool");	
@@ -214,7 +239,7 @@ namespace MonoReports.Services
 
 		SectionView getSectionViewByXY (double x, double y)
 		{
-			var point = new Cairo.PointD (x / Zoom, y / Zoom);
+			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 			SectionView sectionView = null;
 			
 			for (int i = 0; i < SectionViews.Count; i++) {
@@ -261,7 +286,7 @@ namespace MonoReports.Services
 
 		public void ButtonPress (double x, double y, int clicks)
 		{
-			StartPressPoint = new Cairo.PointD (x / Zoom, y / Zoom);
+			StartPressPoint = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 						
 			IsPressed = true;
 			IsMoving = false;
@@ -340,7 +365,7 @@ namespace MonoReports.Services
 		public void MouseMove (double x, double y)
 		{
 			
-			MousePoint = new Cairo.PointD (x / Zoom, y / Zoom);
+			MousePoint = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 			IsMoving = true;
 			if (SelectedTool != null)
 				SelectedTool.OnMouseMove ();

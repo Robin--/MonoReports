@@ -73,7 +73,7 @@ namespace MonoReports.Tools
 		public override void OnAfterDraw (Context c)
 		{
 			if(currentSection != null)
-				c.FillRectangle (currentSection.GripperAbsoluteBound, currentSection.SectionGripperColor);
+				c.FillRectangleInUnit (currentSection.GripperAbsoluteBound, currentSection.SectionGripperColor);
 		}
 		
 

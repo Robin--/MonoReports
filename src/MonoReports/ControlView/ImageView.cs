@@ -56,11 +56,11 @@ namespace MonoReports.ControlView
 			get { return image; }
 		}
 
-		public ImageView (MonoReports.Model.Controls.Image image, SectionView parentSection, PixbufRepository pixbufRepository): base(image)
+		public ImageView (MonoReports.Model.Controls.Image image,ImageRenderer renderer, SectionView parentSection): base(image)
 		{			
 			this.ParentSection = parentSection;
 			AbsoluteBound = new Rectangle (parentSection.AbsoluteDrawingStartPoint.X + image.Location.X, parentSection.AbsoluteDrawingStartPoint.Y + image.Location.Y, image.Width, image.Height);			
-			ImageRenderer = new ImageRenderer(){ PixbufRepository = pixbufRepository, DesignMode = true};
+			ImageRenderer = renderer;
 		}
 
 		
