@@ -116,7 +116,7 @@ namespace MonoReports.Gui.Widgets
 			this.mainHPaned = new global::Gtk.HPaned ();
 			this.mainHPaned.CanFocus = true;
 			this.mainHPaned.Name = "mainHPaned";
-			this.mainHPaned.Position = 721;
+			this.mainHPaned.Position = 735;
 			// Container child mainHPaned.Gtk.Paned+PanedChild
 			this.maindesignview1 = new global::MonoReports.Gui.Widgets.MainDesignView ();
 			this.maindesignview1.Events = ((global::Gdk.EventMask)(256));

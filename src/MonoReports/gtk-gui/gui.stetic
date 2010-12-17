@@ -9,7 +9,7 @@
     <widget-library name="../../Propertygrid/bin/Debug/Propertygrid.dll" />
     <widget-library name="../../../build/MonoReports.dll" internal="true" />
   </import>
-  <widget class="Gtk.Bin" id="MonoReports.Gui.Widgets.MonoreportsDesignerControl" design-size="1027 697">
+  <widget class="Gtk.Bin" id="MonoReports.Gui.Widgets.MonoreportsDesignerControl" design-size="1047 696">
     <action-group name="Default">
       <action id="FileAction">
         <property name="Type">Action</property>
@@ -157,7 +157,7 @@
               <widget class="Gtk.HPaned" id="mainHPaned">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="Position">721</property>
+                <property name="Position">735</property>
                 <child>
                   <widget class="MonoReports.Gui.Widgets.MainDesignView" id="maindesignview1">
                     <property name="MemberName" />

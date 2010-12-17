@@ -89,18 +89,19 @@ namespace MonoReports.Tools
 				
 				if (designService.IsMoving && control != null) {
 					
-					double correction =  (line.End.X == line.Location.X ? 0 : halfRealLineWidth);
+					double correctionX =  (line.End.Y == line.Location.Y ? 0 : halfRealLineWidth);
+					double correctionY =  (line.End.X == line.Location.X ? 0 : halfRealLineWidth);
 					
-					double x =  Math.Max (0, line.Location.X + designService.DeltaPoint.X);
-					double y = Math.Max (correction, line.Location.Y + designService.DeltaPoint.Y);
-					double x1 = Math.Max (0, line.End.X + designService.DeltaPoint.X);
-					double y1 = Math.Max (correction, line.End.Y + designService.DeltaPoint.Y);
+					double x =  Math.Max (correctionX, line.Location.X + designService.DeltaPoint.X);
+					double y = Math.Max (correctionY, line.Location.Y + designService.DeltaPoint.Y);
+					double x1 = Math.Max (correctionX, line.End.X + designService.DeltaPoint.X);
+					double y1 = Math.Max (correctionY, line.End.Y + designService.DeltaPoint.Y);
 					
 					
-					x = Math.Min(x,control.ParentSection.Section.Width);				
-					y = Math.Min(y,control.ParentSection.Section.Height  - correction);
-					x1 = Math.Min(x1,control.ParentSection.Section.Width);
-					y1 = Math.Min(y1,control.ParentSection.Section.Height - correction);
+					x = Math.Min(x,control.ParentSection.Section.Width - correctionX);				
+					y = Math.Min(y,control.ParentSection.Section.Height  - correctionY);
+					x1 = Math.Min(x1,control.ParentSection.Section.Width - correctionX);
+					y1 = Math.Min(y1,control.ParentSection.Section.Height - correctionY);
 					
 					
  

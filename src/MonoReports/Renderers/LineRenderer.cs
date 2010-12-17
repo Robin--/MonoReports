@@ -43,7 +43,7 @@ namespace MonoReports.Renderers
 		{
 			Line line = control as Line;
 			double realLineWidth = line.LineWidth * UnitMulitipier;
-			c.DrawLineWithLocationInUnit (line.Location.X, line.Location.Y,line.End.X,line.End.Y, line.BackgroundColor.ToCairoColor (), realLineWidth > 1 ? realLineWidth : 1 , line.LineType, true);
+			c.DrawLineWithLocationInUnit (line.Location.X, line.Location.Y,line.End.X,line.End.Y, line.BackgroundColor.ToCairoColor (),realLineWidth , line.LineType, true);
 		}
 
 		public Size Measure (Cairo.Context c, Control control)

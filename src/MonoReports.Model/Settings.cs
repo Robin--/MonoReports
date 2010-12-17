@@ -39,9 +39,9 @@ namespace MonoReports.Model
 				switch (DefaultUnit) {
 				
 				case UnitType.mm:
-					return 0.2;
+					return 0.264583333;
 				case UnitType.cm:
-					return 0.02;				
+					return 0.0264583333;				
 				case UnitType.inch:
 					return 0.01;				
 				default:
