@@ -4,11 +4,14 @@ Installing Monoreports
 Monoreports can be installed on Linux and Windows 
 (and probably MacOs - i don't have Mac machine )
 
+System Requirements
+-------------------
+Monoreports should run on Linux (with mono), Windows (.net or mono) and MacOs (mono)
 
 Dependencies
 ------------
 
-To build MonoReports you need to have mono 2.6 or higher
+To build MonoReports you need to have mono 2.6 or higher and superb Json.net library Newtonsoft.Json.dll (src/lib)
 
 Binary version
 ------------------

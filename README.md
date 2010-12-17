@@ -1,8 +1,9 @@
-Monoreports is a cross-platform  report designer and reporting engine for .net/mono  
+Monoreports is a cross-platform (linux/win/mac) report designer and reporting engine for .net/mono  
 It's similar to the CrystalReport (TM) and other tools like that.
 
 Monoreports features
 --------------------
+- gui report designer with zoom and control tools (lin textblock image etc)
 - simple layouting - if control in section is growable and will grow due to assigned data, engine will do layouting to make report look properly
 - page breaking - Monoreports engine will break or keep together report sections whatever is needed
 - generating and running reports from designer and code. 
