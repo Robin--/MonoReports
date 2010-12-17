@@ -45,7 +45,9 @@ namespace MonoReports.Tools
 	public class RectTool : BaseTool
 	{
 
-		double gripSize = 4;
+		double gripSize = 3;
+		double gripSpan = 1;
+		
 		bool isResizing;
 		Border selectBorder;
 		GripperType gripperType;
@@ -54,8 +56,11 @@ namespace MonoReports.Tools
 		{
 			selectBorder = new Border ();
 			selectBorder.Color = new MonoReports.Model.Color(0,0,0);
-			selectBorder.WidthAll = 1 ;
-		
+			selectBorder.WidthAll = 1;	
+			gripSpan = 4 / designService.Zoom;
+			designService.OnZoomChanged += delegate(object sender, EventArgs e) {
+				gripSpan = 4 / designService.Zoom;
+			};
 		}
 
 		public override void OnBeforeDraw (Context c)
@@ -159,20 +164,20 @@ namespace MonoReports.Tools
 				isResizing = false;
 				
 				
-				if (pointInSection.Y > location.Y && pointInSection.Y < location.Y + gripSize) {
-					if (pointInSection.X > location.X && location.X + gripSize > pointInSection.X) {
+				if (pointInSection.Y > location.Y && pointInSection.Y < location.Y + gripSpan) {
+					if (pointInSection.X > location.X && location.X + gripSpan > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.NW;
-					} else if (pointInSection.X > location.X + cw - gripSize && location.X + cw > pointInSection.X) {
+					} else if (pointInSection.X > location.X + cw - gripSpan && location.X + cw > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.NE;
 					}
 					
-				} else if (pointInSection.Y > location.Y + ch - gripSize && pointInSection.Y < location.Y + ch) {
+				} else if (pointInSection.Y > location.Y + ch - gripSpan && pointInSection.Y < location.Y + ch) {
 					if (pointInSection.X > location.X && location.X + gripSize > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.SW;
-					} else if (pointInSection.X > location.X + cw - gripSize && location.X + cw > pointInSection.X) {
+					} else if (pointInSection.X > location.X + cw - gripSpan && location.X + cw > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.SE;
 					}

@@ -85,11 +85,11 @@ namespace MonoReports.Extensions.CairoExtensions
 			return dirty;
 		}
 		
-		public static void DrawGripperWithLocationInUnit(this Context g,double x, double y, int gripperSize){
+		public static void DrawGripperWithLocationInUnit(this Context g,double x, double y, double gripperSize){
 			DrawGripper(g,new PointD(x * UnitMultiplier, y * UnitMultiplier),gripperSize);
 		}
 		
-		public static void DrawGripper(this Context g,PointD r, int gripperSize){
+		public static void DrawGripper(this Context g,PointD r, double gripperSize){
 			g.Save ();			 
 			g.Color = gripperColor;
 			 

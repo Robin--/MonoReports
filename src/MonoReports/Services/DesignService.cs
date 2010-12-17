@@ -49,8 +49,11 @@ namespace MonoReports.Services
 					width = (int)(Report.Width * Zoom);
 					height = (int)(Report.Height * Zoom);
 				}
+				if(OnZoomChanged != null)
+					OnZoomChanged(this,new EventArgs());
 			} }
-
+		
+		public event ZoomChanged OnZoomChanged;
 		double width;
 		public double Width { get { return width; } set { width = value; } }
 
