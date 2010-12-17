@@ -81,16 +81,28 @@ namespace MonoReports.Tools
 		{
 			if (designService.IsPressed) {
 				var control = designService.SelectedControl;
+				double realWidth = line.LineWidth * designService.Renderer.UnitMultipilier;
+				realWidth = realWidth > 1 ? realWidth : 1;
+				realWidth /=designService.Renderer.UnitMultipilier;
+				
+ 				double halfRealLineWidth = (realWidth / 2);
 				
 				if (designService.IsMoving && control != null) {
+					
+					double correction =  (line.End.X == line.Location.X ? 0 : halfRealLineWidth);
+					
 					double x =  Math.Max (0, line.Location.X + designService.DeltaPoint.X);
-					double y = Math.Max (0, line.Location.Y + designService.DeltaPoint.Y);
+					double y = Math.Max (correction, line.Location.Y + designService.DeltaPoint.Y);
 					double x1 = Math.Max (0, line.End.X + designService.DeltaPoint.X);
-					double y1 = Math.Max (0, line.End.Y + designService.DeltaPoint.Y);
-					x = Math.Min(x,control.ParentSection.Section.Width);
-					y = Math.Min(y,control.ParentSection.Section.Height);
+					double y1 = Math.Max (correction, line.End.Y + designService.DeltaPoint.Y);
+					
+					
+					x = Math.Min(x,control.ParentSection.Section.Width);				
+					y = Math.Min(y,control.ParentSection.Section.Height  - correction);
 					x1 = Math.Min(x1,control.ParentSection.Section.Width);
-					y1 = Math.Min(y1,control.ParentSection.Section.Height);
+					y1 = Math.Min(y1,control.ParentSection.Section.Height - correction);
+					
+					
  
 					if (startPointHit) {
 						
@@ -126,7 +138,7 @@ namespace MonoReports.Tools
 							break;
 						}		
 												
-					} else {
+					} else {						
 						line.Location = new MonoReports.Model.Point (x,y);						
 						line.End = new MonoReports.Model.Point (x1,y1);
 					}

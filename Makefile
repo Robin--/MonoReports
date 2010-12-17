@@ -24,7 +24,7 @@ run-tests: all
 clean:
 	$(XBUILD) $(SLN) /property:Configuration=$(conf) /t:Clean
 	rm -rf build/*
-example: all
+examples: all
 	$(XBUILD) $(EXAMPLE) /property:Configuration=$(conf)
 
 

@@ -691,8 +691,7 @@ namespace MonoReports.Extensions.CairoExtensions
 				g.SetDash(dashesStyle,lineWidth);
 			}
 			g.MoveTo (p1.X, p1.Y);
-			g.LineTo (p2.X, p2.Y);
-
+			g.LineTo (p2.X, p2.Y);			
 			g.Color = color;
 			g.LineWidth = lineWidth;
 			g.LineCap = LineCap.Butt;

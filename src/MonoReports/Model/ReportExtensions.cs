@@ -33,6 +33,7 @@ using MonoReports.Core;
 using MonoReports.Renderers;
 using MonoReports.Model.Controls;
 using MonoReports.Model.Data;
+using MonoReports.Extensions.CairoExtensions;
 
  
 
@@ -92,7 +93,8 @@ namespace MonoReports.Model
 		}
 		
 		public static void ExportToPdf(this Report report ,string path) {
-			
+			double unitMultiplier = CairoExtensions.UnitMultiplier;
+			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
 			ReportRenderer renderer = new ReportRenderer (){ Resolution = 72};
 			renderer.Unit = report.Unit;
 			
@@ -102,6 +104,7 @@ namespace MonoReports.Model
 				
 				 
 				Cairo.Context cr = new Cairo.Context (pdfSurface);
+				cr.Antialias = Antialias.None;
 				renderer.Context = cr;
 				renderer.RegisterRenderer (typeof(TextBlock), new TextBlockRenderer ());
 				renderer.RegisterRenderer (typeof(Line), new LineRenderer ());
@@ -122,6 +125,9 @@ namespace MonoReports.Model
 				pdfSurface.Finish ();		
 				(cr as IDisposable).Dispose ();
 			}
+			
+			unitMultiplier = CairoExtensions.UnitMultiplier  = unitMultiplier;
+			CairoExtensions.RealFontMultiplier = realFontMultiplier;
 		}
 		
 		

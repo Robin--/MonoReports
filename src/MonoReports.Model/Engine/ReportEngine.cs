@@ -387,8 +387,8 @@ namespace MonoReports.Model.Engine
 			
 			foreach (Line lineItem in currentSectionExtendedLines) {
 				if (lineItem.Location.Y == lineItem.End.Y) {
-					lineItem.Location = new Point (lineItem.Location.X, currentSection.Height - lineItem.LineWidth / 2 );
-					lineItem.End = new Point (lineItem.End.X, currentSection.Height - lineItem.LineWidth / 2);
+					lineItem.Location = new Point (lineItem.Location.X, currentSection.Height - lineItem.LineWidth/2);
+					lineItem.End = new Point (lineItem.End.X, currentSection.Height - lineItem.LineWidth/2);
 				} else if (lineItem.Location.Y > lineItem.End.Y) {
 					lineItem.Location = new Point (lineItem.Location.X, currentSection.Height);
 				} else {

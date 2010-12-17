@@ -38,7 +38,7 @@ namespace MonoReports.ControlView
 	public class SectionView : ControlViewBase
 	{
 		
-		public static double SectionheaderHeight = 7;
+		public static double SectionheaderHeight = 20;
 		public static double SectionGripperHeight = 1;
 		static Cairo.Color blackColor = new Cairo.Color (0, 0, 0);
 		static Cairo.Color yellowColor = new Cairo.Color (1, 1, 0);
@@ -100,10 +100,17 @@ namespace MonoReports.ControlView
 			get { return sectionRenderer;}
 			set { sectionRenderer = value;}
 		}
+		
+		public double SectionHederHeightInUnit {
+			get;
+			set;
+		}
 
 		public SectionView (Report parentReport,IControlViewFactory controlViewFactory,Section section,Cairo.PointD sectionSpan) : base(section)
 		{
+			
 			sectionRenderer = controlViewFactory.ReportRenderer.RenderersDictionary[section.GetType()] as SectionRenderer;
+			SectionHederHeightInUnit = SectionheaderHeight / sectionRenderer.UnitMulitipier;
 			DesignCrossSectionControlsToAdd = new List<ControlViewBase> ();
 			DesignCrossSectionControlsToRemove = new List<ControlViewBase> ();
 			this.controlViewFactory = controlViewFactory;
@@ -152,10 +159,10 @@ namespace MonoReports.ControlView
 		{
 			double sectionWidth =  section.Width;
 			double sectionHeight =  section.Height ;
-			AbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y , sectionWidth , sectionHeight  + SectionheaderHeight  + SectionGripperHeight);
-			GripperAbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y + sectionHeight + SectionheaderHeight, sectionWidth, SectionGripperHeight);
-			HeaderAbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y,  sectionWidth, SectionheaderHeight);
-			AbsoluteDrawingStartPoint = new Cairo.PointD (AbsoluteBound.X, AbsoluteBound.Y + SectionheaderHeight);
+			AbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y , sectionWidth , sectionHeight  + SectionHederHeightInUnit  + SectionGripperHeight);
+			GripperAbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y + sectionHeight + SectionHederHeightInUnit, sectionWidth, SectionGripperHeight);
+			HeaderAbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y,  sectionWidth, SectionHederHeightInUnit);
+			AbsoluteDrawingStartPoint = new Cairo.PointD (AbsoluteBound.X, AbsoluteBound.Y + SectionHederHeightInUnit);
 		}
 
 		#region implemented abstract members of MonoReport.ControlView.ControlViewBase

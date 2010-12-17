@@ -79,6 +79,7 @@
     <Compile Include="Thickness.cs" />
     <Compile Include="Data\Field.cs" />
     <Compile Include="Data\FieldBuilder.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

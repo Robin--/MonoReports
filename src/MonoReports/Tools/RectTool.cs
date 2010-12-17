@@ -83,8 +83,8 @@ namespace MonoReports.Tools
 					if (!isResizing) {
 						x = Math.Max(0, cx + designService.DeltaPoint.X);
 						y = Math.Max(0, cy + designService.DeltaPoint.Y);
-						x = Math.Min(sw- cw, x);
-						y = Math.Min(sh- ch,y);						
+						x = Math.Min(sw-cw,x);
+						y = Math.Min(sh-ch,y);						
 						var point = new MonoReports.Model.Point (x,y);
 						control.ControlModel.Location = point;
 					} else {
