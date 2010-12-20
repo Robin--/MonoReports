@@ -76,9 +76,9 @@ namespace MonoReports.Model.Data
 							if((typeof(List<>)).IsAssignableFrom(genType))
 								continue;
 						}
-						
-						var expr = Expression.Property(parent,property.Name);
-						fillFields(rootObjectType,fields, par,expr,property.Name,property.PropertyType,fieldKind);
+						string realPrefix =  string.IsNullOrEmpty(namePrefix) ? property.Name : namePrefix + "." + property.Name;
+						var expr = Expression.Property(parent, property.Name);
+						fillFields(rootObjectType,fields, par,expr,realPrefix,property.PropertyType,fieldKind);
 					}
 				}	
 			}

@@ -60,6 +60,31 @@ namespace MonoReports.Tests
 			
 		}
 		
+		
+		[Test()]
+		public void CreateFields_ForClassCInClassBInClassA_ShouldCreateFieldWithName_PrefixClassADotClassBDotClassC ()
+		{
+			 
+		 	var fields = FieldBuilder.CreateFields(typeof(A),"Prefix",FieldKind.Parameter);
+			
+			Assert.IsNotNull(fields);
+			Assert.AreEqual(1,fields.Length);
+			Assert.IsNotNull( fields[0].Name);
+			
+		}
+		
+		public class A {
+			public B B {get;set;}
+		}
+		
+		public class B {
+			public C C {get;set;}
+		}
+		
+		public class C {
+			
+		}
+		
 		 
 				
 				
