@@ -32,6 +32,7 @@ using MonoReports.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MonoReports.Renderers;
+using MonoReports.Services;
 
 namespace MonoReports.ControlView
 {
@@ -48,7 +49,7 @@ namespace MonoReports.ControlView
 
 		public bool IsCollapsed { get; set; }
 
-		public Cairo.PointD SectionSpan { get; set; }
+		public Cairo.PointD SectionSpan { get; set; }				
 
 		public Cairo.PointD AbsoluteDrawingStartPoint { get; set; }
 
@@ -57,11 +58,22 @@ namespace MonoReports.ControlView
 		public Rectangle GripperAbsoluteBound { get; set; }
 
 		IControlViewFactory controlViewFactory;
-		Report parentReport;
 
-		public bool AllowCrossSectionControl { get; private set; }
+		public bool AllowCrossSectionControl { get; private set; }			
 
 		List<ControlViewBase> controls;
+		
+		
+		bool isMouseOver;
+		public bool IsMouseOver {
+			get { return isMouseOver; }
+			set { 
+				isMouseOver = value;
+				if(!isMouseOver){
+					IsSectionGripperHighligted = false;
+				}
+			}
+		}
 
 		public ReadOnlyCollection<ControlViewBase> Controls {
 			get { return controls.AsReadOnly (); }
@@ -93,28 +105,26 @@ namespace MonoReports.ControlView
 			get;
 			set;
 		}
- 
+
 		SectionRenderer sectionRenderer;
-			
+
 		public SectionRenderer SectionRenderer {
 			get { return sectionRenderer;}
 			set { sectionRenderer = value;}
 		}
-		
+
 		public double SectionHederHeightInUnit {
 			get;
 			set;
 		}
 
-		public SectionView (Report parentReport,IControlViewFactory controlViewFactory,Section section,Cairo.PointD sectionSpan) : base(section)
+		public SectionView (IControlViewFactory controlViewFactory, Section section,Cairo.PointD sectionSpan) : base(section)
 		{
-			
-			sectionRenderer = controlViewFactory.ReportRenderer.RenderersDictionary[section.GetType()] as SectionRenderer;
+			sectionRenderer = controlViewFactory.ReportRenderer.RenderersDictionary [section.GetType ()] as SectionRenderer;
 			SectionHederHeightInUnit = SectionheaderHeight / sectionRenderer.UnitMulitipier;
 			DesignCrossSectionControlsToAdd = new List<ControlViewBase> ();
 			DesignCrossSectionControlsToRemove = new List<ControlViewBase> ();
-			this.controlViewFactory = controlViewFactory;
-			this.parentReport = parentReport;
+			this.controlViewFactory = controlViewFactory;			
 			
 			if (section is DetailSection)
 				AllowCrossSectionControl = false; else {
@@ -157,9 +167,9 @@ namespace MonoReports.ControlView
 
 		public void InvalidateBound ()
 		{
-			double sectionWidth =  section.Width;
-			double sectionHeight =  section.Height ;
-			AbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y , sectionWidth , sectionHeight  + SectionHederHeightInUnit  + SectionGripperHeight);
+			double sectionWidth = section.Width;
+			double sectionHeight = section.Height ;
+			AbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y , sectionWidth , sectionHeight + SectionHederHeightInUnit + SectionGripperHeight);
 			GripperAbsoluteBound = new Rectangle (SectionSpan.X , SectionSpan.Y + sectionHeight + SectionHederHeightInUnit, sectionWidth, SectionGripperHeight);
 			HeaderAbsoluteBound = new Rectangle (SectionSpan.X, SectionSpan.Y,  sectionWidth, SectionHederHeightInUnit);
 			AbsoluteDrawingStartPoint = new Cairo.PointD (AbsoluteBound.X, AbsoluteBound.Y + SectionHederHeightInUnit);
@@ -219,25 +229,20 @@ namespace MonoReports.ControlView
 		{
 			return new PointD (x + AbsoluteDrawingStartPoint.X, y + AbsoluteDrawingStartPoint.Y);
 		}
-
-		private bool sectionGripperHighlighted;
-
-		public bool SectionGripperHighlighted {
-
-
-			get { return sectionGripperHighlighted; }
-
+ 
+		bool isSectionGripperHighligted;
+		public bool IsSectionGripperHighligted {
+			get { return isSectionGripperHighligted; }
 			set {
-				if (value != sectionGripperHighlighted) {
-					sectionGripperHighlighted = value;
-					if (sectionGripperHighlighted) {
-						SectionGripperColor = yellowColor;
-					} else {
-						SectionGripperColor = sectionHeaderColor1;
-					}
+				isSectionGripperHighligted = value; 
+				if (isSectionGripperHighligted) {
+					SectionGripperColor = yellowColor;							
+				}else {
+					SectionGripperColor = sectionHeaderColor1;		
 				}
 			}
 		}
+			
 		
 	}
 }

@@ -94,7 +94,7 @@ namespace MonoReports.Tools
 		public virtual void OnMouseMove ()
 		{
 			
-		}
+		}				
 		
 		public virtual void KeyPress(Gdk.Key key){
 			switch (key) {

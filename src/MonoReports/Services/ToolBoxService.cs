@@ -85,6 +85,12 @@ namespace MonoReports.Services
 			SelectedTool = ToolDictionary[toolName]; 
 			SelectedTool.CreateMode = true;
 		}
+		
+		public BaseTool GetToolByName (string toolName)
+		{			 
+			return ToolDictionary[toolName]; 			
+		}
+		
 		#endregion
 	}
 }

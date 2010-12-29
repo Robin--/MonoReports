@@ -289,6 +289,12 @@ namespace MonoReports.Gui.Widgets
 			return res;
 		}
 		
+		protected virtual void OnDrawingareaLeaveNotifyEvent (object o, Gtk.LeaveNotifyEventArgs args)
+		{
+		 	workSpaceService.SetCursor (Gdk.CursorType.LeftPtr);
+		}
+		
+		
 	}
 }
 

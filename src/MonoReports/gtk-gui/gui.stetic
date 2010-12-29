@@ -250,7 +250,7 @@
         <property name="MemberName" />
         <property name="CanFocus">True</property>
         <property name="Events">ButtonPressMask, ButtonReleaseMask, KeyPressMask, KeyReleaseMask, FocusChangeMask, StructureMask</property>
-        <property name="CurrentPage">2</property>
+        <property name="CurrentPage">0</property>
         <signal name="SwitchPage" handler="OnMainNotebookSwitchPage" />
         <child>
           <widget class="Gtk.ScrolledWindow" id="designScrolledWindow">
@@ -265,7 +265,7 @@
                   <widget class="Gtk.DrawingArea" id="drawingarea">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
-                    <property name="Events">ExposureMask, PointerMotionMask, ButtonPressMask, ButtonReleaseMask, KeyPressMask, KeyReleaseMask, PropertyChangeMask</property>
+                    <property name="Events">ExposureMask, PointerMotionMask, ButtonPressMask, ButtonReleaseMask, KeyPressMask, KeyReleaseMask, LeaveNotifyMask, PropertyChangeMask</property>
                     <property name="ExtensionEvents">All</property>
                     <signal name="ButtonPressEvent" handler="OnDrawingareaButtonPressEvent" />
                     <signal name="ButtonReleaseEvent" handler="OnDrawingareaButtonReleaseEvent" />
@@ -273,6 +273,7 @@
                     <signal name="ExposeEvent" handler="OnDrawingareaExposeEvent" />
                     <signal name="KeyPressEvent" handler="OnDrawingareaKeyPressEvent" />
                     <signal name="KeyReleaseEvent" handler="OnDrawingareaKeyReleaseEvent" />
+                    <signal name="LeaveNotifyEvent" handler="OnDrawingareaLeaveNotifyEvent" />
                   </widget>
                 </child>
               </widget>

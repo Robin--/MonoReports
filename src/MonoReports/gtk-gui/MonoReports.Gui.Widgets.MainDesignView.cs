@@ -40,7 +40,7 @@ namespace MonoReports.Gui.Widgets
 			this.mainNotebook.CanFocus = true;
 			this.mainNotebook.Events = ((global::Gdk.EventMask)(52992));
 			this.mainNotebook.Name = "mainNotebook";
-			this.mainNotebook.CurrentPage = 2;
+			this.mainNotebook.CurrentPage = 0;
 			// Container child mainNotebook.Gtk.Notebook+NotebookChild
 			this.designScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.designScrolledWindow.CanFocus = true;
@@ -52,7 +52,7 @@ namespace MonoReports.Gui.Widgets
 			// Container child GtkViewport.Gtk.Container+ContainerChild
 			this.drawingarea = new global::Gtk.DrawingArea ();
 			this.drawingarea.CanFocus = true;
-			this.drawingarea.Events = ((global::Gdk.EventMask)(69382));
+			this.drawingarea.Events = ((global::Gdk.EventMask)(77574));
 			this.drawingarea.ExtensionEvents = ((global::Gdk.ExtensionMode)(1));
 			this.drawingarea.Name = "drawingarea";
 			w3.Add (this.drawingarea);
@@ -171,6 +171,7 @@ namespace MonoReports.Gui.Widgets
 			this.drawingarea.ExposeEvent += new global::Gtk.ExposeEventHandler (this.OnDrawingareaExposeEvent);
 			this.drawingarea.KeyPressEvent += new global::Gtk.KeyPressEventHandler (this.OnDrawingareaKeyPressEvent);
 			this.drawingarea.KeyReleaseEvent += new global::Gtk.KeyReleaseEventHandler (this.OnDrawingareaKeyReleaseEvent);
+			this.drawingarea.LeaveNotifyEvent += new global::Gtk.LeaveNotifyEventHandler (this.OnDrawingareaLeaveNotifyEvent);
 			this.previewDrawingArea.ExposeEvent += new global::Gtk.ExposeEventHandler (this.OnPreviewDrawingareaExposeEvent);
 			this.previewDrawingArea.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnDrawingareaButtonPressEvent);
 			this.previewDrawingArea.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.OnDrawingareaButtonReleaseEvent);

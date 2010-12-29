@@ -47,20 +47,29 @@ namespace MonoReports.Tools
 		{
 			
 			
-		}
+		}	
+				
 		
 		public override void OnMouseMove(){
 			if (designService.IsPressed) {			
 				 
-				if (designService.IsMoving && designService.SelectedControl != null) {
+				if (designService.IsMoving &&  designService.SelectedControl  is SectionView) {
 					
 					var section = designService.SelectedControl as SectionView;														
-					section.ControlModel.Size = new Size(section.ControlModel.Width,section.ControlModel.Height + designService.DeltaPoint.Y);
-										
+					section.ControlModel.Size = new Size(section.ControlModel.Width,section.ControlModel.Height + designService.DeltaPoint.Y);						
 				} 
 				
+			}else if (designService.MouseOverSection != null) {
+				if(designService.MouseOverSection.GripperAbsoluteBound.ContainsPoint(designService.MousePoint.X,designService.MousePoint.Y)) {
+					designService.MouseOverSection.IsSectionGripperHighligted = true;
+					designService.WorkspaceService.SetCursor (Gdk.CursorType.BottomSide);	
+				}else {
+					designService.MouseOverSection.IsSectionGripperHighligted = false;
+					designService.WorkspaceService.SetCursor (Gdk.CursorType.LeftPtr);	
+				}
 			}
-		}
+		}		
+				
 		
 		public override string Name {get {return "SectionTool"; }}
 		
@@ -102,7 +111,7 @@ namespace MonoReports.Tools
 				previousSection = sectionView;
 				counter++;
 			}
-		 	designService.Height =  previousSection.AbsoluteBound.Y + previousSection.AbsoluteBound.Height;
+		 	designService.Height =  previousSection.AbsoluteBound.Y + previousSection.AbsoluteBound.Height;									
 		}
 		
 	}

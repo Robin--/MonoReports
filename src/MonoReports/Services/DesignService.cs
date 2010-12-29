@@ -38,7 +38,7 @@ using MonoReports.Renderers;
 
 namespace MonoReports.Services
 {
-	public class DesignService
+	public sealed class DesignService
 	{
 		double zoom;
 		public double Zoom { 
@@ -113,8 +113,11 @@ namespace MonoReports.Services
 		public event SelectedControlChanged OnSelectedControlChanged;		
 		public event ReportDataFieldsRefreshed OnReportDataFieldsRefreshed;				
 		public event ReportChanged OnReportChanged;
+		
+		
+		public SectionView MouseOverSection{get;set;}
 
-		ControlViewBase selectedControl;
+		ControlViewBase selectedControl;		
 
 		public ControlViewBase SelectedControl { 
 			get { return selectedControl; } 
@@ -130,7 +133,8 @@ namespace MonoReports.Services
 			} 
 		}
 
-		 
+		BaseTool mouseOverTool = null;
+		
 		ControlViewFactory controlViewFactory;
 		Report report;
 
@@ -227,7 +231,6 @@ namespace MonoReports.Services
 
 		public void CreateImageAtXY (string imageKey,double x, double y)
 		{
-
 			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 			PixbufRepository.AddOrUpdatePixbufByName(imageKey);
 			var sectionView = getSectionViewByXY (x, y);
@@ -364,7 +367,7 @@ namespace MonoReports.Services
 			
 			Report.Save(path);
 		}
-
+		 
 		public void MouseMove (double x, double y)
 		{
 			
@@ -372,30 +375,33 @@ namespace MonoReports.Services
 			IsMoving = true;
 			if (SelectedTool != null)
 				SelectedTool.OnMouseMove ();
-			DeltaPoint = new PointD (-PreviousMousePoint.X + MousePoint.X, -PreviousMousePoint.Y + MousePoint.Y);
+			DeltaPoint = new PointD (-PreviousMousePoint.X + MousePoint.X, -PreviousMousePoint.Y + MousePoint.Y);	
 			
 			
-			if (!IsPressed) {
-				bool isOnGripper = false;
-				foreach (SectionView sectionView in SectionViews) {
-					if (sectionView.GripperAbsoluteBound.ContainsPoint (MousePoint)) {
-						sectionView.SectionGripperHighlighted = true;
-						isOnGripper = true;
+			for (int i = 0; i < SectionViews.Count; i++) {					
+					var sectionView = SectionViews [i];		
+					if(sectionView.ContainsPoint(MousePoint.X,MousePoint.Y)) {						 					
+					
+						MouseOverSection = sectionView;
+						MouseOverSection.IsMouseOver = true;
+					
+						if(mouseOverTool == null || sectionView.DefaultToolName != mouseOverTool.Name) {						
+							mouseOverTool =  ToolBoxService.GetToolByName(sectionView.DefaultToolName);								
+						}
+							
+						if(SelectedTool == null || mouseOverTool != SelectedTool )
+							mouseOverTool.OnMouseMove();
 					} else {
-						sectionView.SectionGripperHighlighted = false;
+						if(!IsPressed)
+							sectionView.IsMouseOver = false;
 					}
-				}
-				if (isOnGripper) {
-					WorkspaceService.SetCursor (Gdk.CursorType.BottomSide);
-				} else {
-					WorkspaceService.SetCursor (Gdk.CursorType.LeftPtr);
-				}
 			}
-			
+			 
 			
 			WorkspaceService.InvalidateDesignArea (); 
 			PreviousMousePoint = MousePoint;
 		}
+		
 
 		public void ZoomChanged (double zoom)
 		{
@@ -431,7 +437,7 @@ namespace MonoReports.Services
 			} else {
 				sectionSpan = new Cairo.PointD (0, 0);
 			}
-			var sectionView = new SectionView (Report, controlViewFactory, section, sectionSpan);
+			var sectionView = new SectionView (controlViewFactory, section, sectionSpan);
 			sectionViews.Add (sectionView);
 			Height = sectionView.AbsoluteBound.Y + sectionView.AbsoluteBound.Height;
 		}
