@@ -832,29 +832,31 @@ namespace MonoReports.Extensions.CairoExtensions
 			Pango.Layout layout = createLayoutFromTextBlock(g,tb);
 			g.Color = tb.FontColor.ToCairoColor();
 			
-			Pango.Rectangle unused;
-			Pango.Rectangle te;			
-			layout.GetExtents (out unused, out te);
-			double measuredHeight = te.Height / (Pango.Scale.PangoScale * UnitMultiplier);
+			Pango.Rectangle inkRect;
+			Pango.Rectangle logicalRect;			
+			layout.GetExtents (out inkRect, out logicalRect);
+			double measuredHeight = (inkRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
 			
 			if(tb.VerticalAlignment != VerticalAlignment.Top)
 				vertAlgSpan = measureVerticlaSpan(tb,measuredHeight);
 			
-			g.MoveTo ((tb.Left + tb.Padding.Left) * UnitMultiplier, (tb.Top + tb.Padding.Top + vertAlgSpan) * UnitMultiplier);
+			g.MoveTo ((tb.Left + tb.Padding.Left) * UnitMultiplier, (tb.Top + tb.Padding.Top + vertAlgSpan - measuredY) * UnitMultiplier);
 			
 			if (render) {				
 				Pango.CairoHelper.ShowLayout(g, layout);						
 			}
 			
-			layout.GetExtents (out unused, out te);
-			measuredHeight = te.Height / (Pango.Scale.PangoScale * UnitMultiplier);
-			double measuredWidth = te.Width / (Pango.Scale.PangoScale * UnitMultiplier);
-			double measuredX = te.X / (Pango.Scale.PangoScale * UnitMultiplier);
-			double measuredY = te.Y / (Pango.Scale.PangoScale * UnitMultiplier);
+			layout.GetExtents (out inkRect, out logicalRect);
+			measuredHeight = (inkRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredWidth = inkRect.Width / (Pango.Scale.PangoScale * UnitMultiplier);
+			measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
+			measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
 			
 			(layout as IDisposable).Dispose();
 			g.Restore ();
-			return new Rectangle( tb.Left - tb.Padding.Left + measuredX, tb.Top - tb.Padding.Top + measuredY, measuredWidth + leftRightSpan , measuredHeight + topBottomSpan);
+			return new Rectangle( tb.Left , tb.Top, measuredWidth + leftRightSpan , measuredHeight + topBottomSpan);
 						
 		}
 		
@@ -869,7 +871,7 @@ namespace MonoReports.Extensions.CairoExtensions
 						vertAlgSpan = (controlHeightWithoutPadding  - measuredHeight) / 2;						
 					}
 			}else if (tb.VerticalAlignment == VerticalAlignment.Bottom) {
-				double controlHeightWithoutPadding = (tb.Height - tb.Padding.Bottom);
+				double controlHeightWithoutPadding = (tb.Height - (tb.Padding.Bottom + tb.Padding.Top));
 				if (measuredHeight < controlHeightWithoutPadding) {	
 					vertAlgSpan = (controlHeightWithoutPadding  - measuredHeight) ;			
 				}
@@ -896,8 +898,8 @@ namespace MonoReports.Extensions.CairoExtensions
 		public static int GetBreakLineCharacterIndexbyMaxHeight (this Context g,TextBlock tb, double maxHeight) {
 			
 			int result = 0;			
-			Pango.Rectangle unused;
-			Pango.Rectangle te;			
+			Pango.Rectangle inkRect;
+			Pango.Rectangle logRect;			
 			double vertAlgSpan = 0;	
 			int chi = 0;				
 			int gi = 0;
@@ -905,8 +907,8 @@ namespace MonoReports.Extensions.CairoExtensions
 		    
 			if (maxHeight > 0) {
 				Pango.Layout layout = createLayoutFromTextBlock(g,tb);
-				layout.GetExtents (out unused, out te);						
-				double measuredHeight = te.Height / Pango.Scale.PangoScale;			
+				layout.GetExtents (out inkRect, out logRect);						
+				double measuredHeight = inkRect.Height / Pango.Scale.PangoScale;			
 				
 				if(tb.VerticalAlignment != VerticalAlignment.Top)
 					vertAlgSpan = measureVerticlaSpan(tb,measuredHeight);
