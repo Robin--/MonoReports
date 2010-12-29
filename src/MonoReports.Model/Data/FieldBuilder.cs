@@ -91,8 +91,18 @@ namespace MonoReports.Model.Data
 			Expression parentExpression,
 			string name,
 			FieldKind fieldKind) {
-			var genericType = typeof(PropertyDataField<,>).MakeGenericType(rootObjectType, propertyType);
-			var p = Activator.CreateInstance(genericType,rootParameterExpression,parentExpression,name) as Field;			 
+            Type genericType;
+            object p;
+                if (rootObjectType == propertyType)
+                {
+                     genericType = typeof(SimpleDataField<>).MakeGenericType(propertyType);
+                     p = Activator.CreateInstance(genericType, rootParameterExpression, parentExpression, name) as Field;
+                }
+                else
+                {
+                     genericType = typeof(PropertyDataField<,>).MakeGenericType(rootObjectType, propertyType);
+                     p = Activator.CreateInstance(genericType, rootParameterExpression, parentExpression, name) as Field;
+                }
 			Field f = (p as Field);
 			f.FieldKind = fieldKind;
 			return f;			

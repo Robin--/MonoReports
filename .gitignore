@@ -9,6 +9,8 @@ bin
 src/MonoReports/obj/*
 src/MonoReports/obj/Debug/*
 src/MonoReports.Tests/test-results/*
+src/MonoReports.Shell/obj/Debug/*
+src/MonoReports.Shell/obj/*
 src/MonoReports.Model/obj/*
 src/MonoReports.Model/obj/Debug*
 src/MonoReports.Tests/obj/*

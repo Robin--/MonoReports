@@ -41,13 +41,9 @@ namespace MonoReports.Model.Data
 			Expression<Func<T,K>> lambda = null;
 			Type t = typeof(T);
 			Type k = typeof(K);
-			if(t == k && t.IsPrimitive || t == typeof(string) || t == typeof(DateTime)){
-				lambda = (K x) =>  x; 
-			}
-			else {
-				lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
-			}
 			
+		    lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
+		
 			compiledMethod = lambda.Compile();
 			expression = lambda;			
 		}
@@ -79,7 +75,19 @@ namespace MonoReports.Model.Data
 			compiledMethod = (Func<T,K>) (expression as LambdaExpression) .Compile();		 
 		}
 		
-		Func<T,K> compiledMethod;
+		protected Func<T,K> compiledMethod;
 	}
+
+    public class SimpleDataField<T> : PropertyDataField<T, T>
+    {
+        public SimpleDataField(ParameterExpression root, Expression parent, string propertyName)
+        {
+
+        Expression<Func<T,T>> lambda = null;		
+			lambda = x => x;
+			compiledMethod = lambda.Compile();
+			expression = lambda;		
+        }
+    }
 }
 
