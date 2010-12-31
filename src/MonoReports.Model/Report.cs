@@ -40,7 +40,7 @@ namespace MonoReports.Model
 			Unit = UnitType.mm;
 			Width = 190; 
 			Height = 277;			
-			Margin = new Thickness(1);
+			Margin = new Thickness(10);
 			Groups = new List<Group> ();			
 			Parameters = new List<Field> ();
 			DataFields = new List<Field> ();

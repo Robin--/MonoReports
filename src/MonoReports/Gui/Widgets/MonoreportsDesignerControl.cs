@@ -94,12 +94,12 @@ public sealed class GenerateDataSource {{
 
 ";		
 		
-		
+		double resolutionX = ((double)  Gdk.Screen.Default.Width) / ((double) Gdk.Screen.Default.WidthMm) * 25.4;
 		
 		compilerService = new CompilerService(template);
 		pixbufRepository = new PixbufRepository () { Report = startReport };			
 		workspaceService = new WorkspaceService (this,maindesignview1.DesignDrawingArea,maindesignview1.PreviewDrawingArea,mainPropertygrid, StatusBarLabel);
-		var reportRenderer = new ReportRenderer(){ Resolution =  96, Unit = startReport.Unit};
+		var reportRenderer = new ReportRenderer(){ ResolutionX =  resolutionX, Unit = startReport.Unit};
 		reportRenderer.RegisterRenderer(typeof(Controls.TextBlock), new TextBlockRenderer());
         reportRenderer.RegisterRenderer(typeof(Controls.Line), new LineRenderer());
 		reportRenderer.RegisterRenderer(typeof(MonoReports.Model.Controls.Image),

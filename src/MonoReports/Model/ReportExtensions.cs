@@ -93,9 +93,10 @@ namespace MonoReports.Model
 		}
 		
 		public static void ExportToPdf(this Report report ,string path) {
+			
 			double unitMultiplier = CairoExtensions.UnitMultiplier;
 			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
-			ReportRenderer renderer = new ReportRenderer (){ Resolution = 72};
+			ReportRenderer renderer = new ReportRenderer (){ ResolutionX = 72};
 			renderer.Unit = report.Unit;
 			
 			using (PdfSurface pdfSurface = new PdfSurface (				
@@ -115,19 +116,26 @@ namespace MonoReports.Model
 				renderer.RegisterRenderer(typeof(DetailSection), sr);
 				renderer.RegisterRenderer(typeof(PageHeaderSection), sr);
 				renderer.RegisterRenderer(typeof(PageFooterSection), sr);
-				cr.Translate(report.Margin.Left * renderer.UnitMultipilier,report.Margin.Top * renderer.UnitMultipilier);
+				
+				
 				MonoReports.Model.Engine.ReportEngine engine = new MonoReports.Model.Engine.ReportEngine (report,renderer);
-				engine.Process ();
+				engine.Process ();		
+				
+				Cairo.Context cr1 = new Cairo.Context (pdfSurface);
+				renderer.Context = cr1;
+				cr1.Translate(report.Margin.Left * renderer.UnitMultipilier,report.Margin.Top * renderer.UnitMultipilier);
 				for (int i = 0; i < report.Pages.Count; ++i) {
 					renderer.RenderPage (report.Pages [i]);
-					cr.ShowPage ();
+					cr1.ShowPage ();
 				}			
 				pdfSurface.Finish ();		
 				(cr as IDisposable).Dispose ();
+				(cr1 as IDisposable).Dispose ();
 			}
 			
-			unitMultiplier = CairoExtensions.UnitMultiplier  = unitMultiplier;
+			CairoExtensions.UnitMultiplier = unitMultiplier;
 			CairoExtensions.RealFontMultiplier = realFontMultiplier;
+			
 		}
 		
 		

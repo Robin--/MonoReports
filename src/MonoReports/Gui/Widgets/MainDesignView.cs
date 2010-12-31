@@ -155,7 +155,7 @@ namespace MonoReports.Gui.Widgets
 			if (designService != null) {
 				DrawingArea area = (DrawingArea)o;
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
-				cr.Antialias = Cairo.Antialias.None;
+				cr.Antialias = Cairo.Antialias.Default;
 				designService.RedrawReport (cr);
 				area.SetSizeRequest ((int)(designService.Width* ReportRenderer.UnitMultipilier+3), (int)(designService.Height* ReportRenderer.UnitMultipilier+3));
 				(cr as IDisposable).Dispose ();
@@ -166,9 +166,9 @@ namespace MonoReports.Gui.Widgets
 		{
 	
 			DrawingArea area = (DrawingArea)o;
-			if (designService.Report.Pages.Count > 0) {
+			if (designService.Report.Pages.Count > 0 ) {
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
-				cr.Antialias = Cairo.Antialias.None;								 				 
+				cr.Antialias = Cairo.Antialias.Default;								 				 
 				reportRenderer.Context  = cr;
 				Cairo.Rectangle r = new Cairo.Rectangle (
 					0,

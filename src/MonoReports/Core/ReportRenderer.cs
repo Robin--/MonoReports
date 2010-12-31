@@ -69,12 +69,12 @@ namespace MonoReports.Core
 			}
 		}
 		
-		double resolution;
-		public double Resolution {
-			get { return resolution; }
+		double resolutionX;
+		public double ResolutionX {
+			get { return resolutionX; }
 			set { 
-				resolution = value; 
-			    CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolution / 72;
+				resolutionX = value; 
+			    CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolutionX / 72;
 			}
 		}
 		
@@ -83,13 +83,13 @@ namespace MonoReports.Core
 			get { return unitMultipilier; }
 			set { 
 				unitMultipilier = value;
-				CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolution / 72;
+				CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolutionX / 72;
 			}
 		}
 		
 		
 		UnitType unitType;
-		
+		//TODO: 3tk olny milimeters are really supported in designer
 		public UnitType Unit {
 			get { return unitType; }
 			set 
@@ -97,13 +97,13 @@ namespace MonoReports.Core
 				unitType = value;
 				switch (unitType) {
 				case UnitType.mm:
-						UnitMultipilier = Resolution / 25.4;
+						UnitMultipilier = ResolutionX / 25.4;
 					break;
 				case UnitType.cm:
-						UnitMultipilier = Resolution / 2.54;
+						UnitMultipilier = ResolutionX / 2.54;
 					break;
 				case UnitType.inch:
-						UnitMultipilier = Resolution / 25.4;
+						UnitMultipilier = ResolutionX;
 					break;
 				default:						
 					break;
@@ -127,11 +127,20 @@ namespace MonoReports.Core
 		}
 
 		public void RenderPage (Page p)
-		{			 			
-			for (int i = 0; i < p.Controls.Count; i++) {
+		{					
+			List<Control> controls = new List<Control>();
+			for (int i = 0; i < p.Controls.Count -1; i++) {
 				var control = p.Controls[i];
- 					if(control.IsVisible)
-						RenderControl (control);				 				
+ 					if(control.IsVisible) {
+					   if(control is Section)
+							RenderControl (control);			
+						else 
+							controls.Add(control);													
+					}
+			}
+			
+			for (int i = 0; i < controls.Count; i++) {
+				RenderControl (controls[i]);
 			}
 			 
 		}
