@@ -243,6 +243,10 @@ namespace MonoReports.Services
 			SelectedTool.CreateNewControl (sectionView);
 			var image = (SelectedControl.ControlModel as Image);
 			image.ImageKey = imageKey;
+			if(PixbufRepository.ContainsKey(imageKey)){
+				image.Width =  PixbufRepository.pixbufDictionary[imageKey].Width / Renderer.UnitMultipilier;
+				image.Height = PixbufRepository.pixbufDictionary[imageKey].Height / Renderer.UnitMultipilier;
+			}
 			image.Location = new MonoReports.Model.Point (localpoint.X,localpoint.Y);
 			SelectedTool.CreateMode = false;
 		}

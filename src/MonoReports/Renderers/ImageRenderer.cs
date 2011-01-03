@@ -49,10 +49,12 @@ namespace MonoReports.Renderers
 			c.Save ();
 			borderRect = new Rectangle (image.Location.X  * unitMulitipier, image.Location.Y  * unitMulitipier, image.Width   * unitMulitipier, image.Height * unitMulitipier);	 
 			c.ClipRectangle (borderRect);			
-			c.FillRectangle (borderRect, image.BackgroundColor.ToCairoColor ());
+			
 			if ( PixbufRepository.ContainsKey(image.ImageKey)) {
 				var pixbuf = PixbufRepository[image.ImageKey];		 
 				c.DrawPixbuf (pixbuf, new Cairo.PointD(image.Location.X * unitMulitipier , image.Location.Y  * unitMulitipier), (int)(image.Width * unitMulitipier),(int)(image.Height * unitMulitipier), image.Offset.ToCairoPointD ());
+			}else {
+				c.FillRectangle (borderRect, image.BackgroundColor.ToCairoColor ());
 			}
 			c.DrawInsideBorder (borderRect, image.Border, true);				
 			c.Restore (); 
