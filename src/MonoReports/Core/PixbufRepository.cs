@@ -34,60 +34,73 @@ namespace MonoReports.Core
 	{
 		public PixbufRepository ()
 		{
-			pixbufDictionary = new Dictionary<string, Pixbuf>();
+			pixbufDictionary = new Dictionary<string, Pixbuf> ();
 		}
-		
-		public PixbufRepository (Dictionary<string,byte[]> imagesRepository)
-		{
-			pixbufDictionary = new Dictionary<string, Pixbuf>();
-			foreach (KeyValuePair<string, byte[]> kvp in imagesRepository) {
-				pixbufDictionary.Add(kvp.Key,new Gdk.Pixbuf (kvp.Value));
+
+		Report report;
+
+		public Report Report {
+			get { return report; }
+			set { 
+			
+					
+				if (report != null) {
+					foreach (var item in pixbufDictionary) {
+						item.Value.Dispose ();
+					}
+					pixbufDictionary.Clear ();
+				}
+					
+				report = value; 
+				if (report != null) {
+					foreach (KeyValuePair<string, byte[]> kvp in  report.ResourceRepository) {
+						pixbufDictionary.Add (kvp.Key, new Gdk.Pixbuf (kvp.Value));
+					}
+				}
+				
 			}
 		}
-		
-		
-		public Report Report {get;set;}
-		
-		
-		public Dictionary<string,Pixbuf> pixbufDictionary {get;set;}
-		
-		
+
+		public Dictionary<string,Pixbuf> pixbufDictionary {get; set;}
+
 		public Pixbuf this [string key] {
 			get {
 				
-				if(!pixbufDictionary.ContainsKey (key)){
-					pixbufDictionary.Add(key,	 new Gdk.Pixbuf (Report.ResourceRepository[key]));
+				if (!pixbufDictionary.ContainsKey (key)) {
+					pixbufDictionary.Add (key, new Gdk.Pixbuf (Report.ResourceRepository [key]));
 				}
 
-				return pixbufDictionary[key];
+				return pixbufDictionary [key];
 			}
 		}
-		
-		
-		public bool ContainsKey (string key) {
-			return pixbufDictionary.ContainsKey(key);
+
+		public bool ContainsKey (string key)
+		{
+			return pixbufDictionary.ContainsKey (key);
 		}
-		
-		public void AddOrUpdatePixbufByName(string key) {
-			if (Report.ResourceRepository.ContainsKey(key)) {
-				var pixbuf = new Gdk.Pixbuf (Report.ResourceRepository[key]);
-				if (pixbufDictionary.ContainsKey(key)) {
-					Gdk.Pixbuf pb =  pixbufDictionary[key];
-					pb.Dispose();
-					pixbufDictionary[key] = pixbuf;
+
+		public void AddOrUpdatePixbufByName (string key)
+		{
+			if (Report.ResourceRepository.ContainsKey (key)) {
+				var pixbuf = new Gdk.Pixbuf (Report.ResourceRepository [key]);
+				if (pixbufDictionary.ContainsKey (key)) {
+					Gdk.Pixbuf pb = pixbufDictionary [key];
+					pb.Dispose ();
+					pixbufDictionary [key] = pixbuf;
 					
 				} else {
-					pixbufDictionary.Add(key,pixbuf);
+					pixbufDictionary.Add (key, pixbuf);
 				}
 			}
 		}
-		
-		public void DeletePixbufAtIndex(string key){
-			var pixbuf = pixbufDictionary[key];			
-			pixbufDictionary.Remove(key);
-			pixbuf.Dispose();			
+
+		public void DeletePixbufAtIndex (string key)
+		{
+			var pixbuf = pixbufDictionary [key];			
+			pixbufDictionary.Remove (key);
+			pixbuf.Dispose ();			
 		}
-		
+
 		public int Count {
 			get { return pixbufDictionary.Count; }		
 		}

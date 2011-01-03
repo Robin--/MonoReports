@@ -109,7 +109,10 @@ namespace MonoReports.Model
 				renderer.Context = cr;
 				renderer.RegisterRenderer (typeof(TextBlock), new TextBlockRenderer ());
 				renderer.RegisterRenderer (typeof(Line), new LineRenderer ());
-				renderer.RegisterRenderer (typeof(Image), new ImageRenderer (){ PixbufRepository = new PixbufRepository(report.ResourceRepository)});
+				PixbufRepository pbr = new PixbufRepository();
+				pbr.Report = report;
+				
+				renderer.RegisterRenderer (typeof(Image), new ImageRenderer (){PixbufRepository = pbr});
 				SectionRenderer sr = new SectionRenderer();
 				renderer.RegisterRenderer(typeof(ReportHeaderSection), sr);
 				renderer.RegisterRenderer(typeof(ReportFooterSection), sr);
