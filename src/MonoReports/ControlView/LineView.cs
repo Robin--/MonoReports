@@ -100,11 +100,11 @@ namespace MonoReports.ControlView
 	 
 		public override bool ContainsPoint (double x, double y)
 		{
-			double span = (line.LineWidth  / LineRenderer.UnitMulitipier) * 5;
+			double span = (1  / LineRenderer.UnitMulitipier) * 1.5;
 			Cairo.PointD p1 = ParentSection.AbsolutePointByLocalPoint(line.Location.X,line.Location.Y);
 			Cairo.PointD p2 = ParentSection.AbsolutePointByLocalPoint(line.End.X, line.End.Y);
 			Cairo.PointD hitPoint = new Cairo.PointD(x,y);
- 			if (hitPoint.X >= (Math.Max (p1.X, p2.X) + span) || hitPoint.X <= (Math.Min (p1.X, p2.X) - span) || hitPoint.Y >= (Math.Max (p1.Y, p2.Y) + span) || hitPoint.Y <= (Math.Min (p1.Y, p2.Y) - span))
+ 			if (hitPoint.X >= (Math.Max (p1.X, p2.X) + span) || hitPoint.X <= (Math.Min (p1.X, p2.X) - span) || hitPoint.Y >= (Math.Max (p1.Y, p2.Y) + 2 * span) || hitPoint.Y <= (Math.Min (p1.Y, p2.Y) - span))
 				return false;
 			
 			if (p1.X == p2.X || p1.Y == p2.Y)

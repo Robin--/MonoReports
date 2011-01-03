@@ -111,7 +111,7 @@ namespace MonoReports.Tools
 				previousSection = sectionView;
 				counter++;
 			}
-		 	designService.Height =  previousSection.AbsoluteBound.Y + previousSection.AbsoluteBound.Height;									
+		 	designService.InvalidateDesignHeight();				
 		}
 		
 	}

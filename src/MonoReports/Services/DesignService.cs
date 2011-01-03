@@ -46,8 +46,8 @@ namespace MonoReports.Services
 			set { 
 				zoom = value; 
 				if (Report != null) {
-					width = (int)(Report.Width * Zoom);
-					height = (int)(Report.Height * Zoom);
+					width = (int)(Report.Width * Zoom);	
+					InvalidateDesignHeight();
 				}
 				if(OnZoomChanged != null)
 					OnZoomChanged(this,new EventArgs());
@@ -58,7 +58,11 @@ namespace MonoReports.Services
 		public double Width { get { return width; } set { width = value; } }
 
 		double height;
-		public double Height { get { return height; } set { height = value; } }
+		public double Height { 
+			get { return height; } 
+			set { 
+				height = value; 
+			} }
 
 		public BaseTool SelectedTool {
 			get { return ToolBoxService.SelectedTool; } 
@@ -460,6 +464,12 @@ namespace MonoReports.Services
 		
 			fc.Destroy ();
 			
+		}
+		
+		
+		public void InvalidateDesignHeight(){
+			height = SectionViews[SectionViews.Count -1].AbsoluteBound.Y + SectionViews[SectionViews.Count -1].AbsoluteBound.Height;					
+			height *= zoom;
 		}
  
 	}
