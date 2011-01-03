@@ -12,6 +12,7 @@ Dependencies
 ------------
 
 To build MonoReports you need to have:
+
 - Mono 2.6 or higher
 - Gtk-sharp 2.12 or higher
 - Json.net library Newtonsoft.Json.dll (src/lib)
