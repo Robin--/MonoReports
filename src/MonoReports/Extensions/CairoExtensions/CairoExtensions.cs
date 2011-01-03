@@ -939,7 +939,8 @@ namespace MonoReports.Extensions.CairoExtensions
 		public static void DrawPixbuf (this Context g, Gdk.Pixbuf pixbuf, PointD dest, int width, int height, PointD offset)
 		{
 			g.Save ();			
-			var drawnPixbuf = pixbuf.ScaleSimple(width,height, Gdk.InterpType.Bilinear);
+			var drawnPixbuf = pixbuf.ScaleSimple(width,height, Gdk.InterpType.Hyper);
+			
 			Gdk.CairoHelper.SetSourcePixbuf (g, drawnPixbuf, dest.X + offset.X, dest.Y + offset.Y);
 			g.Paint ();
 			g.Restore ();

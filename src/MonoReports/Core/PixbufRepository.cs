@@ -41,7 +41,7 @@ namespace MonoReports.Core
 		{
 			pixbufDictionary = new Dictionary<string, Pixbuf>();
 			foreach (KeyValuePair<string, byte[]> kvp in imagesRepository) {
-				pixbufDictionary.Add(kvp.Key,new Gdk.Pixbuf (kvp.Value,100,100));
+				pixbufDictionary.Add(kvp.Key,new Gdk.Pixbuf (kvp.Value));
 			}
 		}
 		
@@ -56,7 +56,7 @@ namespace MonoReports.Core
 			get {
 				
 				if(!pixbufDictionary.ContainsKey (key)){
-					pixbufDictionary.Add(key,	 new Gdk.Pixbuf (Report.ResourceRepository[key],100,100));
+					pixbufDictionary.Add(key,	 new Gdk.Pixbuf (Report.ResourceRepository[key]));
 				}
 
 				return pixbufDictionary[key];
