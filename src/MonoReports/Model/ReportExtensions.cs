@@ -127,7 +127,7 @@ namespace MonoReports.Model
 				Cairo.Context cr1 = new Cairo.Context (pdfSurface);
 				renderer.Context = cr1;
 				cr1.Translate(report.Margin.Left * renderer.UnitMultipilier,report.Margin.Top * renderer.UnitMultipilier);
-				for (int i = 0; i < report.Pages.Count; ++i) {
+				for (int i = 0; i < report.Pages.Count; i++) {
 					renderer.RenderPage (report.Pages [i]);
 					cr1.ShowPage ();
 				}			

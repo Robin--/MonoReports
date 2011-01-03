@@ -129,7 +129,7 @@ namespace MonoReports.Core
 		public void RenderPage (Page p)
 		{					
 			List<Control> controls = new List<Control>();
-			for (int i = 0; i < p.Controls.Count -1; i++) {
+			for (int i = 0; i < p.Controls.Count; i++) {
 				var control = p.Controls[i];
  					if(control.IsVisible) {
 					   if(control is Section)
