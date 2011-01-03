@@ -57,9 +57,9 @@ namespace MonoReports.Tools
 			selectBorder = new Border ();
 			selectBorder.Color = new MonoReports.Model.Color(0,0,0);
 			selectBorder.WidthAll = 1;	
-			gripSpan = 4 / designService.Zoom;
+			gripSpan = 2 / designService.Zoom;
 			designService.OnZoomChanged += delegate(object sender, EventArgs e) {
-				gripSpan = 4 / designService.Zoom;
+				gripSpan = 2 / designService.Zoom;
 			};
 		}
 

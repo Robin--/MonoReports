@@ -42,17 +42,17 @@ namespace MonoReports.Tools
 		protected bool endPointHit;
 		protected Line line;
 		protected SectionView currentSection = null;
-		double lineDistance = 2;							
+		double lineDistance = 1;							
 
 		public LineTool (DesignService designService) : base(designService)
 		{		
 			designService.OnZoomChanged += HandleDesignServiceOnZoomChanged;
-			lineDistance = 2 / designService.Zoom;
+			lineDistance = 1 / designService.Zoom;
 		}
 
 		void HandleDesignServiceOnZoomChanged (object sender, EventArgs e)
 		{
-			 lineDistance = 2 / designService.Zoom;
+			 lineDistance = 1 / designService.Zoom;
 		}
 		
 		
