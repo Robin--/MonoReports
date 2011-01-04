@@ -74,56 +74,59 @@ namespace MonoReports.Core
 			get { return resolutionX; }
 			set { 
 				resolutionX = value; 
-			    CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolutionX / 72;
+				refreshUnit();			   
 			}
 		}
 		
 		double unitMultipilier;
 		public double UnitMultipilier {
 			get { return unitMultipilier; }
-			set { 
-				unitMultipilier = value;
-				CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolutionX / 72;
+			private set { 
+				unitMultipilier = value;		
 			}
 		}
 		
-		
-		UnitType unitType;
-		//TODO: 3tk olny milimeters are really supported in designer
-		public UnitType Unit {
-			get { return unitType; }
-			set 
-			{ 
-				unitType = value;
-				switch (unitType) {
+	    public double GetUnitMultiplier(UnitType unitType) {
+			switch (unitType) {
+					
+				case UnitType.px:
+						return ResolutionX / 96;
+					
 				case UnitType.mm:
-						UnitMultipilier = ResolutionX / 25.4;
-					break;
+						return ResolutionX / 25.4;
+					
 				case UnitType.cm:
-						UnitMultipilier = ResolutionX / 2.54;
-					break;
+						return ResolutionX / 2.54;
+					
 				case UnitType.inch:
-						UnitMultipilier = ResolutionX;
-					break;
+						return ResolutionX;
+					
+				case UnitType.pt:
+						return ResolutionX / 72;
 				default:						
 					break;
 				}	
-				
-				CairoExtensions.UnitMultiplier = UnitMultipilier;
-			}
-			
+			return -1;
+		}
+	 
+		
+		void  refreshUnit () {
+			UnitMultipilier = GetUnitMultiplier(UnitType.px);
+			CairoExtensions.UnitMultiplier = UnitMultipilier;
+			CairoExtensions.RealFontMultiplier =  Pango.Scale.PangoScale * resolutionX / 72;			
 		}
 		
 		
 		public ReportRenderer ()
 		{
 			renderersDictionary = new Dictionary<Type, object>();
-			unitMultipilier = 1;
+			unitMultipilier = 1;	
+			ResolutionX = 96;
 		} 
 
 		public void RegisterRenderer(Type t,IControlRenderer renderer) {	
 			renderer.UnitMulitipier = unitMultipilier;
-			renderersDictionary.Add(t,renderer);
+			renderersDictionary.Add(t,renderer);			
 		}
 
 		public void RenderPage (Page p)

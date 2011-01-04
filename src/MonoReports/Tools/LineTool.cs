@@ -47,12 +47,12 @@ namespace MonoReports.Tools
 		public LineTool (DesignService designService) : base(designService)
 		{		
 			designService.OnZoomChanged += HandleDesignServiceOnZoomChanged;
-			lineDistance = 1 / designService.Zoom;
+			lineDistance = 2 / (designService.Zoom > 1.5 ? (designService.Zoom / 2) : 1);
 		}
 
 		void HandleDesignServiceOnZoomChanged (object sender, EventArgs e)
 		{
-			 lineDistance = 1 / designService.Zoom;
+			 lineDistance = 2 / (designService.Zoom > 1.5 ? (designService.Zoom / 2) : 1);
 		}
 		
 		
@@ -191,8 +191,9 @@ namespace MonoReports.Tools
 					.SelectedControl
 					.ParentSection
 					.AbsolutePointByLocalPoint (line.End.X, line.End.Y);
-                c.DrawGripperWithLocationInUnit(p1.X,p1.Y, 1.2 / (designService.Zoom / 2));
-                c.DrawGripperWithLocationInUnit(p2.X,p2.Y, 1.2 / (designService.Zoom / 2));
+				double gripperSize = 2 / (designService.Zoom > 1.5 ? (designService.Zoom / 2) : 1);
+                c.DrawGripperWithLocationInUnit(p1.X,p1.Y, gripperSize);
+                c.DrawGripperWithLocationInUnit(p2.X,p2.Y, gripperSize);
 			}
 		}
 

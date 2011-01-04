@@ -96,9 +96,7 @@ namespace MonoReports.Model
 			
 			double unitMultiplier = CairoExtensions.UnitMultiplier;
 			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
-			ReportRenderer renderer = new ReportRenderer (){ ResolutionX = 72};
-			renderer.Unit = report.Unit;
-			
+			ReportRenderer renderer = new ReportRenderer (){ ResolutionX = 72};			
 			using (PdfSurface pdfSurface = new PdfSurface (				
 				path,report.WidthWithMargins * renderer.UnitMultipilier,
 				report.HeightWithMargins * renderer.UnitMultipilier)) {

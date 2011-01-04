@@ -104,7 +104,7 @@ namespace MonoReports.Extensions.CairoExtensions
 		}
 		
 		public static Rectangle DrawSelectBoxInUnits (this Context g, Rectangle r, double gripperSize){
-			return DrawSelectBox (g, new Rectangle(r.X * UnitMultiplier,r.Y * UnitMultiplier,r.Width * UnitMultiplier,r.Height * UnitMultiplier),  gripperSize);
+			return DrawSelectBox (g, new Rectangle(r.X * UnitMultiplier,r.Y * UnitMultiplier,r.Width * UnitMultiplier,r.Height * UnitMultiplier),  gripperSize * UnitMultiplier);
 		}
 		
 		public static Rectangle DrawSelectBox (this Context g, Rectangle r, double gripperSize)

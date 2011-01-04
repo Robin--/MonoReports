@@ -40,7 +40,7 @@ namespace MonoReports.ControlView
 	{
 		
 		public static double SectionheaderHeight = 20;
-		public static double SectionGripperHeight = 1;
+		public static double SectionGripperHeight = 4;
 		static Cairo.Color blackColor = new Cairo.Color (0, 0, 0);
 		static Cairo.Color yellowColor = new Cairo.Color (1, 1, 0);
 		static Cairo.Color sectionHeaderColor = new Cairo.Color (0.85, 0.85, 0.91);

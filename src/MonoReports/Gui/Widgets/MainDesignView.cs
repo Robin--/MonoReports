@@ -62,8 +62,7 @@ namespace MonoReports.Gui.Widgets
 
 		void HandleDesignServiceOnReportChanged (object sender, EventArgs e)
 		{
-			codeTextview.Buffer.Text = designService.Report.DataScript;
-			ReportRenderer.Unit = designService.Report.Unit;
+			codeTextview.Buffer.Text = designService.Report.DataScript;			
 		}
 
 		ReportRenderer reportRenderer;

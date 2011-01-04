@@ -78,7 +78,7 @@ namespace MonoReports.Tools
 		public override ControlViewBase CreateNewControl (SectionView sectionView)
 		{				
 			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);			
-			var tb = new TextBlock { Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Text="text", FontName="Helvetica", FontSize=11, Size = new Size(20,5) };
+			var tb = new TextBlock { Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Text="text", FontName="Helvetica", FontSize=11, Size = new Size(2.cm(),11.pt() + 2) };
             return AddControl(sectionView, tb); 
 		}
 

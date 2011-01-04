@@ -1,10 +1,10 @@
 // 
-// Settings.cs
+// UnitExtensions.cs
 //  
 // Author:
 //       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
 // 
-// Copyright (c) 2010 Tomasz Kubacki
+// Copyright (c) 2011 Tomasz Kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,34 +27,61 @@ using System;
 
 namespace MonoReports.Model
 {
-	public static class Settings
-	{
+	public static class UnitExtensions
+	{		
+	
+		public static double cm (this double val)
+		{			
+			return 	96 / 2.54 * val;
+		}
 		
+		public static double mm (this double val)
+		{			
+			return 	96 / 25.4 * val;
+		}
 		
-		public static UnitType DefaultUnit = UnitType.mm;
-
-		public static double DefaultLineWidth {
-				
-			get {
-				switch (DefaultUnit) {
-				
-				case UnitType.mm:
-					return 0.264583333;
-				case UnitType.cm:
-					return 0.0264583333;				
-				case UnitType.inch:
-					return 0.01;				
-				default:
-					return 0;
-					break;				
-				}
-				
-				
-			}
-			
+		public static double inch (this double val)
+		{			
+			return 	96 * val;
 		}
 		
 		
+		public static double pt (this double val)
+		{			
+			return 	96 / 72 * val;
+		}
+		
+		public static double cm (this int val)
+		{			
+			return 	96 / 2.54 * (double) val;
+		}
+		
+		public static double mm (this int val)
+		{			
+			return 	96 / 25.4 * (double) val;
+		}
+		
+		public static double inch (this int val)
+		{			
+			return 	96 * (double) val;
+		}
+		
+		
+		public static double pt (this int val)
+		{			
+			return 	96 / 72 * (double) val;
+		}		
+		
+		//yea it's stuipid but may be usable to make code cleaner
+		public static double px (this double val)
+		{			
+			return 	val;
+		}
+				
+		public static double px (this int val)
+		{			
+			return (double)	val;
+		}
 	}
 }
 

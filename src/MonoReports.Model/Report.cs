@@ -36,11 +36,10 @@ namespace MonoReports.Model
 	{
 
 		public Report ()
-		{
-			Unit = UnitType.mm;
-			Width = 190; 
-			Height = 277;			
-			Margin = new Thickness(10);
+		{			
+			Width = 190.mm(); 
+			Height = 277.mm();		
+			Margin = new Thickness(10.mm());
 			Groups = new List<Group> ();			
 			Parameters = new List<Field> ();
 			DataFields = new List<Field> ();
@@ -49,11 +48,11 @@ namespace MonoReports.Model
 			GroupFooterSections = new List<GroupFooterSection> ();
 			Pages = new List<Page> ();
 			ResourceRepository = new Dictionary<string,byte[]> ();
-			ReportHeaderSection = new Controls.ReportHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 2) };
-			PageHeaderSection = new Controls.PageHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 3) };
-			DetailSection = new Controls.DetailSection { Location = new Point (0, 9), Size = new Model.Size (Width, 5) };
-			PageFooterSection = new Controls.PageFooterSection { Location = new Point (0, 13), Size = new Model.Size (Width, 3) };
-			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 16), Size = new Model.Size (Width, 3) };
+			ReportHeaderSection = new Controls.ReportHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 10.mm()) };
+			PageHeaderSection = new Controls.PageHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 10.mm()) };
+			DetailSection = new Controls.DetailSection { Location = new Point (0, 9), Size = new Model.Size (Width, 10.mm()) };
+			PageFooterSection = new Controls.PageFooterSection { Location = new Point (0, 13), Size = new Model.Size (Width, 10.mm()) };
+			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 16), Size = new Model.Size (Width, 10.mm()) };
 		}
 
 		public string Title { get; set; }
@@ -165,9 +164,7 @@ namespace MonoReports.Model
 		
 		public double WidthWithMargins { get { return Width  + Margin.Left + Margin.Right;} }
 		
-		public Thickness Margin {get;set;}
-
-		public UnitType Unit { get; set; }
+		public Thickness Margin {get;set;}		
 
 		public void AddGroup (Group gr)
 		{
@@ -249,8 +246,7 @@ namespace MonoReports.Model
 			r.GroupFooterSections = GroupFooterSections;
 			r.Height = Height;
 			r.Width = Width;
-			r.Margin = Margin;
-			r.Unit = Unit;			
+			r.Margin = Margin;			
 		}
 
  

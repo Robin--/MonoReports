@@ -45,8 +45,7 @@ namespace MonoReports.Tools
 	public class RectTool : BaseTool
 	{
 
-		double gripSize = 3;
-		double gripSpan = 1;
+		
 		
 		bool isResizing;
 		Border selectBorder;
@@ -56,11 +55,7 @@ namespace MonoReports.Tools
 		{
 			selectBorder = new Border ();
 			selectBorder.Color = new MonoReports.Model.Color(0,0,0);
-			selectBorder.WidthAll = 1;	
-			gripSpan = 2 / designService.Zoom;
-			designService.OnZoomChanged += delegate(object sender, EventArgs e) {
-				gripSpan = 2 / designService.Zoom;
-			};
+			selectBorder.WidthAll = 1;		
 		}
 
 		public override void OnBeforeDraw (Context c)
@@ -147,7 +142,8 @@ namespace MonoReports.Tools
 				c.Save ();
 				c.SetDash (new double[] { 1.0 ,1,1}, 2);
 				c.DrawInsideBorderInUnit (designService.SelectedControl.AbsoluteBound, selectBorder, true);
-				c.DrawSelectBoxInUnits (designService.SelectedControl.AbsoluteBound,gripSize);
+				double gripperSize = 4 / (designService.Zoom > 1.5 ? (designService.Zoom / 2) : 1);
+				c.DrawSelectBoxInUnits (designService.SelectedControl.AbsoluteBound,gripperSize);
 				c.Restore ();
 			}
 		}
@@ -162,22 +158,22 @@ namespace MonoReports.Tools
 				var pointInSection = control.ParentSection.PointInSectionByAbsolutePoint (designService.MousePoint);
 				var location = control.ControlModel.Location;
 				isResizing = false;
+				double gripperSize = 4 / (designService.Zoom > 1.5 ? (designService.Zoom / 2) : 1);
 				
-				
-				if (pointInSection.Y > location.Y && pointInSection.Y < location.Y + gripSpan) {
-					if (pointInSection.X > location.X && location.X + gripSpan > pointInSection.X) {
+				if (pointInSection.Y > location.Y && pointInSection.Y < location.Y + gripperSize) {
+					if (pointInSection.X > location.X && location.X + gripperSize > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.NW;
-					} else if (pointInSection.X > location.X + cw - gripSpan && location.X + cw > pointInSection.X) {
+					} else if (pointInSection.X > location.X + cw - gripperSize && location.X + cw > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.NE;
 					}
 					
-				} else if (pointInSection.Y > location.Y + ch - gripSpan && pointInSection.Y < location.Y + ch) {
-					if (pointInSection.X > location.X && location.X + gripSize > pointInSection.X) {
+				} else if (pointInSection.Y > location.Y + ch - gripperSize && pointInSection.Y < location.Y + ch) {
+					if (pointInSection.X > location.X && location.X + gripperSize > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.SW;
-					} else if (pointInSection.X > location.X + cw - gripSpan && location.X + cw > pointInSection.X) {
+					} else if (pointInSection.X > location.X + cw - gripperSize && location.X + cw > pointInSection.X) {
 						isResizing = true;
 						gripperType = GripperType.SE;
 					}

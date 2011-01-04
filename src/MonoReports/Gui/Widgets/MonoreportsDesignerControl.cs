@@ -99,7 +99,7 @@ public sealed class GenerateDataSource {{
 		compilerService = new CompilerService(template);
 		pixbufRepository = new PixbufRepository () { Report = startReport };			
 		workspaceService = new WorkspaceService (this,maindesignview1.DesignDrawingArea,maindesignview1.PreviewDrawingArea,mainPropertygrid, StatusBarLabel);
-		var reportRenderer = new ReportRenderer(){ ResolutionX =  resolutionX, Unit = startReport.Unit};
+		var reportRenderer = new ReportRenderer(){ ResolutionX =  resolutionX};
 		reportRenderer.RegisterRenderer(typeof(Controls.TextBlock), new TextBlockRenderer());
         reportRenderer.RegisterRenderer(typeof(Controls.Line), new LineRenderer());
 		reportRenderer.RegisterRenderer(typeof(MonoReports.Model.Controls.Image),

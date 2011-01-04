@@ -28,7 +28,28 @@ namespace MonoReports.Model
 {
 	public enum UnitType
 	{
-		mm = 1, cm = 2,  inch = 3
+		/// <summary>
+		/// Device independent = 1/96 inch
+		/// </summary>
+		px = 1,
+		/// <summary>
+		/// Device independent = 1 milimeter
+		/// </summary>
+		mm = 2,
+		/// <summary>
+		/// Device independent = 1 centimeter
+		/// </summary>
+		cm = 3,
+		
+		/// <summary>
+		/// Device independent = 1 inch
+		/// </summary>
+		inch = 4,
+		
+		/// <summary>
+		/// Device independent = 96/72 inch
+		/// </summary>
+		pt = 5
 	}
 }
 
