@@ -119,6 +119,48 @@ namespace MonoReports.Model
             } 
         
         }
+
+        public IEnumerable<Control> GetAllReportControls()
+        {
+            yield return ReportHeaderSection;
+            foreach (var item in ReportHeaderSection.Controls)
+            {
+                yield return item;
+            }
+            foreach (var item in PageHeaderSection.Controls)
+            {
+                yield return item;
+            }
+
+            foreach (var group in GroupHeaderSections)
+            {
+                foreach (var item in group.Controls)
+                {
+                    yield return item;
+                }
+            }
+            foreach (var item in DetailSection.Controls)
+            {
+                yield return item;
+            }
+
+            foreach (var group in GroupFooterSections)
+            {
+                foreach (var item in group.Controls)
+                {
+                    yield return item;
+                }
+            }
+
+            foreach (var item in PageFooterSection .Controls)
+            {
+                yield return item;
+            }
+            foreach (var item in ReportFooterSection.Controls)
+            {
+                yield return item;
+            }
+        }
 		
 		public double WidthWithMargins { get { return Width  + Margin.Left + Margin.Right;} }
 		

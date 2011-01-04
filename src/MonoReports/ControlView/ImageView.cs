@@ -67,7 +67,7 @@ namespace MonoReports.ControlView
 		
 		public override string DefaultToolName {
 			get {
-				return "RectTool";
+				return "ImageTool";
 			}
 		}
 

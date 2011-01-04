@@ -127,7 +127,7 @@ namespace MonoReports.Model.Controls
 			line.End = new Point(End.X,End.Y);
 			line.LineWidth = LineWidth;
 			line.LineType = LineType;
-			line.LineMode = line.LineMode;
+			line.LineMode = LineMode;
 			line.ExtendToBottom = ExtendToBottom;
 			return line;
 		}

@@ -34,6 +34,7 @@ using MonoReports.Tools;
 using MonoReports.ControlView;
 using MonoReports.Model.Data;
 using MonoReports.Renderers;
+using Gtk;
 
 
 namespace MonoReports.Services
@@ -218,7 +219,7 @@ namespace MonoReports.Services
 		public void CreateTextBlockAtXY (string text, string fieldName, FieldKind fieldKind, double x, double y)
 		{			
 			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
-			var sectionView = getSectionViewByXY (x, y);
+			var sectionView = getSectionViewByXY (point);
 			
 			if (sectionView != null) {
 				var localpoint = sectionView.PointInSectionByAbsolutePoint (point);	
@@ -237,11 +238,11 @@ namespace MonoReports.Services
 		{
 			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
 			PixbufRepository.AddOrUpdatePixbufByName(imageKey);
-			var sectionView = getSectionViewByXY (x, y);
+			var sectionView = getSectionViewByXY (point);
 			var localpoint = sectionView.PointInSectionByAbsolutePoint (point);
 			ToolBoxService.SetToolByName ("ImageTool");	
 			SelectedTool.CreateNewControl (sectionView);
-			var image = (SelectedControl.ControlModel as Image);
+			var image = (SelectedControl.ControlModel as MonoReports.Model.Controls.Image);
 			image.ImageKey = imageKey;
 			if(PixbufRepository.ContainsKey(imageKey)){
 				image.Width =  PixbufRepository.pixbufDictionary[imageKey].Width / Renderer.UnitMultipilier;
@@ -251,9 +252,8 @@ namespace MonoReports.Services
 			SelectedTool.CreateMode = false;
 		}
 
-		SectionView getSectionViewByXY (double x, double y)
-		{
-			var point = new Cairo.PointD (x / (Zoom * Renderer.UnitMultipilier), y / (Zoom * Renderer.UnitMultipilier));
+		SectionView getSectionViewByXY (Cairo.PointD point)
+		{			
 			SectionView sectionView = null;
 			
 			for (int i = 0; i < SectionViews.Count; i++) {
@@ -283,6 +283,22 @@ namespace MonoReports.Services
 
 		public void KeyPress (Gdk.Key key)
 		{
+            switch (key)
+            {
+                case Gdk.Key.Delete:
+                    DeleteSelectedControl();
+                    break;
+                case Gdk.Key.c:
+                    Copy();
+                    break;
+                case Gdk.Key.v:
+                    Paste();
+                    break;
+                default:
+                    break;
+            }
+
+
 			if (SelectedTool != null) {
 				SelectedTool.KeyPress (key);
 			}
@@ -297,6 +313,72 @@ namespace MonoReports.Services
 				WorkspaceService.InvalidateDesignArea ();			
 			}
 		}
+
+        public void Copy()
+        {
+            if (SelectedControl != null)
+            {                
+                var clipboard = Gtk.Clipboard.Get(Gdk.Atom.Intern("monoreports_control", false));
+                clipboard.Text = selectedControl.ControlModel.GetHashCode().ToString();
+
+            }
+        }
+
+        public void Paste()
+        {
+            var clipboard = Gtk.Clipboard.Get(Gdk.Atom.Intern("monoreports_control",false));
+            if (clipboard != null)
+            {
+                
+                var point = MousePoint;
+                var sectionView = getSectionViewByXY(point);
+                if (sectionView != null)
+                {
+                    string id = clipboard.WaitForText();
+                    Control controlToCopy = null;
+                    foreach (var c in Report.GetAllReportControls())
+                        if (id == c.GetHashCode ().ToString ())
+                        {
+                            controlToCopy = c;
+                            break;
+                        }
+                    if (controlToCopy == null|| controlToCopy is Section)
+                        return;
+                    var newControl = controlToCopy.CreateControl();
+                    var localpoint = sectionView.PointInSectionByAbsolutePoint(point);
+
+                    
+                    double newLeft, newTop;
+                    if (localpoint.X < 0 || localpoint.X > sectionView.AbsoluteBound.Width - newControl.Width)
+                    {
+                        newLeft = 0;
+                    }
+                    else
+                    {
+                        newLeft = newControl.Left;
+                    }
+                    if (localpoint.Y < 0 || localpoint.Y > sectionView.AbsoluteBound.Height - newControl.Height)
+                    {
+                        newTop = 0;
+                    }
+                    else
+                    {
+                        newTop = newControl.Top;
+                    }
+                    newControl.Left = newLeft;
+                    newControl.Top = newTop;
+                    //3tk todo dirty hack - there should be easier wy to get default tool for control
+                    //see lineTool for corner cases before implement
+                    var newControlView = controlViewFactory.CreateControlView(newControl, sectionView);
+                    ToolBoxService.SetToolByName (newControlView.DefaultToolName);
+                    SelectedControl =  SelectedTool.AddControl(sectionView, newControl);
+                    SelectedTool.CreateMode = false;
+                    WorkspaceService.InvalidateDesignArea();
+                }
+            }
+        }
+
+        
 
 		public void ButtonPress (double x, double y, int clicks)
 		{

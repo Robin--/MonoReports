@@ -59,7 +59,7 @@ namespace MonoReports.Tools
 		}
 		
 		
-		public override void CreateNewControl (SectionView sectionView)
+		public override ControlViewBase CreateNewControl (SectionView sectionView)
 		{				
 			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);
 			
@@ -68,11 +68,11 @@ namespace MonoReports.Tools
 				Size = new Size(50,20),
 				BackgroundColor = new MonoReports.Model.Color(0.5,0.5,0.5)
 			};				
-			SubreportView subreportView = sectionView.CreateControlView (subreport) as SubreportView;			
+			SubreportView subreportView = sectionView.AddControl (subreport) as SubreportView;			
 			sectionView.Section.Controls.Add (subreport);				
 			subreportView.ParentSection = sectionView;
-			designService.SelectedControl = subreportView;				
-				
+			designService.SelectedControl = subreportView;
+            return subreportView;
 		}
 		
 

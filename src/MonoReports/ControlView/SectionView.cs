@@ -145,7 +145,7 @@ namespace MonoReports.ControlView
 			controls.Add (controlView);
 		}
 
-		public ControlViewBase CreateControlView (Control controlToAdd)
+		public ControlViewBase AddControl (Control controlToAdd)
 		{
 			var controlView = controlViewFactory.CreateControlView (controlToAdd, this);
 			AddControlView (controlView);
@@ -161,7 +161,7 @@ namespace MonoReports.ControlView
 		public void AddControls (IList<Control> controlsToAdd)
 		{
 			for (int i = 0; i < controlsToAdd.Count; i++) {
-				CreateControlView (controlsToAdd [i]);
+				AddControl (controlsToAdd [i]);
 			}
 		}
 

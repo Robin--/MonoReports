@@ -75,20 +75,22 @@ namespace MonoReports.Tools
 							ted.Show ();
 		}
 
-		public override void CreateNewControl (SectionView sectionView)
+		public override ControlViewBase CreateNewControl (SectionView sectionView)
 		{				
-			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);
-			
-			var tb = new TextBlock { Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Text="text", FontName="Helvetica", FontSize=11, Size = new Size(20,5) };				
- 
-			TextBlockView textBlockView = sectionView.CreateControlView (tb) as TextBlockView;	
-			
-			sectionView.Section.Controls.Add (tb);				
-			textBlockView.ParentSection = sectionView;
-			designService.SelectedControl = textBlockView;				
-				
+			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);			
+			var tb = new TextBlock { Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Text="text", FontName="Helvetica", FontSize=11, Size = new Size(20,5) };
+            return AddControl(sectionView, tb); 
 		}
 
+        public override ControlViewBase AddControl(SectionView sectionView, Control control)
+        {
+            var tb = control as TextBlock;
+            TextBlockView textBlockView = sectionView.AddControl(tb) as TextBlockView;
+            sectionView.Section.Controls.Add(tb);
+            textBlockView.ParentSection = sectionView;
+            designService.SelectedControl = textBlockView;
+            return textBlockView;
+        }
 	}
 }
 

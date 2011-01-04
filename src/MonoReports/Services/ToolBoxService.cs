@@ -70,9 +70,9 @@ namespace MonoReports.Services
 		#region IToolBoxService implementation
  
 	
-		public void SetToolByControlView(ControlViewBase control){
-		 	if(ToolDictionary.ContainsKey(control.DefaultToolName))
-				SelectedTool = ToolDictionary[control.DefaultToolName];
+		public void SetToolByControlView(ControlViewBase controlView){
+		 	if(ToolDictionary.ContainsKey(controlView.DefaultToolName))
+				SelectedTool = ToolDictionary[controlView.DefaultToolName];
 		}
 		
 		public void SetTool (BaseTool tool)

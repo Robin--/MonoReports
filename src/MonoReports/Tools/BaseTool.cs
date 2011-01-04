@@ -49,8 +49,9 @@ namespace MonoReports.Tools
 		public abstract bool IsToolbarTool {get;}
 		
 		public bool CreateMode;
-		
-		public virtual void CreateNewControl (SectionView sectionView){}
+
+        public virtual ControlViewBase CreateNewControl(SectionView sectionView) { return null; }
+        public virtual ControlViewBase AddControl(SectionView sectionView, Control control) { return null; }
 		
 		public virtual void BuildToolbar(Gtk.Toolbar toolBar){
 			if(IsToolbarTool){
@@ -96,16 +97,7 @@ namespace MonoReports.Tools
 			
 		}				
 		
-		public virtual void KeyPress(Gdk.Key key){
-			switch (key) {
-				case Gdk.Key.Delete:				
-					designService.DeleteSelectedControl();
-				break;
-			default:
-			break;
-			}
-			
-			
+		public virtual void KeyPress (Gdk.Key key) {			
 		}
 		
 		

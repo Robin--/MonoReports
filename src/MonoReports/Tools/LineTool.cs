@@ -66,17 +66,22 @@ namespace MonoReports.Tools
 			return l;
 		}
 
-		public override void CreateNewControl (SectionView sectionView)
-		{
-			
-			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);
-			
+		public override ControlViewBase CreateNewControl (SectionView sectionView)
+		{			
+			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);			
 			var l = createLine(startPoint.X,startPoint.Y);
-			var lineView = sectionView.CreateControlView (l);			
-			sectionView.Section.Controls.Add (l);
-			lineView.ParentSection = sectionView;
-			designService.SelectedControl = lineView;			 
+            return AddControl(sectionView, l);
 		}
+
+        public override ControlViewBase AddControl(SectionView sectionView, Control control)
+        {          
+            var l = control as Line;
+            var lineView = sectionView.AddControl(l);
+            sectionView.Section.Controls.Add(l);
+            lineView.ParentSection = sectionView;
+            designService.SelectedControl = lineView;
+            return lineView;
+        }
 
 		public override void OnBeforeDraw (Context c)
 		{
@@ -176,6 +181,7 @@ namespace MonoReports.Tools
 		{
 				
 			if (designService != null && designService.SelectedControl != null && designService.IsDesign) {
+                line = designService.SelectedControl.ControlModel as Line;
 				var p1 = designService
 					.SelectedControl
 					.ParentSection

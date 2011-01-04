@@ -56,19 +56,23 @@ namespace MonoReports.Tools
 		public ImageTool (DesignService designService) :base(designService)
 		{
 		}
-		
-		 
 
-		public override void CreateNewControl (SectionView sectionView)
+
+        public override ControlViewBase AddControl(SectionView sectionView, Control control)
+        {
+            MonoReports.Model.Controls.Image img = control as MonoReports.Model.Controls.Image;
+            ImageView imageView = sectionView.AddControl(img) as ImageView;
+            sectionView.Section.Controls.Add(img);
+            imageView.ParentSection = sectionView;
+            designService.SelectedControl = imageView;
+            return imageView;
+        }
+
+		public override ControlViewBase CreateNewControl (SectionView sectionView)
 		{				
-			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);
-			
+			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);			
 			MonoReports.Model.Controls.Image img = new MonoReports.Model.Controls.Image(){ Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Width = 20, Height=5};
-			ImageView imageView = sectionView.CreateControlView (img) as ImageView;			
-			sectionView.Section.Controls.Add (img);				
-			imageView.ParentSection = sectionView;
-			designService.SelectedControl = imageView;				
-				
+            return AddControl(sectionView,img);
 		}
 
 	}
