@@ -24,20 +24,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using MonoReports.Model.Data;
 namespace MonoReports.Model
 {
 	public class Group
 	{
 		public Group ()
 		{
-		}
-		
-		public string GroupingFieldName  {
-			get;
-			set;
-		}
-		
-		
+		}			
+
+        public string ExpressionFieledName { get; set; }
+				
 	}
 }
 

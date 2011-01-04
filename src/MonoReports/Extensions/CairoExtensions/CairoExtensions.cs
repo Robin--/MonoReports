@@ -652,19 +652,19 @@ namespace MonoReports.Extensions.CairoExtensions
 		}
 		
 		
-		static double[] dotsStyle = new double[]{1};
+		static double[] dotsStyle = new double[]{1,2};
 		static double[] dashesStyle = new double[]{3};
 		static double[] dashDotStyle = new double[]{3,1};
 		static double[] dashDotDotStyle = new double[]{3,1,1};
 		
-		static double[] getDashByLineStyle(LineType type ){
+		static double[] getDashByLineStyle(LineType type , double lineWidth){
 			
 		switch ( type) {
 				
 				case LineType.Solid:				
 					return null;
 				case LineType.Dots:
-					return dotsStyle;
+                    return new double[] { lineWidth, Math.Min(4, 4 * lineWidth) };
 				case LineType.Dash:
 					return dashesStyle;
 				case LineType.DashDot:
@@ -686,7 +686,7 @@ namespace MonoReports.Extensions.CairoExtensions
 		public static Rectangle DrawLine (this Context g, PointD p1, PointD p2, Cairo.Color color, double lineWidth, LineType lineType, bool render)
 		{
 			g.Save ();
-			var dashesStyle = getDashByLineStyle(lineType);
+			var dashesStyle = getDashByLineStyle(lineType, lineWidth);
 			if(dashesStyle != null){
 				g.SetDash(dashesStyle,lineWidth);
 			}

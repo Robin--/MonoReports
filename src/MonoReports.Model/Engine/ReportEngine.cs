@@ -47,6 +47,7 @@ namespace MonoReports.Model.Engine
 		List<Control> currentSectionControlsBuffer = null;
 		List<Control> currentPageFooterSectionControlsBuffer = null;
         List<Control> subreportSectionControlsBuffer = null;
+        List<GroupInfo> groupInfos = null;
 		bool afterReportHeader = false;
 
 		public List<Control> CurrentPageFooterSectionControlsBuffer {
@@ -81,11 +82,17 @@ namespace MonoReports.Model.Engine
 			currentSectionControlsBuffer = new List<Control> ();
             subreportSectionControlsBuffer = new List<Control>();
 			currentPageFooterSectionControlsBuffer = new List<Control> ();
+            groupInfos = new List<GroupInfo>();
+            for (int i = 0; i < report.Groups.Count; i++)
+            {
+                var efld = report.ExpressionFields.FirstOrDefault(ef=>ef.Name == report.Groups[i].ExpressionFieledName);
+                int index = (efld != null ? report.ExpressionFields.IndexOf(efld)  : -1);
+                groupInfos.Add(new GroupInfo() { ExpressionFieldIndex = index });
+            }
 			context = new ReportContext { CurrentPageIndex = 0, DataSource = null, Parameters = new Dictionary<string, string>(), ReportMode = ReportMode.Preview };
 			Report.Pages = new List<Page> ();
 			nextPage ();
 			selectCurrentSectionByTemplateSection (Report.PageFooterSection);
-	
 		}
 
 		public void Process ()
@@ -437,7 +444,14 @@ namespace MonoReports.Model.Engine
 		void nextRecord ()
 		{
 			dataSourceHasNextRow = source.MoveNext ();
-			context.RowIndex++;			
+			context.RowIndex++;
+            for (int i = 0; i < Report.Groups.Count; i++)
+            {                
+              var gi = groupInfos[i];
+              gi.PreviousVal = groupInfos[i].CurrentVal;
+              gi.CurrentVal =  Report.ExpressionFields[gi.ExpressionFieldIndex].GetValue(source.Current, null);
+              gi.ValHasChanged = (gi.CurrentVal != gi.PreviousVal ? true : false);
+            }
 		}
 
 		void nextSection ()
@@ -564,6 +578,14 @@ namespace MonoReports.Model.Engine
 		internal double Treshold;
 		internal double Span;
 	}
+
+    internal class GroupInfo
+    {
+        internal string PreviousVal;
+        internal string CurrentVal;
+        internal bool ValHasChanged;
+        internal int ExpressionFieldIndex;
+    }
 
 	static internal class SectionExtensions
 	{

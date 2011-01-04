@@ -44,6 +44,7 @@ namespace MonoReports.Model
 			Groups = new List<Group> ();			
 			Parameters = new List<Field> ();
 			DataFields = new List<Field> ();
+            ExpressionFields = new List<Field> ();
 			GroupHeaderSections = new List<GroupHeaderSection> ();
 			GroupFooterSections = new List<GroupFooterSection> ();
 			Pages = new List<Page> ();
@@ -78,8 +79,8 @@ namespace MonoReports.Model
 		public List<Field> Parameters { get; private set; }
 		
 		public List<Field> DataFields { get; private set; }
-		
-		public List<Field> Expression { get; private set; }
+
+        public List<Field> ExpressionFields { get; private set; }		
 
 		public List<Group> Groups { get; internal set; }
 
@@ -168,13 +169,13 @@ namespace MonoReports.Model
 
 		public UnitType Unit { get; set; }
 
-		public void AddGroup (string fieldName)
+		public void AddGroup (Group gr)
 		{
-			Group gr = new Group { GroupingFieldName = fieldName };
+			
 			Groups.Add (gr);
-			GroupHeaderSection gh = new GroupHeaderSection { Name = "Group header " + gr.GroupingFieldName, Size = new Model.Size (Width, 20), Location = new Point (0, 150) };
+			GroupHeaderSection gh = new GroupHeaderSection { Name = "Group header " + gr.ExpressionFieledName, Size = new Model.Size (Width, 20), Location = new Point (0, 150) };
 			GroupHeaderSections.Add (gh);
-			GroupFooterSection gf = new GroupFooterSection { Name = "Group footer " + gr.GroupingFieldName, Size = new Model.Size (Width, 20), Location = new Point (0, 250) };
+            GroupFooterSection gf = new GroupFooterSection { Name = "Group footer " + gr.ExpressionFieledName, Size = new Model.Size(Width, 20), Location = new Point(0, 250) };
 			GroupFooterSections.Add (gf);
 		}
 

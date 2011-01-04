@@ -37,7 +37,9 @@ namespace MonoReports.Tools
 	public class SectionTool : BaseTool
 	{
 		SectionView currentSection = null;
-			
+        public bool IsGripperPressed { get; set; }
+
+
 		public SectionTool (DesignService designService) : base(designService)
 		{
 			
@@ -51,12 +53,15 @@ namespace MonoReports.Tools
 				
 		
 		public override void OnMouseMove(){
-			if (designService.IsPressed) {			
-				 
-				if (designService.IsMoving &&  designService.SelectedControl  is SectionView) {
-					
-					var section = designService.SelectedControl as SectionView;														
-					section.ControlModel.Size = new Size(section.ControlModel.Width,section.ControlModel.Height + designService.DeltaPoint.Y);						
+			if (designService.IsPressed) {
+
+                if (designService.IsMoving && (designService.SelectedTool as SectionTool) != null)
+                {
+                    if ((designService.SelectedTool as SectionTool).IsGripperPressed)
+                    {
+                        var section = designService.SelectedControl as SectionView;
+                        section.ControlModel.Size = new Size(section.ControlModel.Width, section.ControlModel.Height + designService.DeltaPoint.Y);
+                    }
 				} 
 				
 			}else if (designService.MouseOverSection != null) {
@@ -111,6 +116,7 @@ namespace MonoReports.Tools
 				previousSection = sectionView;
 				counter++;
 			}
+            IsGripperPressed = false;
 		 	designService.InvalidateDesignHeight();				
 		}
 		
