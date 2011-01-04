@@ -35,8 +35,7 @@ namespace MrptInvoiceExample
 	{
 		public static void Main (string[] args)
 		{
-			Report r = new Report ();
-			r.Margin = new Thickness(10);
+			Report r = new Report ();			
 			//----------------------
 			// report header section
 			//----------------------
@@ -45,7 +44,7 @@ namespace MrptInvoiceExample
 				Text = "Invoice",
 				Width = r.Width,
 				FontWeight = FontWeight.Bold,
-				FontSize = 18,
+				FontSize = 14,
 				HorizontalAlignment = HorizontalAlignment.Center,				
 			};		
 			r.ReportHeaderSection.Controls.Add (invTextTb);
@@ -55,12 +54,12 @@ namespace MrptInvoiceExample
 				FieldKind = FieldKind.Parameter, 
 				Text = "Invoice",
 				Width = r.Width,
-				FontSize = 18,
-				Top = 20,
+				FontSize = 14,
+				Top = 20.mm(),
 				HorizontalAlignment = HorizontalAlignment.Center,
 				FontColor = new Color (1,1,1)
 			};				
-			r.ReportHeaderSection.Height = 50;
+			r.ReportHeaderSection.Height = 50.mm();
 			r.ReportHeaderSection.Controls.Add (invNumberTb);
 			r.ReportHeaderSection.BackgroundColor = new Color (0.8,0.8,0.8);
 			
@@ -70,25 +69,25 @@ namespace MrptInvoiceExample
 			//-------------------
 			
 			var phLine = new Line (){ 
-				Location = new Point(0,10), End = new Point(r.Width,10), ExtendToBottom = true};
-			r.PageHeaderSection.Height = 16;
+				Location = new Point(0,10.mm()), End = new Point(r.Width,10.mm()), ExtendToBottom = true};
+			r.PageHeaderSection.Height = 16.mm();
 			r.PageHeaderSection.Controls.Add (phLine);
 			
 			
 			//index label
-			var indhTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Ind", Width = 10, Height = 14};			
+			var indhTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Ind", Width = 10.mm(), Height = 14.mm()};			
 			r.PageHeaderSection.Controls.Add (indhTb);
 			
 			// description label
-			var deschTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Description", Left = 12, Height = 14};			
+			var deschTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Description", Left = 12.mm(), Height = 14.mm()};			
 			r.PageHeaderSection.Controls.Add (deschTb);
 			
 			// quantity label
-			var qnthTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Quantity", Left = 42, Height = 14};			
+			var qnthTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Quantity", Left = 42.mm(), Height = 14.mm()};			
 			r.PageHeaderSection.Controls.Add (qnthTb);
 			
 			// price field
-			var prthTb = new TextBlock () {FontWeight = FontWeight.Bold,Text = "Price", Left = 60,Width = 30,  Height = 14};			
+			var prthTb = new TextBlock () {FontWeight = FontWeight.Bold,Text = "Price", Left = 60.mm(),Width = 30.mm(),  Height = 14.mm()};			
 			r.PageHeaderSection.Controls.Add (prthTb);
 			
 			
@@ -99,26 +98,26 @@ namespace MrptInvoiceExample
 			
 			//do not allow break detail section across page
 			r.DetailSection.KeepTogether = true;			
-			r.DetailSection.Height = 16;
+			r.DetailSection.Height = 16.mm();
 				
 			//index field
-			var indTb = new TextBlock () { FieldName = "Index",  FieldKind = FieldKind.Data, Text = "00", Left = 1.2, Width = 10, Height = 14};			
+			var indTb = new TextBlock () { FieldName = "Index",  FieldKind = FieldKind.Data, Text = "00", Left = 1.2.mm(), Width = 10.mm(), Height = 14.mm()};			
 			r.DetailSection.Controls.Add (indTb);
 			
 			// description field
-			var descTb = new TextBlock () { FieldName = "Description",FieldKind =  FieldKind.Data, Text = "Desc", Left = 12, Width =30,  Height = 14};			
+			var descTb = new TextBlock () { FieldName = "Description",FieldKind =  FieldKind.Data, Text = "Desc", Left = 12.mm(), Width =30.mm(),  Height = 14.mm()};			
 			r.DetailSection.Controls.Add (descTb);
 			
 			// quantity field
-			var qntTb = new TextBlock () { FieldName = "Quantity",FieldKind =  FieldKind.Data, Text = "0", Left = 42, Width = 20, Height = 14};			
+			var qntTb = new TextBlock () { FieldName = "Quantity",FieldKind =  FieldKind.Data, Text = "0", Left = 42.mm(), Width = 20.mm(), Height = 14.mm()};			
 			r.DetailSection.Controls.Add (qntTb);
 			
 			// price field
-			var prtTb = new TextBlock () { FieldName = "PricePerUnitGross", FieldTextFormat = "{0:C}", FieldKind =  FieldKind.Data, Text = "0", Left = 62,Width = 20,  Height = 14};			
+			var prtTb = new TextBlock () { FieldName = "PricePerUnitGross", FieldTextFormat = "{0:C}", FieldKind =  FieldKind.Data, Text = "0", Left = 62.mm(),Width = 20.mm(),  Height = 14.mm()};			
 			r.DetailSection.Controls.Add (prtTb);
 			
 			
-			var line = new Line (){ Location = new Point(0,10), End = new Point(r.Width,10), ExtendToBottom = true};
+			var line = new Line (){ Location = new Point(0,10.mm()), End = new Point(r.Width,10.mm()), ExtendToBottom = true};
 			r.DetailSection.Controls.Add (line);
  
 			//just before processing we can change section properties
@@ -129,10 +128,13 @@ namespace MrptInvoiceExample
 					( (TextBlock) (c as Section).Controls[1]).FontColor = new Color(1,0.7,0.2);
 			};
 			
-			var lv0 = new Line (){ Location = new Point(Settings.DefaultLineWidth/2,0), End = new Point(Settings.DefaultLineWidth/2,10), ExtendToBottom = true};
+			var lv0 = new Line (){
+				Location = new Point(1,0),
+				End = new Point(1,10.mm()), 
+				ExtendToBottom = true};
 			r.DetailSection.Controls.Add (lv0);
 			
-			var lineV = new Line (){ Location = new Point(r.Width,0), End = new Point(r.Width,10), LineType = LineType.Dash, ExtendToBottom = true};
+			var lineV = new Line (){ Location = new Point(r.Width,0), End = new Point(r.Width,10.mm()), LineType = LineType.Dash, ExtendToBottom = true};
 			r.DetailSection.Controls.Add (lineV);
 			
 			
@@ -148,8 +150,8 @@ namespace MrptInvoiceExample
 				FontSize = 22,
 				FieldKind =  FieldKind.Parameter, 
 				Text = "Total: ", 
-				Left = 30,
-				Width = 100
+				Left = 30.mm(),
+				Width = 100.mm()
 				};	
 			
 			r.ReportFooterSection.Controls.Add (prtTotalLabelTb);
@@ -163,9 +165,9 @@ namespace MrptInvoiceExample
 				FontSize = 22,
 				FieldKind =  FieldKind.Parameter, 
 				Text = "0", 
-				Left = 30,
-				Width = 50,  
-				Height = 14};	
+				Left = 30.mm(),
+				Width = 50.mm(),  
+				Height = 14.mm()};	
 			
 			r.ReportFooterSection.Controls.Add (prtTotalTb);
 			
@@ -181,11 +183,11 @@ namespace MrptInvoiceExample
 				FieldTextFormat = "{0:C}",
 				FieldKind =  FieldKind.Expression, 
 				Text = "0",
-				Left = r.Width-30,
-				Width = 10, 
+				Left = (r.Width-30).mm(),
+				Width = 10.mm(), 
 				HorizontalAlignment = HorizontalAlignment.Right,
-				Top = 2,
-				Height = 14};	
+				Top = 2.mm(),
+				Height = 14.mm()};	
 			
 			r.PageFooterSection.Controls.Add (pnTb);
 			
