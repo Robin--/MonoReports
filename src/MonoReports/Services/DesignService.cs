@@ -287,13 +287,7 @@ namespace MonoReports.Services
             {
                 case Gdk.Key.Delete:
                     DeleteSelectedControl();
-                    break;
-                case Gdk.Key.c:
-                    Copy();
-                    break;
-                case Gdk.Key.v:
-                    Paste();
-                    break;
+                    break;                
                 default:
                     break;
             }

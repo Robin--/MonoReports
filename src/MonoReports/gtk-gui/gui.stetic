@@ -103,6 +103,20 @@
         <property name="ShortLabel" translatable="yes">Report Settings</property>
         <signal name="Activated" handler="OnReportSettingsActionActivated" />
       </action>
+      <action id="copyAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">S_kopiuj</property>
+        <property name="ShortLabel" translatable="yes">S_kopiuj</property>
+        <property name="StockId">gtk-copy</property>
+        <signal name="Activated" handler="OnCopyActionActivated" />
+      </action>
+      <action id="pasteAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Wk_lej</property>
+        <property name="ShortLabel" translatable="yes">Wk_lej</property>
+        <property name="StockId">gtk-paste</property>
+        <signal name="Activated" handler="OnPasteActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Visible">False</property>
@@ -122,6 +136,8 @@
               </node>
               <node type="Menu" action="EditAction">
                 <node type="Menuitem" action="ReportSettingsAction" />
+                <node type="Menuitem" action="copyAction" />
+                <node type="Menuitem" action="pasteAction" />
               </node>
               <node type="Menu" action="HelpAction1">
                 <node type="Menuitem" action="aboutAction" />

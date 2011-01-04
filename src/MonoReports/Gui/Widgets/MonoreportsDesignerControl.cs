@@ -270,6 +270,18 @@ THE SOFTWARE.
 		
 	}
 	
+	protected virtual void OnCopyActionActivated (object sender, System.EventArgs e)
+	{
+			designService.Copy();
+	}
+	
+	protected virtual void OnPasteActionActivated (object sender, System.EventArgs e)
+	{
+			designService.Paste();
+	}
+	
+	
+	
 	
 }
 
