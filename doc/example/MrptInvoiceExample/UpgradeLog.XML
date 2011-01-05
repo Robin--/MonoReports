@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="MrptInvoiceExample">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\tomek\My Documents\Visual Studio 2008\Projects\prv\monoreports\doc\example\MrptInvoiceExample\MrptInvoiceExample.sln">
+</Property><Property Name="Date" Value="5 stycznia 2011">
+</Property><Property Name="Time" Value="16:40">
+</Property></Properties><Event ErrorLevel="0" Project="MrptInvoiceExample" Source="MrptInvoiceExample\MrptInvoiceExample.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MrptInvoiceExample" Source="MrptInvoiceExample\MrptInvoiceExample.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="MrptInvoiceExample.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="MrptInvoiceExample.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MrptInvoiceExample" Source="MrptInvoiceExample\MrptInvoiceExample.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

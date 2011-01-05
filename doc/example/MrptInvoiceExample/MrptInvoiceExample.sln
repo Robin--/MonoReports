@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrptInvoiceExample", "MrptInvoiceExample\MrptInvoiceExample.csproj", "{261069EA-6721-4974-AB94-6B2577ADE620}"
 EndProject
 Global
@@ -13,6 +13,9 @@ Global
 		{261069EA-6721-4974-AB94-6B2577ADE620}.Debug|x86.Build.0 = Debug|x86
 		{261069EA-6721-4974-AB94-6B2577ADE620}.Release|x86.ActiveCfg = Release|x86
 		{261069EA-6721-4974-AB94-6B2577ADE620}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MrptInvoiceExample\MrptInvoiceExample.csproj
