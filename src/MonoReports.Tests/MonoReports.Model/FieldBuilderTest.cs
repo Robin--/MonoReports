@@ -62,14 +62,30 @@ namespace MonoReports.Tests
 		
 		
 		[Test()]
-		public void CreateFields_ForClassCInClassBInClassA_ShouldCreateFieldWithName_PrefixClassADotClassBDotClassC ()
+		public void CreateFields_ForNamedAWithBWithC_ShouldCreateFieldWithName_NameDotClassBDotClassC ()
 		{
 			 
-		 	var fields = FieldBuilder.CreateFields(typeof(A),"Prefix",FieldKind.Parameter);
+		 	var fields = FieldBuilder.CreateFields(typeof(A),"Name",FieldKind.Parameter);
 			
 			Assert.IsNotNull(fields);
 			Assert.AreEqual(1,fields.Length);
 			Assert.IsNotNull( fields[0].Name);
+			Assert.AreEqual( fields[0].Name , "Name.B.C.Name");
+			
+			
+		}
+		
+		
+		[Test()]
+		public void CreateFields_ForStruct_ShouldCreateFields ()
+		{
+			 
+		 	var fields = FieldBuilder.CreateFields(typeof(MySize),"varrr",FieldKind.Parameter);
+			
+			Assert.IsNotNull(fields);
+			Assert.AreEqual(2,fields.Length);
+			Assert.IsNotNull( fields[0].Name);
+			Assert.IsNotNull( fields[1].Name);
 			
 		}
 		
@@ -82,10 +98,13 @@ namespace MonoReports.Tests
 		}
 		
 		public class C {
-			
+			public string Name{get;set;}
 		}
 		
-		 
+		public struct  MySize{
+			public double Width{get;set;}
+			public double Height{get;set;}						
+		}
 				
 				
 		public class TestClass {
