@@ -7,8 +7,9 @@ Monoreports features
 - simple layouting - if control in section is growable and will grow due to assigned data, engine will do layouting to make report look properly
 - page breaking - Monoreports engine will break or keep together report sections whatever is needed
 - generating and running reports from designer and code. 
+- can be used as simple PDF generation library
 
-Simple code generated report example example:
+Simple code generated report example:
 		
 		Report report = new Report;
 		report.Details.Controls.Add(new Textblock(){ FieldName = "InvoiceNumber" });
