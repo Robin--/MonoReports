@@ -37,12 +37,13 @@ namespace MonoReports.Model.Controls
 		public TextBlock ():base()
 		{
 			Border = new Border() {WidthAll = 0, Color = new Color(0,0,0)};
-			FontName = "Helvetica";
+			FontName = "Tahoma";
 			FontColor = new Color(0,0,0);
 			FontSize = 11;
 			FieldName = String.Empty;
 			Padding = new Thickness(1,1,0,0);
-			CanGrow = true;						
+			CanGrow = true;		
+			Size = new Size(20.mm(),5.mm());
 		}	
 		
 		

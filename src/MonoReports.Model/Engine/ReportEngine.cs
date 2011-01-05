@@ -108,7 +108,9 @@ namespace MonoReports.Model.Engine
 					if (item is IDataControl) {
 						IDataControl dc = item as IDataControl;
 						if (dc.FieldName == "#NumberOfPages") {
-							dc.Text = Report.Pages.Count.ToString ();
+							try{
+								dc.Text =  string.Format( string.IsNullOrEmpty(dc.FieldTextFormat) ? "{0}" : dc.FieldTextFormat,  Report.Pages.Count);
+							}catch{}
 						}
 					}
 				}
@@ -238,10 +240,15 @@ namespace MonoReports.Model.Engine
 								break;
 							case FieldKind.Expression:
 								if (dc.FieldName == "#PageNumber") {
-									dc.Text = context.CurrentPageIndex.ToString ();
+									try{
+										dc.Text =  string.Format( string.IsNullOrEmpty(dc.FieldTextFormat) ? "{0}" : dc.FieldTextFormat, context.CurrentPageIndex);
+									}catch{}
 								} else if (dc.FieldName == "#RowNumber") {
-									dc.Text = context.RowIndex.ToString ();
+									try{
+										dc.Text =  string.Format( string.IsNullOrEmpty(dc.FieldTextFormat) ? "{0}" : dc.FieldTextFormat, context.RowIndex);
+									}catch{}
 								}
+							
 								break;
 							case FieldKind.Data:
 							 	if (source.ContainsField (dc.FieldName))

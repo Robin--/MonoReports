@@ -67,7 +67,8 @@ namespace MonoReports.Model
 			//should find way to serialize anonymous types			
 			report.Parameters.Clear();
 			report.DataFields.Clear();
-			
+			report.Pages.Clear();
+			report.DataSource = null;
 			using (System.IO.FileStream file = System.IO.File.OpenWrite (path)) {
 					var serializedProject = JsonConvert.SerializeObject (report,
 					Formatting.None, 
@@ -96,7 +97,8 @@ namespace MonoReports.Model
 			
 			double unitMultiplier = CairoExtensions.UnitMultiplier;
 			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
-			ReportRenderer renderer = new ReportRenderer (){ ResolutionX = 72};			
+			ReportRenderer renderer = new ReportRenderer ();
+			renderer.ResolutionX = 72;			
 			using (PdfSurface pdfSurface = new PdfSurface (				
 				path,report.WidthWithMargins * renderer.UnitMultipilier,
 				report.HeightWithMargins * renderer.UnitMultipilier)) {

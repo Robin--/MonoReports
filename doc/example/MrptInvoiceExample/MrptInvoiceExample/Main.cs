@@ -55,11 +55,11 @@ namespace MrptInvoiceExample
 				Text = "Invoice",
 				Width = r.Width,
 				FontSize = 14,
-				Top = 20.mm(),
+				Top = 5.mm(),
 				HorizontalAlignment = HorizontalAlignment.Center,
 				FontColor = new Color (1,1,1)
 			};				
-			r.ReportHeaderSection.Height = 50.mm();
+			r.ReportHeaderSection.Height = 30.mm();
 			r.ReportHeaderSection.Controls.Add (invNumberTb);
 			r.ReportHeaderSection.BackgroundColor = new Color (0.8,0.8,0.8);
 			
@@ -70,24 +70,24 @@ namespace MrptInvoiceExample
 			
 			var phLine = new Line (){ 
 				Location = new Point(0,10.mm()), End = new Point(r.Width,10.mm()), ExtendToBottom = true};
-			r.PageHeaderSection.Height = 16.mm();
+ 
 			r.PageHeaderSection.Controls.Add (phLine);
 			
 			
 			//index label
-			var indhTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Ind", Width = 10.mm(), Height = 14.mm()};			
+			var indhTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Ind", Width = 10.mm()};			
 			r.PageHeaderSection.Controls.Add (indhTb);
 			
 			// description label
-			var deschTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Description", Left = 12.mm(), Height = 14.mm()};			
+			var deschTb = new TextBlock () {FontWeight = FontWeight.Bold,Text = "Description", Left = 12.mm(), Width = 20.mm()};			
 			r.PageHeaderSection.Controls.Add (deschTb);
 			
 			// quantity label
-			var qnthTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Quantity", Left = 42.mm(), Height = 14.mm()};			
+			var qnthTb = new TextBlock () {FontWeight = FontWeight.Bold, Text = "Quantity", Left = 42.mm()};			
 			r.PageHeaderSection.Controls.Add (qnthTb);
 			
 			// price field
-			var prthTb = new TextBlock () {FontWeight = FontWeight.Bold,Text = "Price", Left = 60.mm(),Width = 30.mm(),  Height = 14.mm()};			
+			var prthTb = new TextBlock () {FontWeight = FontWeight.Bold,Text = "Price", Left = 60.mm(),Width = 30.mm()};			
 			r.PageHeaderSection.Controls.Add (prthTb);
 			
 			
@@ -98,22 +98,22 @@ namespace MrptInvoiceExample
 			
 			//do not allow break detail section across page
 			r.DetailSection.KeepTogether = true;			
-			r.DetailSection.Height = 16.mm();
+			r.DetailSection.Height = 6.mm();
 				
 			//index field
-			var indTb = new TextBlock () { FieldName = "Index",  FieldKind = FieldKind.Data, Text = "00", Left = 1.2.mm(), Width = 10.mm(), Height = 14.mm()};			
+			var indTb = new TextBlock () { FieldName = "Index",  FieldKind = FieldKind.Data, Text = "00", Left = 1.2.mm(), Width = 10.mm()};			
 			r.DetailSection.Controls.Add (indTb);
 			
 			// description field
-			var descTb = new TextBlock () { FieldName = "Description",FieldKind =  FieldKind.Data, Text = "Desc", Left = 12.mm(), Width =30.mm(),  Height = 14.mm()};			
+			var descTb = new TextBlock () { FieldName = "Description",  FieldKind =  FieldKind.Data, Text = "Desc", Left = 12.mm(), Width = 35.mm()};			
 			r.DetailSection.Controls.Add (descTb);
 			
 			// quantity field
-			var qntTb = new TextBlock () { FieldName = "Quantity",FieldKind =  FieldKind.Data, Text = "0", Left = 42.mm(), Width = 20.mm(), Height = 14.mm()};			
+			var qntTb = new TextBlock () { FieldName = "Quantity",  FieldKind =  FieldKind.Data, Text = "0", Left = 47.mm(), Width = 5.mm(), };			
 			r.DetailSection.Controls.Add (qntTb);
 			
 			// price field
-			var prtTb = new TextBlock () { FieldName = "PricePerUnitGross", FieldTextFormat = "{0:C}", FieldKind =  FieldKind.Data, Text = "0", Left = 62.mm(),Width = 20.mm(),  Height = 14.mm()};			
+			var prtTb = new TextBlock () { FieldName = "PricePerUnitGross", FieldTextFormat = "{0:C}", FieldKind =  FieldKind.Data, Text = "0", Left = 62.mm(),Width = 20.mm()};			
 			r.DetailSection.Controls.Add (prtTb);
 			
 			
@@ -122,10 +122,14 @@ namespace MrptInvoiceExample
  
 			//just before processing we can change section properties
 			r.DetailSection.OnBeforeControlProcessing += delegate(ReportContext rc, Control c) {
-				if(rc.RowIndex % 2 == 0)
+				if(rc.RowIndex % 2 == 0) {
 					c.BackgroundColor = new Color(0.91,0.91,0.91);
-				else
+					( (TextBlock) (c as Section).Controls[1]).BackgroundColor = new Color(1,0.7,0.9);
+				}
+				else {
 					( (TextBlock) (c as Section).Controls[1]).FontColor = new Color(1,0.7,0.2);
+					( (TextBlock) (c as Section).Controls[1]).BackgroundColor = new Color(1,1,1);
+				}
 			};
 			
 			var lv0 = new Line (){
@@ -166,8 +170,8 @@ namespace MrptInvoiceExample
 				FieldKind =  FieldKind.Parameter, 
 				Text = "0", 
 				Left = 30.mm(),
-				Width = 50.mm(),  
-				Height = 14.mm()};	
+				Width = 50.mm()
+				};	
 			
 			r.ReportFooterSection.Controls.Add (prtTotalTb);
 			
@@ -186,8 +190,7 @@ namespace MrptInvoiceExample
 				Left = (r.Width-30).mm(),
 				Width = 10.mm(), 
 				HorizontalAlignment = HorizontalAlignment.Right,
-				Top = 2.mm(),
-				Height = 14.mm()};	
+				Top = 2.mm()};	
 			
 			r.PageFooterSection.Controls.Add (pnTb);
 			
@@ -213,16 +216,20 @@ namespace MrptInvoiceExample
 				);								
 			}
 			
-			invoice.Positions[11].Description = "here comes longer position text to see if position will extend section height";
+			
+			invoice.Positions[4].Description = " here comes longer position text to see if position will extend section height";
+			
+			invoice.Positions[11].Description = "another longer position text to see if position will extend section height";
 			
 			
 			//Total gross ...
 			invoice.TotalGross = invoice.Positions.Sum (p => p.PricePerUnitGross * p.Quantity);
 			#endregion
 	
-			r.DataSource = invoice.Positions;
-			
+			r.DataSource = invoice.Positions;			
 			r.ExportToPdf ("invoice.pdf", new Dictionary<string,object>{ {"invoice",invoice}});
+			r.Save("report.mrp");
+			
 				
 		}
 
