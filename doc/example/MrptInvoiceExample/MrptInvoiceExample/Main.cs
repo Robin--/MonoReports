@@ -57,11 +57,11 @@ namespace MrptInvoiceExample
 				FontSize = 14,
 				Top = 5.mm(),
 				HorizontalAlignment = HorizontalAlignment.Center,
-				FontColor = new Color (1,1,1)
+				FontColor = Color.White
 			};				
 			r.ReportHeaderSection.Height = 30.mm();
 			r.ReportHeaderSection.Controls.Add (invNumberTb);
-			r.ReportHeaderSection.BackgroundColor = new Color (0.8,0.8,0.8);
+			r.ReportHeaderSection.BackgroundColor = Color.Silver;
 			
 			
 			//-------------------
@@ -123,12 +123,10 @@ namespace MrptInvoiceExample
 			//just before processing we can change section properties
 			r.DetailSection.OnBeforeControlProcessing += delegate(ReportContext rc, Control c) {
 				if(rc.RowIndex % 2 == 0) {
-					c.BackgroundColor = new Color(0.91,0.91,0.91);
-					( (TextBlock) (c as Section).Controls[1]).BackgroundColor = new Color(1,0.7,0.9);
+					c.BackgroundColor = Color.LightGray;					
 				}
 				else {
-					( (TextBlock) (c as Section).Controls[1]).FontColor = new Color(1,0.7,0.2);
-					( (TextBlock) (c as Section).Controls[1]).BackgroundColor = new Color(1,1,1);
+					( (TextBlock) (c as Section).Controls[1]).FontColor = Color.PaleVioletRed;				 
 				}
 			};
 			
@@ -151,11 +149,11 @@ namespace MrptInvoiceExample
 			var prtTotalLabelTb = new TextBlock () { 
 				FontWeight = FontWeight.Bold, 
 			  	HorizontalAlignment = HorizontalAlignment.Right,			 
-				FontSize = 22,
+				FontSize = 12,
 				FieldKind =  FieldKind.Parameter, 
 				Text = "Total: ", 
-				Left = 30.mm(),
-				Width = 100.mm()
+				Left = 50.mm(),
+				Width = 10.mm()
 				};	
 			
 			r.ReportFooterSection.Controls.Add (prtTotalLabelTb);
@@ -166,11 +164,11 @@ namespace MrptInvoiceExample
 				FontWeight = FontWeight.Bold, 
 				FieldName = "invoice.TotalGross", 
 				FieldTextFormat = "{0:C}", 
-				FontSize = 22,
+				FontSize = 12,
 				FieldKind =  FieldKind.Parameter, 
 				Text = "0", 
-				Left = 30.mm(),
-				Width = 50.mm()
+				Left = 62.mm(),
+				Width = 40.mm()
 				};	
 			
 			r.ReportFooterSection.Controls.Add (prtTotalTb);
@@ -193,7 +191,7 @@ namespace MrptInvoiceExample
 				Top = 2.mm()};	
 			
 			r.PageFooterSection.Controls.Add (pnTb);
-			
+			r.PageFooterSection.BackgroundColor = Color.LightBlue;
 			
 			#region example invoice datasource	
 			
@@ -217,7 +215,7 @@ namespace MrptInvoiceExample
 			}
 			
 			
-			invoice.Positions[4].Description = " here comes longer position text to see if position will extend section height";
+			invoice.Positions[4].Description = "here comes longer position text to see if position will extend section height";
 			
 			invoice.Positions[11].Description = "another longer position text to see if position will extend section height";
 			

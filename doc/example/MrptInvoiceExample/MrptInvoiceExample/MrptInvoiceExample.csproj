@@ -34,11 +34,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="MonoReports, Version=1.0.4022.14718, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="MonoReports, Version=1.0.4022.25377, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\build\MonoReports.dll</HintPath>
     </Reference>
-    <Reference Include="MonoReports.Model, Version=1.0.4022.14716, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="MonoReports.Model, Version=1.0.4022.25405, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\build\MonoReports.Model.dll</HintPath>
     </Reference>
