@@ -16,6 +16,13 @@ There are a couple of extension methods defined (Monoreport.Model namespace), to
 	textBlock.Width = 15.mm();
 	textBlock.Height = 2.in();
 
+If you want to know what's measure of something in more human readable form you can use:
+
+	textBlock.Width.Tomm(); // width in milimeters
+	textBlock.Width.Toin(); // ---//--- inches
+	textBlock.Width.Tocm(); // ---//--- centimeters
+
+
 Units in designer
 ----------------
 As of today (pre 0.1) designer supports only default units for input. It is however possible to display mouse distance (in windows status) from point 0,0 in non default unit using
