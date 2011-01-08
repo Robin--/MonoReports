@@ -30,7 +30,7 @@ namespace MonoReports.Core
 {
 	public class MonoreportsSettings
 	{
- 
+		
 		internal static bool debugMode;
 		public bool DebugMode {
 			get {
@@ -43,7 +43,7 @@ namespace MonoReports.Core
 		}
 		
 		
-		static UnitType unit;
+		internal static UnitType unit = UnitType.px;
 		public  UnitType Unit {
 			get { return unit; }
 			
@@ -51,7 +51,33 @@ namespace MonoReports.Core
 				unit = value;				
 			}
 		}
+		
+		
 			
+	}
+	
+	
+	
+	public static class MonoreportsExtensions {
+		
+		public static string ToUnitString(this double val) {
+			
+			switch (MonoreportsSettings.unit) {			
+			case UnitType.mm:
+				return String.Format("{0:0.00}mm", val.Tomm());
+			case UnitType.cm:
+				return String.Format("{0:0.00}cm", val.Tocm());
+			case UnitType.inch:
+				return String.Format("{0:0.00}in", val.Toinch());
+			case UnitType.pt:
+				return String.Format("{0:0.00}pt", val.Topt());
+			case UnitType.px :
+				return String.Format("{0:0.00}px", val);
+			default:	
+				return val.ToString();
+			}
+					
+		}
 	}
 }
 

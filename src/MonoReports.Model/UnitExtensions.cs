@@ -82,6 +82,30 @@ namespace MonoReports.Model
 		{			
 			return (double)	val;
 		}
+		
+		
+	 
+		
+		public static double Tomm (this double  val)
+		{			
+			return 	 25.4 * val / 96;
+		}
+		
+		public static double Tocm (this double  val)
+		{			
+			return 	 2.54 * val / 96;
+		}
+		
+		
+		public static double Toinch (this double  val)
+		{			
+			return 	  val / 96;
+		}
+		
+		public static double Topt (this double  val)
+		{			
+			return 	 25.4 / 72 * val / 96;
+		}
 	}
 }
 

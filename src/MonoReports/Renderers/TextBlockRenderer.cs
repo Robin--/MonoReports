@@ -64,7 +64,7 @@ namespace MonoReports.Renderers
 			c.DrawInsideBorderInUnit  (borderRect, textBlock.Border,true);						
 			c.Restore();		
 			if(MonoreportsSettings.debugMode)
-				c.DrawDebug( string.Format("{0:0.0000}",textBlock.Bottom),borderRect.X,textBlock.Bottom);
+				c.DrawDebug( string.Format("bottom: {0}",textBlock.Bottom.ToUnitString()),borderRect.X,textBlock.Bottom);
 		}
 
         public Size Measure(Cairo.Context c, Control control)
