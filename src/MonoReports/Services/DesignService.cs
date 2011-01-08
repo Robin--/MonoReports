@@ -445,10 +445,8 @@ namespace MonoReports.Services
 		
 		public void Save(string path){
 			
-			if ( string.IsNullOrEmpty (Report.Title))
-			{
-				Report.Title = System.IO.Path.GetFileName(path);	
-			}
+			if(string.IsNullOrEmpty(Report.Title))
+					Report.Title =  System.IO.Path.GetFileNameWithoutExtension(path);
 			
 			Report.Save(path);
 		}
@@ -535,7 +533,7 @@ namespace MonoReports.Services
 			fileFilter.AddPattern ("*.pdf");
 			
 			fc.AddFilter (fileFilter);
-			fc.CurrentName = string.IsNullOrEmpty( Report.Title) ? "untitled_report.pdf" : Report.Title ;
+			fc.CurrentName = string.IsNullOrEmpty( Report.Title) ? "untitled_report.pdf" : Report.Title + ".pdf";
 				
 			 
 			if (fc.Run () == (int)Gtk.ResponseType.Accept) {

@@ -184,10 +184,10 @@ public sealed class GenerateDataSource {{
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
 		fileFilter.AddPattern ("*.mrp");
 		fc.AddFilter (fileFilter);
-		fc.CurrentName = "untiteled.mrp";
+		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? "untiteled.mrp" : designService.Report.Title + ".mrp";
 		
 		designService.Report.DataSource = null;
-		if (fc.Run () == (int)ResponseType.Accept) {						
+		if (fc.Run () == (int)ResponseType.Accept) {				
 			designService.Save(fc.Filename);
 		}
 		
@@ -201,7 +201,7 @@ public sealed class GenerateDataSource {{
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
 		fileFilter.AddPattern ("*.mrp");
 		fc.AddFilter (fileFilter);
-		
+		fc.CurrentName =  string.Empty;
 		if (fc.Run () == (int)ResponseType.Accept) {
 			ShowInPropertyGrid (null);
 			designService.Load(fc.Filename);

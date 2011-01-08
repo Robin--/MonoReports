@@ -64,7 +64,7 @@ namespace MonoReports.Model
 		public static void Save(this Report report , string path) {		
 			
 			//TODO 3tk workaround hence can't serialize anonymous classes hidden in PropertyDataField<T,K> - 
-			//should find way to serialize anonymous types			
+			//should find way to serialize anonymous types or change PropertyDataField to something else	
 			report.Parameters.Clear();
 			report.DataFields.Clear();
 			report.Pages.Clear();

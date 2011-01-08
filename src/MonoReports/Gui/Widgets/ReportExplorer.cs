@@ -132,7 +132,7 @@ namespace MonoReports.Gui.Widgets
 			exporerTreeview.ExpandAll();
 		}
 		
-		//3tk needs to be cleaned
+		//TODO: 3tk needs to be cleaned
 		void HandleExporerTreeviewRowActivated (object o, RowActivatedArgs args)
 		{
 			
@@ -178,15 +178,8 @@ namespace MonoReports.Gui.Widgets
 		
 		private void renderReportCell (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 		{
-		TreeItemWrapper w = (TreeItemWrapper) model.GetValue (iter, 0);
- 		
-//		if (song.Artist.StartsWith ("X") == true) {
-//			(cell as Gtk.CellRendererText).Foreground = "red";
-//		} else {
-//			(cell as Gtk.CellRendererText).Foreground = "darkgreen";
-//		}
- 
-		(cell as Gtk.CellRendererText).Text = w.ToString();
+			TreeItemWrapper w = (TreeItemWrapper) model.GetValue (iter, 0); 
+			(cell as Gtk.CellRendererText).Text = w.ToString();
 		}
 
 		protected virtual void OnUpdateFieldsFromDataSourceButtonButtonPressEvent (object o, Gtk.ButtonPressEventArgs args)
@@ -258,7 +251,7 @@ namespace MonoReports.Gui.Widgets
 							addNewMenuItem.Activated += delegate(object sender, EventArgs e) {
 								
 								
-								Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose the Monoreports file to open",null, FileChooserAction.Open , "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
+								Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose monoreports file to open",null, FileChooserAction.Open , "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
 								var fileFilter = new FileFilter { Name = "Images" };
 								fileFilter.AddPattern ("*.jpg");
 								fileFilter.AddPattern ("*.png");
@@ -284,6 +277,25 @@ namespace MonoReports.Gui.Widgets
 							};
 						jBox.ShowAll ();
 						jBox.Popup ();	
+					}else if (index == 4 && path.Depth == 3) {
+						Gtk.Menu jBox = new Gtk.Menu ();
+						 
+						Gtk.MenuItem deleteImageItem = new MenuItem ("delete image");
+						 
+						jBox.Add (deleteImageItem);		
+								
+						deleteImageItem.Activated += delegate(object sender, EventArgs e) {		
+							TreeIter imageIter;
+							theModel.GetIter(out imageIter,path);
+							var imageNodeWrapper = theModel.GetValue(imageIter,0) as TreeItemWrapper;
+							var kvp =  (KeyValuePair<string,byte[]>) imageNodeWrapper.Object;
+							designService.Report.ResourceRepository.Remove(kvp.Key);							
+ 							updateTreeNode(imagesNode,designService.Report.ResourceRepository); 
+						}; 
+						
+						jBox.ShowAll ();
+						jBox.Popup ();		
+						
 					}
 				} 
 	
@@ -324,7 +336,7 @@ namespace MonoReports.Gui.Widgets
 		
 		public override string ToString ()
 		{
-			 return obj.ToString();
+			 return  obj.ToString();
 		}
 	}
 
