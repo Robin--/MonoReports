@@ -1,4 +1,4 @@
-How does reporting processing work
+How does report processing work
 ==================================
 
 What is report processing?
