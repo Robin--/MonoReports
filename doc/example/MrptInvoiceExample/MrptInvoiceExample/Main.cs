@@ -117,7 +117,7 @@ namespace MrptInvoiceExample
 			r.DetailSection.Controls.Add (prtTb);
 			
 			
-			var line = new Line (){ Location = new Point(0,10.mm()), End = new Point(r.Width,10.mm()), ExtendToBottom = true};
+			var line = new Line (){ Location = new Point(0,2.mm()), End = new Point(r.Width,2.mm()), ExtendToBottom = true};
 			r.DetailSection.Controls.Add (line);
  
 			//just before processing we can change section properties
@@ -132,11 +132,11 @@ namespace MrptInvoiceExample
 			
 			var lv0 = new Line (){
 				Location = new Point(1,0),
-				End = new Point(1,10.mm()), 
+				End = new Point(1,2.mm()), 
 				ExtendToBottom = true};
 			r.DetailSection.Controls.Add (lv0);
 			
-			var lineV = new Line (){ Location = new Point(r.Width,0), End = new Point(r.Width,10.mm()), LineType = LineType.Dash, ExtendToBottom = true};
+			var lineV = new Line (){ Location = new Point(r.Width,2.mm()), End = new Point(r.Width,2.mm()), LineType = LineType.Dash, ExtendToBottom = true};
 			r.DetailSection.Controls.Add (lineV);
 			
 			
