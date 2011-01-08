@@ -80,6 +80,8 @@
     <Compile Include="Data\Field.cs" />
     <Compile Include="Data\FieldBuilder.cs" />
     <Compile Include="UnitExtensions.cs" />
+    <Compile Include="Engine\SpanInfo.cs" />
+    <Compile Include="Engine\SectionProcessingContext.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

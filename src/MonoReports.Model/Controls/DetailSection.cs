@@ -32,7 +32,7 @@ namespace MonoReports.Model.Controls
 		public DetailSection ():base()
 		{
 			this.Name = "Detail";
-			KeepTogether = false;
+			KeepTogether = true;
 			sectionType = SectionType.Details;
 		}
 	

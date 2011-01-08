@@ -26,6 +26,7 @@
 using System;
 using MonoReports.Model;
 using MonoReports.Extensions.PropertyGridEditors;
+using MonoReports.Core;
 
 namespace MonoReports.Gui.Widgets
 {
@@ -35,6 +36,8 @@ namespace MonoReports.Gui.Widgets
 		{
 			this.Build ();
 			reportPropertygrid.LoadMonoreportsExtensions();
+			settingsPeportPropertygrid.LoadMonoreportsExtensions();
+			settingsPeportPropertygrid.CurrentObject =  new MonoreportsSettings();
 		}
 		
 		

@@ -103,20 +103,6 @@
         <property name="ShortLabel" translatable="yes">Report Settings</property>
         <signal name="Activated" handler="OnReportSettingsActionActivated" />
       </action>
-      <action id="copyAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">S_kopiuj</property>
-        <property name="ShortLabel" translatable="yes">S_kopiuj</property>
-        <property name="StockId">gtk-copy</property>
-        <signal name="Activated" handler="OnCopyActionActivated" />
-      </action>
-      <action id="pasteAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Wk_lej</property>
-        <property name="ShortLabel" translatable="yes">Wk_lej</property>
-        <property name="StockId">gtk-paste</property>
-        <signal name="Activated" handler="OnPasteActionActivated" />
-      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Visible">False</property>
@@ -136,8 +122,8 @@
               </node>
               <node type="Menu" action="EditAction">
                 <node type="Menuitem" action="ReportSettingsAction" />
-                <node type="Menuitem" action="copyAction" />
-                <node type="Menuitem" action="pasteAction" />
+                <node type="Menuitem" />
+                <node type="Menuitem" />
               </node>
               <node type="Menu" action="HelpAction1">
                 <node type="Menuitem" action="aboutAction" />
@@ -738,7 +724,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="MonoReports.Gui.Widgets.ReportSettingsEditor" design-size="400 300">
+  <widget class="Gtk.Dialog" id="MonoReports.Gui.Widgets.ReportSettingsEditor" design-size="517 504">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Report Settings</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -749,9 +735,10 @@
         <property name="MemberName" />
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.VBox" id="vbox2">
+          <widget class="Gtk.VPaned" id="vpaned1">
             <property name="MemberName" />
-            <property name="Spacing">6</property>
+            <property name="CanFocus">True</property>
+            <property name="Position">279</property>
             <child>
               <widget class="PropertyGrid.PropertyGrid" id="reportPropertygrid">
                 <property name="MemberName" />
@@ -759,14 +746,21 @@
                 <property name="ShowHelp">False</property>
               </widget>
               <packing>
-                <property name="Position">0</property>
-                <property name="AutoSize">False</property>
+                <property name="Resize">False</property>
               </packing>
+            </child>
+            <child>
+              <widget class="PropertyGrid.PropertyGrid" id="settingsPeportPropertygrid">
+                <property name="MemberName" />
+                <property name="ShowToolbar">False</property>
+                <property name="ShowHelp">False</property>
+              </widget>
             </child>
           </widget>
           <packing>
-            <property name="Position">0</property>
-            <property name="AutoSize">False</property>
+            <property name="PackType">End</property>
+            <property name="Position">1</property>
+            <property name="AutoSize">True</property>
           </packing>
         </child>
       </widget>

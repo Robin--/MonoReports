@@ -1,10 +1,10 @@
 // 
-// HeaderSection.cs
+// MonoreportsSettings.cs
 //  
 // Author:
-//       Tomasz Kubacki <Tomasz.Kubacki (at) gmail.com>
+//       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
 // 
-// Copyright (c) 2010 Tomasz Kubacki 2010
+// Copyright (c) 2011 Tomasz Kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-namespace MonoReports.Model.Controls
-{
-	public class ReportHeaderSection : Section
-	{
-		public ReportHeaderSection ():base()
-		{
-			this.Name = "Report Header";
-			sectionType = SectionType.ReportHeader;
-		}
+using MonoReports.Model;
 
-		public override Control CreateControl ()
-		{
-			ReportHeaderSection rhs = new ReportHeaderSection();
-			CopyTo(rhs);		
-			rhs.BreakPageAfter = BreakPageAfter;
-			return rhs;
+namespace MonoReports.Core
+{
+	public class MonoreportsSettings
+	{
+ 
+		internal static bool debugMode;
+		public bool DebugMode {
+			get {
+				return debugMode; }
+			
+			set { 
+				debugMode = value; 
+				Extensions.CairoExtensions.CairoExtensions.DebugTextBlock = debugMode;
+			}
 		}
 		
-		public bool BreakPageAfter {get;set;}
+		
+		static UnitType unit;
+		public  UnitType Unit {
+			get { return unit; }
+			
+			set { 
+				unit = value;				
+			}
+		}
+			
 	}
 }
 

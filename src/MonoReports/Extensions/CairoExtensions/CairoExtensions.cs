@@ -51,8 +51,10 @@ namespace MonoReports.Extensions.CairoExtensions
 {
 	
 	
+	
 	public static class CairoExtensions
 	{
+		public static bool DebugTextBlock {get;set;}
 		
 		static Cairo.Color gripperColor = new Cairo.Color(1,0.2,0.2);
 		
@@ -756,15 +758,45 @@ namespace MonoReports.Extensions.CairoExtensions
 				return Pango.Alignment.Left;
 			}
 		}
+		
+		
+		public static void DrawDebug (this Context g,string text,double x,double y)
+		{			 
+			DrawText(g,new PointD(x,y),"Tahoma",Cairo.FontSlant.Normal,Cairo.FontWeight.Normal,	9,new Cairo.Color(0,0,0),100,text);	
+		}
+		
+		public static void DrawDebugRect (this Context g,Rectangle r)
+		{	
+			g.Save();
+			g.Color = new Cairo.Color(1,0,0);
+			g.LineWidth = 0.2;
+			double newUpperY = (r.Y);			
+			g.MoveTo (r.X, newUpperY);
+			g.LineTo (r.X + r.Width, newUpperY);
+			g.Stroke ();
+			double rightX = r.X + r.Width;
+			g.MoveTo (rightX, r.Y);
+			g.LineTo (rightX, r.Y + r.Height);
+			g.Stroke ();
+			double bottomY = r.Y + r.Height;
+			g.MoveTo(r.X + r.Width, bottomY);	
+			g.LineTo (r.X,bottomY);
+			g.Stroke ();
+			double leftX = r.X;
+			g.MoveTo(leftX, r.Y + r.Height);
+			g.LineTo (leftX, r.Y);
+			g.Stroke ();			
+			g.Restore();		
+		}
 
 		public static Rectangle DrawText (this Context g, PointD p, string family, Cairo.FontSlant slant, Cairo.FontWeight weight, double size, Cairo.Color color, double width, string text)
 		{
 			g.Save ();
-			g.MoveTo (p.X, p.Y);
+			g.MoveTo (p.X * UnitMultiplier, p.Y * UnitMultiplier);
 			g.Color = color;
 			Pango.Layout layout = Pango.CairoHelper.CreateLayout (g);
 			layout.Wrap = Pango.WrapMode.Char;
-			layout.Width = (int)(width * Pango.Scale.PangoScale);
+			layout.Width = (int)(width * UnitMultiplier * Pango.Scale.PangoScale);
 			Pango.FontDescription fd = new Pango.FontDescription ();			
 			fd.Family = family;
 		
@@ -790,7 +822,7 @@ namespace MonoReports.Extensions.CairoExtensions
 			
 			g.Restore ();
 			
-			return new Rectangle( p.X + te.X / Pango.Scale.PangoScale, p.Y + unused.Y / Pango.Scale.PangoScale, (unused.Width / Pango.Scale.PangoScale) , (unused.Height/ Pango.Scale.PangoScale) );
+			return new Rectangle( p.X + te.X / (Pango.Scale.PangoScale * UnitMultiplier), p.Y + unused.Y / (Pango.Scale.PangoScale* UnitMultiplier), (unused.Width / Pango.Scale.PangoScale) , unused.Height/ (Pango.Scale.PangoScale * UnitMultiplier) );
 						
 		}
 		
@@ -814,7 +846,7 @@ namespace MonoReports.Extensions.CairoExtensions
 			fd.AbsoluteSize = tb.FontSize *  RealFontMultiplier ;
 			layout.FontDescription = fd;
 		 
-			layout.Spacing = (int)(tb.LineSpan * UnitMultiplier* Pango.Scale.PangoScale);			
+			layout.Spacing = (int)(tb.LineSpan * UnitMultiplier * Pango.Scale.PangoScale);			
 			layout.Alignment = ReportToPangoAlignment (tb.HorizontalAlignment);  
 			layout.SetText (tb.Text);
 			return layout;
@@ -837,7 +869,7 @@ namespace MonoReports.Extensions.CairoExtensions
 			layout.GetExtents (out inkRect, out logicalRect);
 			double measuredHeight = (inkRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
 			double measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
-			double measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
+			//double measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
 			
 			if(tb.VerticalAlignment != VerticalAlignment.Top)
 				vertAlgSpan = measureVerticlaSpan(tb,measuredHeight);
@@ -851,8 +883,34 @@ namespace MonoReports.Extensions.CairoExtensions
 			layout.GetExtents (out inkRect, out logicalRect);
 			measuredHeight = (inkRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
 			double measuredWidth = inkRect.Width / (Pango.Scale.PangoScale * UnitMultiplier);
-			measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
+			//measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
 			measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
+			
+			if ( DebugTextBlock && render ) {
+				
+				Pango.Rectangle  inklineRect = new Pango.Rectangle();
+				Pango.Rectangle logLineRect = new Pango.Rectangle();
+				
+				{ 
+					double span = 0;
+					for(int d = 0 ; d < layout.LinesReadOnly.Length;d++){
+						var item = layout.LinesReadOnly[d];
+					
+					item.GetExtents(ref inklineRect,ref logLineRect);
+					double h = ((logLineRect.Height / Pango.Scale.PangoScale));
+					double y = ((logLineRect.Y / Pango.Scale.PangoScale));
+					DrawDebugRect(g,
+						new Cairo.Rectangle(
+						((tb.Left + tb.Padding.Left) * UnitMultiplier + (logLineRect.X / Pango.Scale.PangoScale)) ,
+						((tb.Top + tb.Padding.Top) * UnitMultiplier - y) + span,
+						((logLineRect.Width / Pango.Scale.PangoScale)) ,
+						-h 							
+						));
+						
+						span += h;
+					}
+				}
+			}
 			
 			(layout as IDisposable).Dispose();
 			g.Restore ();
@@ -908,13 +966,14 @@ namespace MonoReports.Extensions.CairoExtensions
 			if (maxHeight > 0) {
 				Pango.Layout layout = createLayoutFromTextBlock(g,tb);
 				layout.GetExtents (out inkRect, out logRect);						
-				double measuredHeight = inkRect.Height / Pango.Scale.PangoScale;			
+				double measuredHeight = inkRect.Height / (Pango.Scale.PangoScale * UnitMultiplier);			
+				//double measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);	
 				
 				if(tb.VerticalAlignment != VerticalAlignment.Top)
 					vertAlgSpan = measureVerticlaSpan(tb,measuredHeight);
 				
 
-				double realTbStart = tb.Padding.Top + vertAlgSpan;
+				double realTbStart = (tb.Padding.Top + vertAlgSpan);
 				
 				
 				if(realTbStart >= maxHeight) {
@@ -922,9 +981,12 @@ namespace MonoReports.Extensions.CairoExtensions
 				} else if (maxHeight > realTbStart + measuredHeight)
 					return -2;
 				else {
-	                layout.XyToIndex(0, (int)((maxHeight - realTbStart) * Pango.Scale.PangoScale), out chi, out gi);               
+					int line = 0;
+					int x = 0;
+	                layout.XyToIndex(0, (int)((maxHeight - realTbStart) * UnitMultiplier * Pango.Scale.PangoScale) + inkRect.Y , out chi, out gi);               					
+					layout.IndexToLineX(chi,false,out line,out x);
                     byte[] bytes = System.Text.Encoding.UTF8.GetBytes(tb.Text);                            
-                    int o = System.Text.Encoding.UTF8.GetCharCount(bytes,0, chi);                    
+                    int o = System.Text.Encoding.UTF8.GetCharCount(bytes,0, chi);                    					
                 	result = o;	
 				}
 				  

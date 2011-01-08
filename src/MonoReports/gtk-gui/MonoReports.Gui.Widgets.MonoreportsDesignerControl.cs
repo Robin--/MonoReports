@@ -21,8 +21,6 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.Action sortAscendingAction;
 		private global::Gtk.Action EditAction;
 		private global::Gtk.Action ReportSettingsAction;
-		private global::Gtk.Action copyAction;
-		private global::Gtk.Action pasteAction;
 		private global::Gtk.VBox mainVbox;
 		private global::Gtk.MenuBar mainMenubar;
 		private global::Gtk.Toolbar mainToolbar;
@@ -84,12 +82,6 @@ namespace MonoReports.Gui.Widgets
 			this.ReportSettingsAction = new global::Gtk.Action ("ReportSettingsAction", global::Mono.Unix.Catalog.GetString ("Report Settings"), null, null);
 			this.ReportSettingsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Report Settings");
 			w2.Add (this.ReportSettingsAction, null);
-			this.copyAction = new global::Gtk.Action ("copyAction", global::Mono.Unix.Catalog.GetString ("S_kopiuj"), null, "gtk-copy");
-			this.copyAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("S_kopiuj");
-			w2.Add (this.copyAction, null);
-			this.pasteAction = new global::Gtk.Action ("pasteAction", global::Mono.Unix.Catalog.GetString ("Wk_lej"), null, "gtk-paste");
-			this.pasteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Wk_lej");
-			w2.Add (this.pasteAction, null);
 			this.UIManager.InsertActionGroup (w2, 0);
 			this.Name = "MonoReports.Gui.Widgets.MonoreportsDesignerControl";
 			// Container child MonoReports.Gui.Widgets.MonoreportsDesignerControl.Gtk.Container+ContainerChild
@@ -97,7 +89,7 @@ namespace MonoReports.Gui.Widgets
 			this.mainVbox.Name = "mainVbox";
 			this.mainVbox.Spacing = -1;
 			// Container child mainVbox.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString ("<ui><menubar name='mainMenubar'><menu name='FileAction1' action='FileAction1'><menuitem name='openAction' action='openAction'/><menuitem name='saveAction' action='saveAction'/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='ReportSettingsAction' action='ReportSettingsAction'/><menuitem name='copyAction' action='copyAction'/><menuitem name='pasteAction' action='pasteAction'/></menu><menu name='HelpAction1' action='HelpAction1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString ("<ui><menubar name='mainMenubar'><menu name='FileAction1' action='FileAction1'><menuitem name='openAction' action='openAction'/><menuitem name='saveAction' action='saveAction'/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='ReportSettingsAction' action='ReportSettingsAction'/><menuitem/><menuitem/></menu><menu name='HelpAction1' action='HelpAction1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 			this.mainMenubar = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/mainMenubar")));
 			this.mainMenubar.Name = "mainMenubar";
 			this.mainVbox.Add (this.mainMenubar);
@@ -188,8 +180,6 @@ namespace MonoReports.Gui.Widgets
 			this.saveAction.Activated += new global::System.EventHandler (this.OnSaveActionActivated);
 			this.editAction.Activated += new global::System.EventHandler (this.OnEditActionActivated);
 			this.ReportSettingsAction.Activated += new global::System.EventHandler (this.OnReportSettingsActionActivated);
-			this.copyAction.Activated += new global::System.EventHandler (this.OnCopyActionActivated);
-			this.pasteAction.Activated += new global::System.EventHandler (this.OnPasteActionActivated);
 			this.mainPropertygrid.Changed += new global::System.EventHandler (this.OnMainPropertygridChanged);
 		}
 	}

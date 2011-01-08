@@ -40,7 +40,7 @@ namespace MonoReports.Renderers
 		}
 
 		public void Render (Cairo.Context c,Control control)
-		{
+		{			
             TextBlock textBlock = control as TextBlock;
 			Rectangle borderRect;			
 			c.Save();
@@ -52,17 +52,19 @@ namespace MonoReports.Renderers
 			if(!DesignMode && (textBlock.CanGrow && rect.Height > textBlock.Height  || textBlock.CanShrink && rect.Height < textBlock.Height )){
 				borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, rect.Height);				
 			} else {
-				borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, textBlock.Height);												
+				borderRect = new Rectangle (textBlock.Location.X, textBlock.Location.Y, textBlock.Width, textBlock.Height);	
+				
 			}
 		
 			c.FillRectangleInUnit(borderRect,textBlock.BackgroundColor.ToCairoColor());
 			if(DesignMode){
-					
-					c.DrawInsideSelectorInUnits  (borderRect, new Border(1),4);
+				c.DrawInsideSelectorInUnits  (borderRect, new Border(1),4);
 			}
 			c.DrawTextBlock (textBlock,true);
-			c.DrawInsideBorderInUnit  (borderRect, textBlock.Border,true);	
-			c.Restore();
+			c.DrawInsideBorderInUnit  (borderRect, textBlock.Border,true);						
+			c.Restore();		
+			if(MonoreportsSettings.debugMode)
+				c.DrawDebug( string.Format("{0:0.0000}",textBlock.Bottom),borderRect.X,textBlock.Bottom);
 		}
 
         public Size Measure(Cairo.Context c, Control control)
@@ -99,11 +101,11 @@ namespace MonoReports.Renderers
 			TextBlock textBlock = control.CreateControl() as TextBlock;
             controls[1] = textBlock;
             var newTextBlock = control.CreateControl() as TextBlock;
-            textBlock.Top = 0;
-			int charNumber = c.GetBreakLineCharacterIndexbyMaxHeight ( textBlock,height);
+			int charNumber = c.GetBreakLineCharacterIndexbyMaxHeight (textBlock,height);
 			
 			if (charNumber > 0) {
-				newTextBlock.Text = textBlock.Text.Substring (0,charNumber-1);
+				
+				newTextBlock.Text = textBlock.Text.Substring(0,charNumber-1);
 				newTextBlock.Padding = new Thickness(textBlock.Padding.Left,0,textBlock.Padding.Right,textBlock.Padding.Bottom);
 				var newSize = c.DrawTextBlock (newTextBlock, false);
 				newTextBlock.Height = newSize.Height;
@@ -132,8 +134,7 @@ namespace MonoReports.Renderers
 				textBlock.Padding =   new Thickness (textBlock.Padding.Left,textBlock.Padding.Top - height,textBlock.Padding.Right,textBlock.Padding.Bottom);
 				
 			}
-			controls[0] = newTextBlock;
-			
+			controls[0] = newTextBlock;			
 			return controls;
 		}
 		

@@ -11,7 +11,20 @@
     <widget-library name="../../../build/MonoReports.Shell.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="1082 759">
-    <action-group name="Default" />
+    <action-group name="Default">
+      <action id="copyAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">S_kopiuj</property>
+        <property name="ShortLabel" translatable="yes">S_kopiuj</property>
+        <property name="StockId">gtk-copy</property>
+      </action>
+      <action id="pasteAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Wk_lej</property>
+        <property name="ShortLabel" translatable="yes">Wk_lej</property>
+        <property name="StockId">gtk-paste</property>
+      </action>
+    </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Monoreports pre</property>
     <property name="WindowPosition">Center</property>

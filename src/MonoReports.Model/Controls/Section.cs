@@ -40,8 +40,7 @@ namespace MonoReports.Model.Controls
 			Size = new Size(double.MaxValue,100);
 			Location = new Point(0,0);
 			CanGrow = true;
-			BackgroundColor =  new Color(1,1,1);
-			
+			BackgroundColor =  new Color(1,1,1);			
 		}	
 		
 		protected SectionType sectionType;
@@ -70,9 +69,8 @@ namespace MonoReports.Model.Controls
 		public virtual void BeforePrint(){}
 		
 		public virtual void AfterPrint(){}
-		
-		public void CopyTo(Section s){
-		
+
+		public void CopyTo (Section s){
 			CopyBasicProperties(s);
 			s.Name = Name;			 		 			
  			s.CanGrow = CanGrow;
@@ -81,10 +79,7 @@ namespace MonoReports.Model.Controls
 			foreach (Control ctrl in Controls) {
 				s.Controls.Add( ctrl.CreateControl() as Control);
 			}
-			
 		}
-		
-		 
 	}
 }
 

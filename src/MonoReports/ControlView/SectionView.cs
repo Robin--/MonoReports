@@ -194,7 +194,7 @@ namespace MonoReports.ControlView
 			pat.AddColorStop (1, sectionHeaderColor1);
 			c.FillRectangleInUnit (HeaderAbsoluteBound, pat);
 			
-			c.DrawText (new Cairo.PointD (HeaderAbsoluteBound.X * SectionRenderer.UnitMulitipier + 2, HeaderAbsoluteBound.Y * SectionRenderer.UnitMulitipier + 2), "Tahoma", Cairo.FontSlant.Normal, Cairo.FontWeight.Normal, 10, blackColor, 600, Section.Name);
+			c.DrawText (new Cairo.PointD (HeaderAbsoluteBound.X + 1, HeaderAbsoluteBound.Y + 1), "Tahoma", Cairo.FontSlant.Normal, Cairo.FontWeight.Normal, 10, blackColor, 600, Section.Name);
 			c.FillRectangleInUnit (GripperAbsoluteBound, SectionGripperColor);
 			c.Translate (AbsoluteDrawingStartPoint.X, AbsoluteDrawingStartPoint.Y * SectionRenderer.UnitMulitipier);
 			

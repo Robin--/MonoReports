@@ -277,7 +277,7 @@ THE SOFTWARE.
 	
 	protected virtual void OnPasteActionActivated (object sender, System.EventArgs e)
 	{
-			designService.Paste();
+			designService.Paste();			
 	}
 	
 	

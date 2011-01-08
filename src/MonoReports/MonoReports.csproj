@@ -154,6 +154,7 @@
     <Compile Include="Gui\Widgets\MonoreportsDesignerControl.cs" />
     <Compile Include="gtk-gui\MonoReports.Gui.Widgets.MonoreportsDesignerControl.cs" />
     <Compile Include="Model\ReportExtensions.cs" />
+    <Compile Include="Core\MonoreportsSettings.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

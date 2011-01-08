@@ -4,6 +4,8 @@
 public partial class MainWindow
 {
 	private global::Gtk.UIManager UIManager;
+	private global::Gtk.Action copyAction;
+	private global::Gtk.Action pasteAction;
 	private global::MonoReports.Gui.Widgets.MonoreportsDesignerControl monoreportsdesignercontrol2;
 
 	protected virtual void Build ()
@@ -12,6 +14,12 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
+		this.copyAction = new global::Gtk.Action ("copyAction", global::Mono.Unix.Catalog.GetString ("S_kopiuj"), null, "gtk-copy");
+		this.copyAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("S_kopiuj");
+		w1.Add (this.copyAction, null);
+		this.pasteAction = new global::Gtk.Action ("pasteAction", global::Mono.Unix.Catalog.GetString ("Wk_lej"), null, "gtk-paste");
+		this.pasteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Wk_lej");
+		w1.Add (this.pasteAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";

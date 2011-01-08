@@ -40,6 +40,16 @@ namespace MonoReports.Model.Controls
 			Size = new Size (0,0);
 			IsVisible = true;
 		}
+		
+		internal bool WasProcessed {
+			get;
+			set;
+		}
+		
+		internal bool WasFullyProcessed {
+			get;
+			set;
+		}
 
 		public Control TemplateControl {get; set;}
 
