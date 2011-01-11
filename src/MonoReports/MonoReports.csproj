@@ -70,9 +70,6 @@
     <EmbeddedResource Include="Resources\ToolLine.png">
       <LogicalName>ToolLine.png</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\tarski.png">
-      <LogicalName>tarski.png</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ToolSubreport.png">
       <LogicalName>ToolSubreport.png</LogicalName>
     </EmbeddedResource>
