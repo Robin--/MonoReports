@@ -37,7 +37,7 @@ namespace MonoReports.Services
 		
 		public CompilerService ()
 		{
-			
+			references = new System.Collections.Specialized.StringCollection();
 		}
 		
 		public CompilerService (string codeTemplate):this()
@@ -47,11 +47,13 @@ namespace MonoReports.Services
 		
 		LanguageCompiler cmp;
 		
+		System.Collections.Specialized.StringCollection references;
+		
 		public System.Collections.Specialized.StringCollection References {
 			
 			get {
 				
-				return cmp.Parms.ReferencedAssemblies;
+				return references;
 			}
 				
 		}
@@ -59,12 +61,16 @@ namespace MonoReports.Services
 		public bool Evaluate (out object result,out string message, object[] inputs)
 		{
 			cmp = new LanguageCompiler (LangType.CSharp,false,true,true);
+			foreach(string refAsm in References)
+				cmp.AddReferencedAssembly(refAsm);
+			
 			bool result_set = false;
 			message = String.Empty;
 			result = new  object ();
 			try {
-			cmp.Code = String.Format(CodeTemplate,inputs);				
+				cmp.Code = String.Format(CodeTemplate,inputs);				
 			}catch(Exception exp){
+				message = exp.ToString();
 				return false;
 			}
 				

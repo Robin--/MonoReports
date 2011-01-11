@@ -97,6 +97,7 @@ public sealed class GenerateDataSource {{
 		double resolutionX = ((double)  Gdk.Screen.Default.Width) / ((double) Gdk.Screen.Default.WidthMm) * 25.4;
 		
 		compilerService = new CompilerService(template);
+			compilerService.References.Add("Newtonsoft.Json.dll");
 		pixbufRepository = new PixbufRepository () { Report = startReport };			
 		workspaceService = new WorkspaceService (this,maindesignview1.DesignDrawingArea,maindesignview1.PreviewDrawingArea,mainPropertygrid, StatusBarLabel);
 		var reportRenderer = new ReportRenderer(){ ResolutionX =  resolutionX};

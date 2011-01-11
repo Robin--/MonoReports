@@ -36,6 +36,8 @@ using MonoReports.Extensions.CairoExtensions;
 using System.Reflection;
 using System.Collections.Generic;
 using MonoReports.Model.Data;
+using Newtonsoft.Json.Linq;
+
 
 namespace MonoReports.Gui.Widgets
 {
@@ -258,17 +260,39 @@ namespace MonoReports.Gui.Widgets
 			}
 		}
 		
+		void sdfs(){
+			string json = @"{
+  ""Name"": ""Apple"",
+  ""Expiry"": new Date(1230422400000),
+  ""Price"": 3.99,
+  ""Sizes"": [
+    ""Small"",
+    ""Medium"",
+    ""Large""
+  ]
+}";
+ 
+JObject o = JObject.Parse(json);
+
+string name = (string)o["Name"];
+// Apple
+ 
+JArray sizes = (JArray)o["Sizes"];
+ 
+string smallest = (string)sizes[0];
+		}
+		
 		bool evaluate() {			
  
 			object result = null;
 			string meassage = null;			 
 			bool res = false;
-			string usings = String.Empty;
+			string usings = "using Newtonsoft.Json.Linq;";
 			string code = codeTextview.Buffer.Text;
 			designService.Report.Parameters.Clear();
 			designService.Report.DataSource = null;
-			
-			if( Compiler.Evaluate (out result, out meassage,new object[]{usings,code})  ) {
+		
+			if( Compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
 				var ds = (result as object[]);
 				var datasource = ds[0] ;
 				
