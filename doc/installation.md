@@ -2,7 +2,7 @@ Installing Monoreports
 ======================
 
 Monoreports can be installed on Linux and Windows 
-(Miguel De Icaza reporteted, that it also works on MacOs).
+(Miguel De Icaza reported, that it also does work on MacOs).
 
 System Requirements
 -------------------
@@ -20,8 +20,8 @@ To build MonoReports you need to have:
 
 Binary version
 ------------------
-I've found that on Windows and Ubuntu 10.10 binary version works out of box. 
-so if you want to play with the designer simply grab binary package at:
+I've found that on Windows and Ubuntu 10.10 binary version works out of box (as long as you have gtk-sharp installed). 
+so if you want to play with the designer simply grab a binary package at:
 [http://github.com/downloads/tomaszkubacki/monoreports/monoreports_pre.zip](http://github.com/downloads/tomaszkubacki/monoreports/monoreports_pre.zip)
 
 Building from source
@@ -35,8 +35,9 @@ git clone git://github.com/tomaszkubacki/monoreports.git
 
 3. enter cloned directory and run:
 
-	./configure
-	make
+	./configure;
+	make;
+
 
 
 
