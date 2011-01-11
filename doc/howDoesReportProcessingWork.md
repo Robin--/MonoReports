@@ -1,16 +1,16 @@
 How does report processing work
-==================================
+===============================
 
 What is report processing?
--------------------------
-Report processing is to produce report pages from report template (called report). In Monoreports, report is processed section by section, starting with Report Header, every control in that section is processed (measured, growed, spaned  etc.), then next section is processed and so on.
+--------------------------
+Report processing is a procedure that generates report pages from a report template (later called `report`). In Monoreports, report is processed section by section, starting with Report Header, every control (textblock, image, line etc.) in that section is processed (measured, resized, spaned  etc.).
 
-It's not possible to start process next section before previous one is not finished.
+Each section must be completed in order to proceed to the next section. It is not possible to start processing the next section before the previous one has been finished.
 
-Section processing sequence
----------------------------
+The report processing sequence
+------------------------------
 
-In most cases (see: Exceptions to processing sequence) report processing squence is like this:
+In most cases (see: Exceptions to the above processing sequence) the report processing sequence looks this:
 
 	1 Report Header
 	2 Page Header
@@ -25,20 +25,16 @@ In most cases (see: Exceptions to processing sequence) report processing squence
 	n+x+1 Page Footer
 	
 
-It may seem odd that page footer is processed before detail section, but reporting engine has to know how much space left before
-is shall break page.
+It may seem odd that the page footer is processed before the detail section, but this reporting engine has to know how much space left before it breaks page.
 
-Exceptions to processing sequence
----------------------------------
-- some sections could have IsVisible = true, 
-- ReportHeader could have BreakPageAfter set to True, it that's the case, then report footer (if visible) is processed just after Report Header
+Exceptions to the above processing sequence
+-------------------------------------------
+- some sections may have IsVisible set to True, the section is not processed then and it's not visible on the output report
+- ReportHeader may have BreakPageAfter set to True, it that's the case, then the report footer (if visible) is processed just after the report header
 
 Breaking Off Sections
---------------------
+---------------------
 
-If section's KeepTogether flag is set to false and in the same time section will not fit in a current page. Section break will happen. Monoreports's engine is looking how much space left on current space and breake (or move to next page) every control exceeding page height threashold.
-
-
-
+If section's KeepTogether flag is set to False and at same time the section does not fit into current page, the section will be broken. Monoreports's engine is detecting how much space left on the current page and breaks (or move to the next page) every control exceeding current page height threshold.
 
 
