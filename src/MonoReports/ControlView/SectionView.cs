@@ -241,8 +241,7 @@ namespace MonoReports.ControlView
 					SectionGripperColor = sectionHeaderColor1;		
 				}
 			}
-		}
-			
-		
+		}				 		
+		public double MinHeight {get;set;}				
 	}
 }

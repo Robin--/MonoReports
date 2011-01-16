@@ -35,6 +35,7 @@ using MonoReports.ControlView;
 using MonoReports.Model.Data;
 using MonoReports.Renderers;
 using Gtk;
+using System.Linq;
 
 
 namespace MonoReports.Services
@@ -503,6 +504,11 @@ namespace MonoReports.Services
 			}
 			
 			if (SelectedControl != null) {
+				if(MouseOverSection != null){
+					if(!(SelectedControl is SectionView))
+						MouseOverSection.MinHeight = MouseOverSection.Controls.Max(ctrl=>ctrl.ControlModel.Bottom);
+					 		
+				}
 				WorkspaceService.ShowInPropertyGrid (SelectedControl.ControlModel);
 			}
 			

@@ -60,7 +60,12 @@ namespace MonoReports.Tools
                     if ((designService.SelectedTool as SectionTool).IsGripperPressed)
                     {
                         var section = designService.SelectedControl as SectionView;
-                        section.ControlModel.Size = new Size(section.ControlModel.Width, section.ControlModel.Height + designService.DeltaPoint.Y);
+						Size newSize = new Size(section.ControlModel.Width, section.ControlModel.Height + designService.DeltaPoint.Y);
+						if(newSize.Height >= section.MinHeight)
+                        	section.ControlModel.Size = newSize;
+						else{
+							section.ControlModel.Size = new Size(newSize.Width,section.MinHeight);
+					}
                     }
 				} 
 				
