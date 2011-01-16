@@ -303,9 +303,10 @@ namespace MonoReports.Services
 		{
 			if (selectedControl != null) {
 				SelectedControl.ParentSection.RemoveControlView (selectedControl);				
+				SelectedControl.ParentSection.MinHeight = SelectedControl.ParentSection.Controls.Count > 0 ? SelectedControl.ParentSection.Controls.Max(ctrl=>ctrl.ControlModel.Bottom) : 0;
 				SelectedControl.ControlModel = null;
 				SelectedControl = null;
-				WorkspaceService.InvalidateDesignArea ();			
+				WorkspaceService.InvalidateDesignArea ();
 			}
 		}
 
