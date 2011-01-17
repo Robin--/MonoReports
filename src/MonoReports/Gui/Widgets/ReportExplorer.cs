@@ -303,11 +303,15 @@ namespace MonoReports.Gui.Widgets
 					
 					if (path.Depth == 3) {
 						int index = path.Indices [1];
-						
+						try{
 						if (index == 1) {
 							Workspace.ShowInPropertyGrid( designService.Report.DataFields[path.Indices[2]]);
 						} else if (index == 0) {
 							Workspace.ShowInPropertyGrid( designService.Report.Parameters[path.Indices[2]]);
+						}
+						}catch(Exception exp){
+							//3tk to be found why sometimes can't be show in PG
+							Console.WriteLine(exp.ToString());
 						}
 					}
 				}

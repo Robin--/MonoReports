@@ -209,7 +209,7 @@ namespace MonoReports.Gui.Widgets
 			if (designService.IsDesign) {
 				designService.MouseMove (args.Event.X, args.Event.Y);
 				workSpaceService.Status (String.Format ("move x:{0} y:{1}",
-					(args.Event.X / designService.Renderer.UnitMultipilier).ToUnitString(), (args.Event.Y  / designService.Renderer.UnitMultipilier).ToUnitString()));
+					((args.Event.X / designService.Renderer.UnitMultipilier) / designService.Zoom).ToUnitString(), ((args.Event.Y  / designService.Renderer.UnitMultipilier) / designService.Zoom).ToUnitString()));
 			}
 			
 		}
