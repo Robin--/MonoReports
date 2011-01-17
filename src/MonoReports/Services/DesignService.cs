@@ -505,11 +505,10 @@ namespace MonoReports.Services
 			}
 			
 			if (SelectedControl != null) {
-				if(MouseOverSection != null){
-					if(!(SelectedControl is SectionView))
-						MouseOverSection.MinHeight = MouseOverSection.Controls.Max(ctrl=>ctrl.ControlModel.Bottom);
+				if(!(SelectedControl is SectionView))
+						SelectedControl.ParentSection.MinHeight = SelectedControl.ParentSection.Controls.Max(ctrl=>ctrl.ControlModel.Bottom);
 					 		
-				}
+				
 				WorkspaceService.ShowInPropertyGrid (SelectedControl.ControlModel);
 			}
 			
