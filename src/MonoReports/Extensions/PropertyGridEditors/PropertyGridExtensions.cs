@@ -36,6 +36,7 @@ namespace MonoReports.Extensions.PropertyGridEditors
 			pg.AddPropertyEditor (typeof(MonoReports.Model.Border), typeof(MonoReports.Extensions.PropertyGridEditors.BorderEditorCell));
 			pg.AddPropertyEditor (typeof(MonoReports.Model.Thickness), typeof(MonoReports.Extensions.PropertyGridEditors.ThicknessEditorCell));
 			pg.AddPropertyEditor (typeof(MonoReports.Model.Color), typeof(MonoReports.Extensions.PropertyGridEditors.MonoreportsColorEditorCell));
+			pg.AddPropertyEditor (typeof(double), typeof(MonoReports.Extensions.PropertyGridEditors.DoubleEditorCell));
 		
 		}
 	}

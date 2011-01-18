@@ -133,6 +133,7 @@ namespace MonoReports.Gui.Widgets
 			};								
 			
 			previewDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
+			DesignDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
 		}
 
 		void buildPreviewToolbar ()

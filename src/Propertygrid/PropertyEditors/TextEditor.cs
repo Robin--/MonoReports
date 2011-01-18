@@ -43,6 +43,8 @@ namespace PropertyGrid.PropertyEditors
 		string initialText;
 		Entry entry;
 		
+		public TypeConverter CustomConverter {get;set;}
+		
 		public TextEditor()
 		{
 		}
@@ -50,10 +52,11 @@ namespace PropertyGrid.PropertyEditors
 		public void Initialize (EditSession session)
 		{
 			this.session = session;
-			
+			if(this.CustomConverter == null)
+				this.CustomConverter = session.Converter;
 			//if standard values are supported by the converter, then 
 			//we list them in a combo
-			if (session.Property.Converter.GetStandardValuesSupported (session))
+			if (CustomConverter.GetStandardValuesSupported (session))
 			{
 				ListStore store = new ListStore (typeof (string));
 				ComboBoxEntry combo = new ComboBoxEntry (store, 0);
@@ -64,18 +67,18 @@ namespace PropertyGrid.PropertyEditors
 				
 				//but if the converter doesn't allow nonstandard values, 
 				// then we make the entry uneditable
-				if (session.Property.Converter.GetStandardValuesExclusive (session)) {
+				if (CustomConverter.GetStandardValuesExclusive (session)) {
 					entry.IsEditable = false;
 					entry.CanFocus = false;
 				}
 				
 				//fill the list
-				foreach (object stdValue in session.Property.Converter.GetStandardValues (session)) {
-					store.AppendValues (session.Property.Converter.ConvertToString (session, stdValue));
+				foreach (object stdValue in CustomConverter.GetStandardValues (session)) {
+					store.AppendValues (CustomConverter.ConvertToString (session, stdValue));
 				}
 				
 				//a value of "--" gets rendered as a --, if typeconverter marked with UsesDashesForSeparator
-				object[] atts = session.Property.Converter.GetType ()
+				object[] atts = CustomConverter.GetType ()
 					.GetCustomAttributes (typeof (StandardValuesSeparatorAttribute), true);
 				if (atts.Length > 0) {
 					string separator = ((StandardValuesSeparatorAttribute)atts[0]).Separator;
@@ -129,9 +132,9 @@ namespace PropertyGrid.PropertyEditors
 				return;
 			
 			bool valid = false;
-			if (session.Property.Converter.IsValid (session, entry.Text)) {
+			if (CustomConverter.IsValid (session, entry.Text)) {
 				try {
-					session.Property.Converter.ConvertFromString (session, entry.Text);
+					CustomConverter.ConvertFromString (session, entry.Text);
 					initialText = entry.Text;
 					if (ValueChanged != null)
 						ValueChanged (this, a);
@@ -152,10 +155,10 @@ namespace PropertyGrid.PropertyEditors
 		// to return values with the expected type.
 		public object Value {
 			get {
-				return session.Property.Converter.ConvertFromString (session, entry.Text);
+				return CustomConverter.ConvertFromString (session, entry.Text);
 			}
 			set {
-				string val = session.Property.Converter.ConvertToString (session, value);
+				string val = CustomConverter.ConvertToString (session, value);
 				initialText = entry.Text;
 				entry.Text = val ?? string.Empty;
 			}

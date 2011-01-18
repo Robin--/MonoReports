@@ -52,6 +52,11 @@ namespace PropertyGrid
 			get { return property; }
 		}
 		
+		
+		public TypeConverter CustomConverter {
+			get;set;
+		}
+		
 		public Gtk.Widget Container {
 			get { return container; }
 		}
@@ -81,7 +86,7 @@ namespace PropertyGrid
 			IPropertyEditor ed = CreateEditor (cell_area, state);
 			if (ed == null)
 				return null;
-			return new EditSession (container, obj, property, ed);
+			return new EditSession (container, obj, property, ed, CustomConverter != null ? CustomConverter : property.Converter);
 		}
 		
 		protected virtual string GetValueText ()
@@ -223,12 +228,20 @@ namespace PropertyGrid
 		
 		public event EventHandler Changed;
 		
-		public EditSession (Gtk.Widget container, object instance, PropertyDescriptor property, IPropertyEditor currentEditor)
+		
+		public EditSession (Gtk.Widget container, object instance, PropertyDescriptor property, IPropertyEditor currentEditor) :
+			this(container,instance,property,currentEditor,property.Converter)
 		{
+		}
+		
+		public EditSession (Gtk.Widget container, object instance, PropertyDescriptor property, IPropertyEditor currentEditor, TypeConverter converter)
+		{
+			
 			this.property = property;
 			this.obj = instance;
 			this.container = container;
 			this.currentEditor = currentEditor;
+			this.converter = converter;
 			
 			currentEditor.Initialize (this);
 			if (instance != null)
@@ -248,6 +261,12 @@ namespace PropertyGrid
 		
 		public PropertyDescriptor Property {
 			get { return property; }
+		}
+		
+		TypeConverter converter;
+		
+		public TypeConverter Converter {
+			get { return converter; }
 		}
 		
 		PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor {
@@ -343,7 +362,7 @@ namespace PropertyGrid
 			cell.Initialize (this, em, property, obj);
 			
 			Gdk.Rectangle rect = Allocation;
-			rect.Inflate (-3, 0);// Add some margin
+			rect.Inflate (-2, 0);// Add some margin
 			
 			cell.Render (this.GdkWindow, rect, StateType.Normal);
 			return res;
