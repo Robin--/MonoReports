@@ -38,11 +38,12 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="MonoReports, Version=1.0.4024.12937, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Mono.Cairo" />
+    <Reference Include="MonoReports, Version=1.0.4036.40272, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\build\MonoReports.dll</HintPath>
     </Reference>
-    <Reference Include="MonoReports.Model, Version=1.0.4024.12937, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="MonoReports.Model, Version=1.0.4036.40268, Culture=neutral, PublicKeyToken=null">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\build\MonoReports.Model.dll</HintPath>
     </Reference>

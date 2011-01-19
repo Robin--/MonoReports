@@ -59,7 +59,7 @@ namespace MrptInvoiceExample
 				HorizontalAlignment = HorizontalAlignment.Center,
 				FontColor = Color.White
 			};				
-			r.ReportHeaderSection.Height = 30.mm();
+			r.ReportHeaderSection.Height = 30.mm ();
 			r.ReportHeaderSection.Controls.Add (invNumberTb);
 			r.ReportHeaderSection.BackgroundColor = Color.Silver;
 			
@@ -70,7 +70,7 @@ namespace MrptInvoiceExample
 			
 			var phLine = new Line (){ 
 				Location = new Point(0,10.mm()), End = new Point(r.Width,10.mm()), ExtendToBottom = true};
- 
+	
 			r.PageHeaderSection.Controls.Add (phLine);
 			
 			
@@ -98,7 +98,7 @@ namespace MrptInvoiceExample
 			
 			//do not allow break detail section across page
 			r.DetailSection.KeepTogether = true;			
-			r.DetailSection.Height = 6.mm();
+			r.DetailSection.Height = 6.mm ();
 				
 			//index field
 			var indTb = new TextBlock () { FieldName = "Index",  FieldKind = FieldKind.Data, Text = "00", Left = 1.2.mm(), Width = 10.mm()};			
@@ -119,14 +119,14 @@ namespace MrptInvoiceExample
 			
 			var line = new Line (){ Location = new Point(0,2.mm()), End = new Point(r.Width,2.mm()), ExtendToBottom = true};
 			r.DetailSection.Controls.Add (line);
- 
+	
 			//just before processing we can change section properties
 			r.DetailSection.OnBeforeControlProcessing += delegate(ReportContext rc, Control c) {
-				if(rc.RowIndex % 2 == 0) {
+				if (rc.RowIndex % 2 == 0) {
 					c.BackgroundColor = Color.LightGray;					
 				}
 				else {
-					( (TextBlock) (c as Section).Controls[1]).FontColor = Color.PaleVioletRed;				 
+					((TextBlock)(c as Section).Controls [1]).FontColor = Color.PaleVioletRed;				 
 				}
 			};
 			
@@ -144,11 +144,11 @@ namespace MrptInvoiceExample
 			//Report footer
 			//---------------
 
-		 	// price field
+			// price field
 			
 			var prtTotalLabelTb = new TextBlock () { 
 				FontWeight = FontWeight.Bold, 
-			  	HorizontalAlignment = HorizontalAlignment.Right,			 
+					HorizontalAlignment = HorizontalAlignment.Right,			 
 				FontSize = 12,
 				FieldKind =  FieldKind.Parameter, 
 				Text = "Total: ", 
@@ -215,18 +215,53 @@ namespace MrptInvoiceExample
 			}
 			
 			
-			invoice.Positions[4].Description = "here comes longer position text to see if position will extend section height";
+			invoice.Positions [4].Description = "here comes longer position text to see if position will extend section height";
 			
-			invoice.Positions[11].Description = "another longer position text to see if position will extend section height";
+			invoice.Positions [11].Description = "another longer position text to see if position will extend section height";
 			
 			
 			//Total gross ...
 			invoice.TotalGross = invoice.Positions.Sum (p => p.PricePerUnitGross * p.Quantity);
 			#endregion
 	
-			r.DataSource = invoice.Positions;			
+			r.DataSource = invoice.Positions;	
+			
+			//we can get cairo context before and after rendering each page
+			//to draw custom shapes, texts (e.g watermarks etc)
+			//here modified example from http://www.mono-project.com/Mono.Cairo			
+			r.OnAfterPageRender += delegate(ReportContext rc, Page p) {
+				if (rc.CurrentPageIndex % 2 > 0) {
+					Cairo.Context gr = rc.RendererContext as Cairo.Context;
+					gr.MoveTo (50.mm (), 100.mm ());
+					
+					gr.CurveTo (50.mm (), 50.mm (), 50.mm (), 50.mm (), 100.mm (), 50.mm ());
+					gr.CurveTo (100.mm (), 100.mm (), 100.mm (), 100.mm (), 50.mm (), 100.mm ());
+					gr.ClosePath ();
+		
+					// Save the state to restore it later. That will NOT save the path
+					gr.Save ();
+					Cairo.Gradient pat = new Cairo.LinearGradient (50.mm (),100.mm (), 100.mm (),50.mm ());
+					pat.AddColorStop (0, new Cairo.Color (0,0,0,0.3));
+					pat.AddColorStop (1, new Cairo.Color (1,0,0,0.2));
+					gr.Pattern = pat;
+					
+					// Fill the path with pattern
+					gr.FillPreserve ();
+					
+					// We "undo" the pattern setting here
+					gr.Restore ();
+					
+					// Color for the stroke
+					gr.Color = new Cairo.Color (0,0,0);
+					
+					gr.LineWidth = 1.px ();
+					gr.Stroke ();		
+				}
+							
+			};
+			
 			r.ExportToPdf ("invoice.pdf", new Dictionary<string,object>{ {"invoice",invoice}});
-			r.Save("report.mrp");
+			r.Save ("report.mrp");
 			
 				
 		}
