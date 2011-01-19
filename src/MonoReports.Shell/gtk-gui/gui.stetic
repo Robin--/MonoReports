@@ -109,7 +109,7 @@
       </action>
       <action id="mediaPlayAction">
         <property name="Type">Action</property>
-        
+        <property name="Accelerator">&lt;Mod2&gt;F5</property>
         <property name="Label" translatable="yes">Execute</property>
         <property name="ShortLabel" translatable="yes">Execute</property>
         <property name="StockId">gtk-media-play</property>
@@ -190,6 +190,7 @@
         <property name="Label" translatable="yes">_O programie</property>
         <property name="ShortLabel" translatable="yes">_O programie</property>
         <property name="StockId">gtk-about</property>
+        <signal name="Activated" handler="OnAboutActionActivated" />
       </action>
     </action-group>
     <property name="MemberName" />

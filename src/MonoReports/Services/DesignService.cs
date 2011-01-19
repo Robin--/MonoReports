@@ -512,7 +512,10 @@ namespace MonoReports.Services
 		public void ZoomChanged (double zoom)
 		{
 			Zoom = zoom;
-			WorkspaceService.InvalidateDesignArea (); 
+			if(isDesign)
+				WorkspaceService.InvalidateDesignArea (); 
+			else
+				WorkspaceService.InvalidatePreviewArea (); 
 		}
 
 		public void ButtonRelease (double x, double y)

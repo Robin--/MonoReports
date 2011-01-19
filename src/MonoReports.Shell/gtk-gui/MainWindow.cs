@@ -92,7 +92,7 @@ public partial class MainWindow
 		w1.Add (this.ViewAction, null);
 		this.mediaPlayAction = new global::Gtk.Action ("mediaPlayAction", global::Mono.Unix.Catalog.GetString ("Execute"), null, "gtk-media-play");
 		this.mediaPlayAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Execute");
-		w1.Add (this.mediaPlayAction, null);
+		w1.Add (this.mediaPlayAction, "<Mod2>F5");
 		this.undoAction = new global::Gtk.Action ("undoAction", global::Mono.Unix.Catalog.GetString ("Cof_nij"), null, "gtk-undo");
 		this.undoAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Cof_nij");
 		w1.Add (this.undoAction, null);
@@ -168,5 +168,6 @@ public partial class MainWindow
 		this.zoomInAction.Activated += new global::System.EventHandler (this.OnZoomInActionActivated);
 		this.zoomOutAction.Activated += new global::System.EventHandler (this.OnZoomOutActionActivated);
 		this.zoom100Action.Activated += new global::System.EventHandler (this.OnZoom100ActionActivated);
+		this.aboutAction.Activated += new global::System.EventHandler (this.OnAboutActionActivated);
 	}
 }

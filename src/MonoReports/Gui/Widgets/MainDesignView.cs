@@ -182,16 +182,18 @@ namespace MonoReports.Gui.Widgets
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
 				cr.Antialias = Cairo.Antialias.Default;								 				 
 				reportRenderer.Context  = cr;
+				
 				Cairo.Rectangle r = new Cairo.Rectangle (
 					0,
 					0,
 					reportRenderer.UnitMultipilier * designService.Report.WidthWithMargins,
 					reportRenderer.UnitMultipilier * designService.Report.HeightWithMargins
 					);
+				cr.Scale (designService.Zoom, designService.Zoom);			
 				cr.FillRectangle (r,backgroundPageColor);				
 				cr.Translate (designService.Report.Margin.Left * reportRenderer.UnitMultipilier ,designService.Report.Margin.Top * reportRenderer.UnitMultipilier  );
 				reportRenderer.RenderPage (designService.Report.Pages [pageNumber]);
-				area.SetSizeRequest ((int)(designService.Report.HeightWithMargins * ReportRenderer.UnitMultipilier),(int) (designService.Report.HeightWithMargins* ReportRenderer.UnitMultipilier)+5);
+				area.SetSizeRequest ((int)(designService.Report.HeightWithMargins * designService.Zoom * ReportRenderer.UnitMultipilier),(int) (designService.Report.HeightWithMargins * designService.Zoom * ReportRenderer.UnitMultipilier)+5);
 			
 				(cr as IDisposable).Dispose ();
 			}

@@ -47,6 +47,7 @@ public partial class MainWindow: Gtk.Window
 	
 	protected virtual void OnAboutActionActivated (object sender, System.EventArgs e)
 	{
+		monoreportsdesignercontrol1.About();
 	}
 	
 	protected virtual void OnOpenActionActivated (object sender, System.EventArgs e)
@@ -57,19 +58,7 @@ public partial class MainWindow: Gtk.Window
 	{
 		monoreportsdesignercontrol1.Save();
 	}
-	
-	protected virtual void OnEditActionActivated (object sender, System.EventArgs e)
-	{
-	}
-	
-	protected virtual void OnReportSettingsActionActivated (object sender, System.EventArgs e)
-	{
-	}
-	
-	protected virtual void OnExecuteActionActivated (object sender, System.EventArgs e)
-	{
-	}
-	
+ 
 	protected virtual void OnCopyAction1Activated (object sender, System.EventArgs e)
 	{
 		monoreportsdesignercontrol1.DesignService.Copy();
