@@ -24,15 +24,236 @@
         <property name="ShortLabel" translatable="yes">Wk_lej</property>
         <property name="StockId">gtk-paste</property>
       </action>
+      <action id="openAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Otwórz</property>
+        <property name="ShortLabel" translatable="yes">_Otwórz</property>
+        <property name="StockId">gtk-open</property>
+      </action>
+      <action id="quitAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Za_kończ</property>
+        <property name="ShortLabel" translatable="yes">Za_kończ</property>
+        <property name="StockId">gtk-quit</property>
+      </action>
+      <action id="FileAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">File</property>
+        <property name="ShortLabel" translatable="yes">File</property>
+      </action>
+      <action id="openAction1">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Otwórz</property>
+        <property name="ShortLabel" translatable="yes">_Otwórz</property>
+        <property name="StockId">gtk-open</property>
+      </action>
+      <action id="newAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Nowy</property>
+        <property name="ShortLabel" translatable="yes">_Nowy</property>
+        <property name="StockId">gtk-new</property>
+      </action>
+      <action id="fileAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">File</property>
+        <property name="ShortLabel" translatable="yes">File</property>
+        <property name="StockId">gtk-file</property>
+      </action>
+      <action id="EditAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Edit</property>
+        <property name="ShortLabel" translatable="yes">Edit</property>
+      </action>
+      <action id="ProjectAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Project</property>
+        <property name="ShortLabel" translatable="yes">Project</property>
+      </action>
+      <action id="newAction1">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Nowy</property>
+        <property name="ShortLabel" translatable="yes">_Nowy</property>
+        <property name="StockId">gtk-new</property>
+      </action>
+      <action id="openAction2">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Otwórz</property>
+        <property name="ShortLabel" translatable="yes">_Otwórz</property>
+        <property name="StockId">gtk-open</property>
+        <signal name="Activated" handler="OnOpenAction2Activated" />
+      </action>
+      <action id="saveAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Zapisz</property>
+        <property name="ShortLabel" translatable="yes">_Zapisz</property>
+        <property name="StockId">gtk-save</property>
+        <signal name="Activated" handler="OnSaveActionActivated" />
+      </action>
+      <action id="saveAsAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Zapi_sz jako</property>
+        <property name="ShortLabel" translatable="yes">Zapi_sz jako</property>
+        <property name="StockId">gtk-save-as</property>
+      </action>
+      <action id="quitAction1">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Za_kończ</property>
+        <property name="ShortLabel" translatable="yes">Za_kończ</property>
+        <property name="StockId">gtk-quit</property>
+        <signal name="Activated" handler="OnQuitAction1Activated" />
+      </action>
+      <action id="ViewAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">View</property>
+        <property name="ShortLabel" translatable="yes">Help</property>
+      </action>
+      <action id="mediaPlayAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Execute</property>
+        <property name="ShortLabel" translatable="yes">Execute</property>
+        <property name="StockId">gtk-media-play</property>
+        <signal name="Activated" handler="OnMediaPlayActionActivated" />
+      </action>
+      <action id="undoAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Cof_nij</property>
+        <property name="ShortLabel" translatable="yes">Cof_nij</property>
+        <property name="StockId">gtk-undo</property>
+      </action>
+      <action id="redoAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">P_onów</property>
+        <property name="ShortLabel" translatable="yes">P_onów</property>
+        <property name="StockId">gtk-redo</property>
+      </action>
+      <action id="cutAction">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Alt&gt;&lt;Mod2&gt;x</property>
+        <property name="Label" translatable="yes">_Wytnij</property>
+        <property name="ShortLabel" translatable="yes">_Wytnij</property>
+        <property name="StockId">gtk-cut</property>
+      </action>
+      <action id="copyAction1">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Alt&gt;&lt;Mod2&gt;c</property>
+        <property name="Label" translatable="yes">S_kopiuj</property>
+        <property name="ShortLabel" translatable="yes">S_kopiuj</property>
+        <property name="StockId">gtk-copy</property>
+        <signal name="Activated" handler="OnCopyAction1Activated" />
+      </action>
+      <action id="pasteAction1">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Alt&gt;&lt;Mod2&gt;v</property>
+        <property name="Label" translatable="yes">Wk_lej</property>
+        <property name="ShortLabel" translatable="yes">Wk_lej</property>
+        <property name="StockId">gtk-paste</property>
+        <signal name="Activated" handler="OnPasteAction1Activated" />
+      </action>
+      <action id="deleteAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Usuń</property>
+        <property name="ShortLabel" translatable="yes">_Usuń</property>
+        <property name="StockId">gtk-delete</property>
+      </action>
+      <action id="zoomInAction">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Control&gt;&lt;Mod2&gt;equal</property>
+        <property name="Label" translatable="yes">Po_większ</property>
+        <property name="ShortLabel" translatable="yes">Po_większ</property>
+        <property name="StockId">gtk-zoom-in</property>
+        <signal name="Activated" handler="OnZoomInActionActivated" />
+      </action>
+      <action id="zoomOutAction">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Control&gt;&lt;Mod2&gt;minus</property>
+        <property name="Label" translatable="yes">Po_mniejsz</property>
+        <property name="ShortLabel" translatable="yes">Po_mniejsz</property>
+        <property name="StockId">gtk-zoom-out</property>
+        <signal name="Activated" handler="OnZoomOutActionActivated" />
+      </action>
+      <action id="zoom100Action">
+        <property name="Type">Action</property>
+        <property name="Accelerator">&lt;Control&gt;&lt;Mod2&gt;Return</property>
+        <property name="Label" translatable="yes">_Dopasowanie</property>
+        <property name="ShortLabel" translatable="yes">_Dopasowanie</property>
+        <property name="StockId">gtk-zoom-100</property>
+        <signal name="Activated" handler="OnZoom100ActionActivated" />
+      </action>
+      <action id="HelpAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Help</property>
+        <property name="ShortLabel" translatable="yes">Help</property>
+      </action>
+      <action id="aboutAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_O programie</property>
+        <property name="ShortLabel" translatable="yes">_O programie</property>
+        <property name="StockId">gtk-about</property>
+      </action>
     </action-group>
     <property name="MemberName" />
-    <property name="Title" translatable="yes">Monoreports pre</property>
+    <property name="Title" translatable="yes">Monoreports 0.1</property>
     <property name="WindowPosition">Center</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
-      <widget class="MonoReports.Gui.Widgets.MonoreportsDesignerControl" id="monoreportsdesignercontrol2">
+      <widget class="Gtk.VBox" id="vbox2">
         <property name="MemberName" />
-        <property name="Events">ButtonPressMask</property>
+        <property name="Spacing">6</property>
+        <child>
+          <widget class="Gtk.MenuBar" id="menubar3">
+            <property name="MemberName" />
+            <node name="__gtksharp_100_Stetic_Editor_ActionMenuBar" type="Menubar">
+              <node type="Menu" action="fileAction">
+                <node type="Menuitem" action="newAction1" />
+                <node type="Menuitem" action="openAction2" />
+                <node type="Menuitem" action="saveAction" />
+                <node type="Menuitem" action="saveAsAction" />
+                <node type="Menuitem" action="quitAction1" />
+              </node>
+              <node type="Menu" action="EditAction">
+                <node type="Menuitem" action="undoAction" />
+                <node type="Menuitem" action="redoAction" />
+                <node type="Menuitem" action="cutAction" />
+                <node type="Menuitem" action="copyAction1" />
+                <node type="Menuitem" action="pasteAction1" />
+                <node type="Menuitem" action="deleteAction" />
+              </node>
+              <node type="Menu" action="ViewAction">
+                <node type="Menuitem" action="zoomInAction" />
+                <node type="Menuitem" action="zoomOutAction" />
+                <node type="Menuitem" action="zoom100Action" />
+              </node>
+              <node type="Menu" action="ProjectAction">
+                <node type="Menuitem" action="mediaPlayAction" />
+              </node>
+              <node type="Menu" action="HelpAction">
+                <node type="Menuitem" action="aboutAction" />
+              </node>
+            </node>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <widget class="MonoReports.Gui.Widgets.MonoreportsDesignerControl" id="monoreportsdesignercontrol1">
+            <property name="MemberName" />
+            <property name="Events">ButtonPressMask</property>
+          </widget>
+          <packing>
+            <property name="Position">2</property>
+            <property name="AutoSize">True</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
       </widget>
     </child>
   </widget>

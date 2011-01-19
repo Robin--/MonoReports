@@ -5,7 +5,6 @@ namespace MonoReports.Gui.Widgets
 	public partial class MainDesignView
 	{
 		private global::Gtk.UIManager UIManager;
-		private global::Gtk.Action executeAction;
 		private global::Gtk.Notebook mainNotebook;
 		private global::Gtk.ScrolledWindow designScrolledWindow;
 		private global::Gtk.DrawingArea drawingarea;
@@ -21,7 +20,6 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.TextView codeTextview;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 		private global::Gtk.TextView outputTextview;
-		private global::Gtk.Toolbar toolbar1;
 		private global::Gtk.Label datasourceLabel;
 
 		protected virtual void Build ()
@@ -31,8 +29,6 @@ namespace MonoReports.Gui.Widgets
 			Stetic.BinContainer w1 = global::Stetic.BinContainer.Attach (this);
 			this.UIManager = new global::Gtk.UIManager ();
 			global::Gtk.ActionGroup w2 = new global::Gtk.ActionGroup ("Default");
-			this.executeAction = new global::Gtk.Action ("executeAction", null, null, "gtk-execute");
-			w2.Add (this.executeAction, null);
 			this.UIManager.InsertActionGroup (w2, 0);
 			this.Name = "MonoReports.Gui.Widgets.MainDesignView";
 			// Container child MonoReports.Gui.Widgets.MainDesignView.Gtk.Container+ContainerChild
@@ -112,7 +108,7 @@ namespace MonoReports.Gui.Widgets
 			this.vpaned1 = new global::Gtk.VPaned ();
 			this.vpaned1.CanFocus = true;
 			this.vpaned1.Name = "vpaned1";
-			this.vpaned1.Position = 399;
+			this.vpaned1.Position = 335;
 			// Container child vpaned1.Gtk.Paned+PanedChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
@@ -138,19 +134,9 @@ namespace MonoReports.Gui.Widgets
 			this.vbox2.Add (this.vpaned1);
 			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.vpaned1]));
 			w17.Position = 0;
-			// Container child vbox2.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString ("<ui><toolbar name='toolbar1'><toolitem name='executeAction' action='executeAction'/></toolbar></ui>");
-			this.toolbar1 = ((global::Gtk.Toolbar)(this.UIManager.GetWidget ("/toolbar1")));
-			this.toolbar1.Name = "toolbar1";
-			this.toolbar1.ShowArrow = false;
-			this.vbox2.Add (this.toolbar1);
-			global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.toolbar1]));
-			w18.Position = 1;
-			w18.Expand = false;
-			w18.Fill = false;
 			this.mainNotebook.Add (this.vbox2);
-			global::Gtk.Notebook.NotebookChild w19 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.vbox2]));
-			w19.Position = 2;
+			global::Gtk.Notebook.NotebookChild w18 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.vbox2]));
+			w18.Position = 2;
 			// Notebook tab
 			this.datasourceLabel = new global::Gtk.Label ();
 			this.datasourceLabel.Name = "datasourceLabel";
@@ -163,7 +149,6 @@ namespace MonoReports.Gui.Widgets
 			}
 			w1.SetUiManager (UIManager);
 			this.Hide ();
-			this.executeAction.Activated += new global::System.EventHandler (this.OnExecuteActionActivated);
 			this.mainNotebook.SwitchPage += new global::Gtk.SwitchPageHandler (this.OnMainNotebookSwitchPage);
 			this.drawingarea.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnDrawingareaButtonPressEvent);
 			this.drawingarea.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.OnDrawingareaButtonReleaseEvent);

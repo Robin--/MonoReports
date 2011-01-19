@@ -77,6 +77,8 @@ namespace MonoReports.Services
 			get;
 			private set;
 		}
+		
+		public CompilerService Compiler {get;set;}
 
 		public Cairo.PointD EndPressPoint { get; private set; }
 
@@ -131,12 +133,24 @@ namespace MonoReports.Services
 				selectedControl = value; 
 				if (selectedControl != null) {
 					ToolBoxService.SetToolByControlView (selectedControl);
+					
+					if (selectedControl.ControlModel is Section) {
+					   	SelectedSection = selectedControl as SectionView;
+					}
+					else {
+					 	SelectedSection = selectedControl.ParentSection;
+					}
+					
 				} else {
 					ToolBoxService.UnselectTool ();
 				}
 				if (OnSelectedControlChanged != null)
 					OnSelectedControlChanged (this, new EventArgs ());
 			} 
+		}
+		
+		public SectionView SelectedSection {
+			get;set;
 		}
 
 		BaseTool mouseOverTool = null;
@@ -165,10 +179,11 @@ namespace MonoReports.Services
 
 		public PixbufRepository PixbufRepository {get; set;}
 
-		public DesignService (IWorkspaceService workspaceService,ReportRenderer renderer,PixbufRepository pixbufRepository, Report report)
+		public DesignService (IWorkspaceService workspaceService,ReportRenderer renderer,PixbufRepository pixbufRepository,CompilerService compilerService, Report report)
 		{		
 			this.PixbufRepository = pixbufRepository;
 			this.WorkspaceService = workspaceService;
+			this.Compiler = compilerService;
 			this.renderer = renderer;
 			controlViewFactory = new ControlViewFactory (renderer);			
 			IsDesign = true;
@@ -312,6 +327,9 @@ namespace MonoReports.Services
 
         public void Copy()
         {
+			if(!isDesign)
+				return;
+			
             if (SelectedControl != null)
             {                
                 var clipboard = Gtk.Clipboard.Get(Gdk.Atom.Intern("monoreports_control", false));
@@ -322,13 +340,16 @@ namespace MonoReports.Services
 
         public void Paste()
         {
+			if(!isDesign)
+				return;
+			
             var clipboard = Gtk.Clipboard.Get(Gdk.Atom.Intern("monoreports_control",false));
             if (clipboard != null)
             {
                 
                 var point = MousePoint;
-                var sectionView = getSectionViewByXY(point);
-                if (sectionView != null)
+                
+                if (SelectedSection != null)
                 {
                     string id = clipboard.WaitForText();
                     Control controlToCopy = null;
@@ -341,11 +362,11 @@ namespace MonoReports.Services
                     if (controlToCopy == null|| controlToCopy is Section)
                         return;
                     var newControl = controlToCopy.CreateControl();
-                    var localpoint = sectionView.PointInSectionByAbsolutePoint(point);
+                    var localpoint = newControl.Location;
 
                     
                     double newLeft, newTop;
-                    if (localpoint.X < 0 || localpoint.X > sectionView.AbsoluteBound.Width - newControl.Width)
+                    if (localpoint.X < 0 || localpoint.X > SelectedSection.AbsoluteBound.Width - newControl.Width)
                     {
                         newLeft = 0;
                     }
@@ -353,7 +374,7 @@ namespace MonoReports.Services
                     {
                         newLeft = newControl.Left;
                     }
-                    if (localpoint.Y < 0 || localpoint.Y > sectionView.AbsoluteBound.Height - newControl.Height)
+                    if (localpoint.Y < 0 || localpoint.Y > SelectedSection.AbsoluteBound.Height - newControl.Height)
                     {
                         newTop = 0;
                     }
@@ -365,9 +386,9 @@ namespace MonoReports.Services
                     newControl.Top = newTop;
                     //3tk todo dirty hack - there should be easier wy to get default tool for control
                     //see lineTool for corner cases before implement
-                    var newControlView = controlViewFactory.CreateControlView(newControl, sectionView);
+                    var newControlView = controlViewFactory.CreateControlView(newControl, SelectedSection);
                     ToolBoxService.SetToolByName (newControlView.DefaultToolName);
-                    SelectedControl =  SelectedTool.AddControl(sectionView, newControl);
+                    SelectedControl =  SelectedTool.AddControl(SelectedSection, newControl);
                     SelectedTool.CreateMode = false;
                     WorkspaceService.InvalidateDesignArea();
                 }
@@ -529,6 +550,45 @@ namespace MonoReports.Services
 			var sectionView = new SectionView (controlViewFactory, section, sectionSpan);
 			sectionViews.Add (sectionView);
 			Height = sectionView.AbsoluteBound.Y + sectionView.AbsoluteBound.Height;
+		}
+		
+		
+		public void ProcessReport() {
+			Evaluate();
+			RefreshDataFieldsFromDataSource();
+		}
+		
+		
+		public bool Evaluate() {	
+			
+			string code = Report.DataScript;
+ 
+			object result = null;
+			string meassage = null;			 
+			bool res = false;
+			string usings = "using Newtonsoft.Json.Linq;";
+			
+			Report.Parameters.Clear();
+			Report.DataSource = null;
+		
+			if( Compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
+				var ds = (result as object[]);
+				var datasource = ds[0] ;
+				
+				Dictionary<string,object> parametersDictionary = ds[1] as Dictionary<string,object>;
+ 				foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
+					 Report.Parameters.AddRange(FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter));
+				}
+					
+				if (datasource != null) {
+					Report.DataSource = datasource;
+					//Report.DataScript = codeTextview.Buffer.Text;		
+					res = true;
+				}
+			}
+			
+			//outputTextview.Buffer.Text = meassage;
+			return res;
 		}
 
 		public void ExportToPdf ()

@@ -60,12 +60,21 @@ namespace MonoReports.Gui.Widgets
 			}
 		}
 		
-		public CompilerService Compiler {get;set;}
+		bool flag = false;
 
 		void HandleDesignServiceOnReportChanged (object sender, EventArgs e)
-		{
-			codeTextview.Buffer.Text = designService.Report.DataScript;			
+		{		
+			flag = true;
+			codeTextview.Buffer.Text = designService.Report.DataScript;					
+			flag = false;
 		}
+		
+		void HandleCodeTextviewBufferChanged (object sender, EventArgs e)
+		{
+			if(!flag)
+				designService.Report.DataScript = codeTextview.Buffer.Text;
+		}
+
 
 		ReportRenderer reportRenderer;
 
@@ -109,7 +118,7 @@ namespace MonoReports.Gui.Widgets
 			buildPreviewToolbar ();
 			
 			Gtk.Drag.DestSet (DesignDrawingArea, DestDefaults.All, new TargetEntry[]{new TargetEntry ("Field", TargetFlags.OtherWidget,2)}, DragAction.Copy);
-			
+			codeTextview.Buffer.Changed += HandleCodeTextviewBufferChanged;
 		
 				
 			DesignDrawingArea.DragDrop += delegate(object o, DragDropArgs args) {
@@ -136,6 +145,7 @@ namespace MonoReports.Gui.Widgets
 			DesignDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
 		}
 
+	
 		void buildPreviewToolbar ()
 		{
 			pageSpinButton = new ToolBarSpinButton (40, 1, 1, 1);
@@ -227,7 +237,7 @@ namespace MonoReports.Gui.Widgets
 			if (designService != null) {
 				if (args.PageNum == 1) {
 					designService.IsDesign = false;
-					evaluate ();
+					designService.Evaluate();
 
 					ImageSurface imagesSurface = new ImageSurface (Format.Argb32, (int)designService.Report.Width, (int)designService.Report.Height);
 					Cairo.Context cr = new Cairo.Context (imagesSurface);				
@@ -245,6 +255,7 @@ namespace MonoReports.Gui.Widgets
 				}
 			}
 		}
+		
 		protected virtual void OnDrawingareaKeyPressEvent (object o, Gtk.KeyPressEventArgs args)
 		{			 
 			DesignService.KeyPress(args.Event.Key);
@@ -254,42 +265,7 @@ namespace MonoReports.Gui.Widgets
 		{
 		}
 		
-		protected virtual void OnExecuteActionActivated (object sender, System.EventArgs e)
-		{
-			if(evaluate()){
-				designService.RefreshDataFieldsFromDataSource();
-			}
-		}
-
-		bool evaluate() {			
- 
-			object result = null;
-			string meassage = null;			 
-			bool res = false;
-			string usings = "using Newtonsoft.Json.Linq;";
-			string code = codeTextview.Buffer.Text;
-			designService.Report.Parameters.Clear();
-			designService.Report.DataSource = null;
-		
-			if( Compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
-				var ds = (result as object[]);
-				var datasource = ds[0] ;
-				
-				Dictionary<string,object> parametersDictionary = ds[1] as Dictionary<string,object>;
- 				foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
-					 designService.Report.Parameters.AddRange(FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter));
-				}
-					
-				if (datasource != null) {
-					designService.Report.DataSource = datasource;
-					designService.Report.DataScript = codeTextview.Buffer.Text;		
-					res = true;
-				}
-			}
-			
-			outputTextview.Buffer.Text = meassage;
-			return res;
-		}
+	 
 		
 		protected virtual void OnDrawingareaLeaveNotifyEvent (object o, Gtk.LeaveNotifyEventArgs args)
 		{

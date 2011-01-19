@@ -53,6 +53,16 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 {
 
 	DesignService designService;
+
+		public DesignService DesignService {
+			get {
+				return this.designService;
+			}
+			set {
+				designService = value;
+			}
+		}
+
 	ToolBoxService toolBoxService;
 	WorkspaceService workspaceService;
 	CompilerService compilerService;	 
@@ -111,13 +121,12 @@ public sealed class GenerateDataSource {{
 		reportRenderer.RegisterRenderer(typeof(Controls.DetailSection), sr);
 		reportRenderer.RegisterRenderer(typeof(Controls.PageHeaderSection), sr);
 		reportRenderer.RegisterRenderer(typeof(Controls.PageFooterSection), sr);	
-		designService = new DesignService (workspaceService,reportRenderer,pixbufRepository,startReport);
+		designService = new DesignService (workspaceService,reportRenderer,pixbufRepository,compilerService, startReport);
 		
 		toolBoxService = new ToolBoxService ();
 		designService.ToolBoxService = toolBoxService;
 		maindesignview1.DesignService = designService;
-		maindesignview1.WorkSpaceService = workspaceService;
-		maindesignview1.Compiler = compilerService;
+		maindesignview1.WorkSpaceService = workspaceService;		
 		maindesignview1.ReportRenderer = reportRenderer;
 		workspaceService.InvalidateDesignArea ();		
 		reportExplorer.DesignService = designService;
@@ -146,17 +155,11 @@ public sealed class GenerateDataSource {{
 		mainPropertygrid.LoadMonoreportsExtensions();
  
 	}
-
-	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
+	 
+	
+	protected virtual void OnMainPropertygridChanged (object sender, System.EventArgs e)
 	{
-		Application.Quit ();
-		a.RetVal = true;
-	}
- 
-
-	protected virtual void OnQuitActionActivated (object sender, System.EventArgs e)
-	{
-		Application.Quit ();
+		workspaceService.InvalidateDesignArea();
 	}
 
 	public void Status (string message)
@@ -179,7 +182,7 @@ public sealed class GenerateDataSource {{
 		toolBoxService.SetToolByName ("LineTool");
 	}
 
-	protected virtual void OnSaveActionActivated (object sender, System.EventArgs e)
+	public void Save()
 	{
 		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose Monoreports file to save", ((Gtk.Window)this.Toplevel), FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Accept);
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
@@ -192,11 +195,10 @@ public sealed class GenerateDataSource {{
 			designService.Save(fc.Filename);
 		}
 		
-		fc.Destroy ();
-		
+		fc.Destroy ();		
 	}
 
-	protected virtual void OnOpenActionActivated (object sender, System.EventArgs e)
+	public void Open()
 	{
 		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose the Monoreports file to open", ((Gtk.Window)this.Toplevel), FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
@@ -212,14 +214,9 @@ public sealed class GenerateDataSource {{
 		workspaceService.InvalidateDesignArea ();
 	}
 
-	 
+
 	
-	protected virtual void OnMainPropertygridChanged (object sender, System.EventArgs e)
-	{
-		workspaceService.InvalidateDesignArea();
-	}
-	
-	protected virtual void OnAboutActionActivated (object sender, System.EventArgs e)
+	public void About()
 	{
 		AboutDialog about = new AboutDialog();
 	
@@ -256,7 +253,7 @@ THE SOFTWARE.
 		about.Show();
 	}
 	
-	protected virtual void OnReportSettingsActionActivated (object sender, System.EventArgs e)
+	public void Settings()
 	{
 		
 		ReportSettingsEditor reportSettingsEditor = new ReportSettingsEditor();
@@ -270,19 +267,7 @@ THE SOFTWARE.
 		reportSettingsEditor.Show();
 		
 	}
-	
-	protected virtual void OnCopyActionActivated (object sender, System.EventArgs e)
-	{
-			designService.Copy();
-	}
-	
-	protected virtual void OnPasteActionActivated (object sender, System.EventArgs e)
-	{
-			designService.Paste();			
-	}
-	
-	
-	
+ 
 	
 }
 

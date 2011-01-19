@@ -10,133 +10,13 @@
     <widget-library name="../../../build/MonoReports.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="MonoReports.Gui.Widgets.MonoreportsDesignerControl" design-size="1047 696">
-    <action-group name="Default">
-      <action id="FileAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">File</property>
-        <property name="ShortLabel" translatable="yes">File</property>
-      </action>
-      <action id="FileAction1">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">File</property>
-        <property name="ShortLabel" translatable="yes">File</property>
-      </action>
-      <action id="quitAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Quit</property>
-        <property name="ShortLabel" translatable="yes">Quit</property>
-        <property name="StockId">gtk-quit</property>
-        <signal name="Activated" handler="OnQuitActionActivated" />
-      </action>
-      <action id="HelpAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Help</property>
-        <property name="ShortLabel" translatable="yes">Help</property>
-      </action>
-      <action id="HelpAction1">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Help</property>
-        <property name="ShortLabel" translatable="yes">About</property>
-      </action>
-      <action id="executeAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-execute</property>
-      </action>
-      <action id="aboutAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">About</property>
-        <property name="ShortLabel" translatable="yes">About</property>
-        <property name="StockId">gtk-about</property>
-        <signal name="Activated" handler="OnAboutActionActivated" />
-      </action>
-      <action id="zoomFitAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-zoom-fit</property>
-      </action>
-      <action id="openAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">_Otwórz</property>
-        <property name="ShortLabel" translatable="yes">_Otwórz</property>
-        <property name="StockId">gtk-open</property>
-        <signal name="Activated" handler="OnOpenActionActivated" />
-      </action>
-      <action id="saveAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">_Zapisz</property>
-        <property name="ShortLabel" translatable="yes">_Zapisz</property>
-        <property name="StockId">gtk-save</property>
-        <signal name="Activated" handler="OnSaveActionActivated" />
-      </action>
-      <action id="executeAction1">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-execute</property>
-      </action>
-      <action id="dialogErrorAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-dialog-error</property>
-      </action>
-      <action id="editAction">
-        <property name="Type">Toggle</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-edit</property>
-        <property name="DrawAsRadio">False</property>
-        <property name="Active">False</property>
-        <signal name="Activated" handler="OnEditActionActivated" />
-      </action>
-      <action id="sortAscendingAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-sort-ascending</property>
-      </action>
-      <action id="EditAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Edit</property>
-        <property name="ShortLabel" translatable="yes">Edit</property>
-      </action>
-      <action id="ReportSettingsAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Report Settings</property>
-        <property name="ShortLabel" translatable="yes">Report Settings</property>
-        <signal name="Activated" handler="OnReportSettingsActionActivated" />
-      </action>
-    </action-group>
+    <action-group name="Default" />
     <property name="MemberName" />
     <property name="Visible">False</property>
-    <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <widget class="Gtk.VBox" id="mainVbox">
         <property name="MemberName" />
         <property name="Spacing">-1</property>
-        <child>
-          <widget class="Gtk.MenuBar" id="mainMenubar">
-            <property name="MemberName" />
-            <node name="mainMenubar" type="Menubar">
-              <node type="Menu" action="FileAction1">
-                <node type="Menuitem" action="openAction" />
-                <node type="Menuitem" action="saveAction" />
-                <node type="Menuitem" action="quitAction" />
-              </node>
-              <node type="Menu" action="EditAction">
-                <node type="Menuitem" action="ReportSettingsAction" />
-                <node type="Menuitem" />
-                <node type="Menuitem" />
-              </node>
-              <node type="Menu" action="HelpAction1">
-                <node type="Menuitem" action="aboutAction" />
-              </node>
-            </node>
-          </widget>
-          <packing>
-            <property name="Position">0</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
         <child>
           <widget class="Gtk.Toolbar" id="mainToolbar">
             <property name="MemberName" />
@@ -145,7 +25,7 @@
             <node name="mainToolbar" type="Toolbar" />
           </widget>
           <packing>
-            <property name="Position">1</property>
+            <property name="Position">0</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -203,7 +83,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">1</property>
             <property name="AutoSize">True</property>
           </packing>
         </child>
@@ -227,7 +107,7 @@
             </child>
           </widget>
           <packing>
-            <property name="Position">3</property>
+            <property name="Position">2</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
@@ -237,14 +117,7 @@
     </child>
   </widget>
   <widget class="Gtk.Bin" id="MonoReports.Gui.Widgets.MainDesignView" design-size="733 573">
-    <action-group name="Default">
-      <action id="executeAction">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes" />
-        <property name="StockId">gtk-execute</property>
-        <signal name="Activated" handler="OnExecuteActionActivated" />
-      </action>
-    </action-group>
+    <action-group name="Default" />
     <property name="MemberName" />
     <property name="Visible">False</property>
     <child>
@@ -357,7 +230,7 @@
               <widget class="Gtk.VPaned" id="vpaned1">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="Position">399</property>
+                <property name="Position">335</property>
                 <child>
                   <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
                     <property name="MemberName" />
@@ -393,21 +266,6 @@
               <packing>
                 <property name="Position">0</property>
                 <property name="AutoSize">True</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.Toolbar" id="toolbar1">
-                <property name="MemberName" />
-                <property name="ShowArrow">False</property>
-                <node name="toolbar1" type="Toolbar">
-                  <node type="Toolitem" action="executeAction" />
-                </node>
-              </widget>
-              <packing>
-                <property name="Position">1</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
               </packing>
             </child>
           </widget>

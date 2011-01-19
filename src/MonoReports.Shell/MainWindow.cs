@@ -35,11 +35,13 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
-		Application.Quit ();
+		Application.Quit ();	
 		a.RetVal = true;
 	}
-	protected virtual void OnQuitActionActivated (object sender, System.EventArgs e)
+	
+	protected virtual void OnQuitAction1Activated (object sender, System.EventArgs e)
 	{
+		Application.Quit ();	
 	}
 	
 	protected virtual void OnAboutActionActivated (object sender, System.EventArgs e)
@@ -52,6 +54,7 @@ public partial class MainWindow: Gtk.Window
 	
 	protected virtual void OnSaveActionActivated (object sender, System.EventArgs e)
 	{
+		monoreportsdesignercontrol1.Save();
 	}
 	
 	protected virtual void OnEditActionActivated (object sender, System.EventArgs e)
@@ -65,6 +68,56 @@ public partial class MainWindow: Gtk.Window
 	protected virtual void OnExecuteActionActivated (object sender, System.EventArgs e)
 	{
 	}
+	
+	protected virtual void OnCopyAction1Activated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.Copy();
+		
+	}
+	
+	protected virtual void OnPasteAction1Activated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.Paste();
+	}
+	
+	protected virtual void OnMediaPlayActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.ProcessReport ();
+	}
+	
+	protected virtual void OnOpenAction2Activated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.Open();
+	}
+	
+	protected virtual void OnZoomInActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.Zoom += 0.1;
+		monoreportsdesignercontrol1.DesignService.WorkspaceService.InvalidateDesignArea();
+	}
+	
+	protected virtual void OnZoomOutActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.Zoom -= 0.1;
+		monoreportsdesignercontrol1.DesignService.WorkspaceService.InvalidateDesignArea();
+	}
+	
+	protected virtual void OnZoom100ActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.Zoom = 1;
+		monoreportsdesignercontrol1.DesignService.WorkspaceService.InvalidateDesignArea();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
