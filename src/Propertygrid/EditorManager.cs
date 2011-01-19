@@ -39,6 +39,7 @@ using System.ComponentModel;
 //using MonoDevelop.Components.PropertyGrid.PropertyEditors;
 using System.Drawing.Design;
 using PropertyGrid.PropertyEditors;
+using System.Collections.Generic;
 
 namespace PropertyGrid
 {
@@ -49,9 +50,20 @@ namespace PropertyGrid
 		private Hashtable surrogates = new Hashtable ();
 		static PropertyEditorCell Default = new PropertyEditorCell ();
 		static Hashtable cellCache = new Hashtable ();
+        private Dictionary<Type, TypeConverter> customConverters = new Dictionary<Type, TypeConverter>();
 
-		internal EditorManager ()
-		{
+        internal EditorManager() {
+            LoadEditor(Assembly.GetAssembly(typeof(EditorManager)));
+        }
+
+		internal EditorManager (IEnumerable<TypeConverter> converters)
+		{            
+            //foreach (var item in converters)
+            //{
+            //    item.
+            //    customConverters.Add();
+            //}
+
 			LoadEditor (Assembly.GetAssembly (typeof (EditorManager)));
 		}
 

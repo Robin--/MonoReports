@@ -179,6 +179,8 @@ namespace MonoReports.Core
 			
 			return controls;
 		}
+
+        public object RendererContext { get { return  context ; }}
 		
 	}
 }

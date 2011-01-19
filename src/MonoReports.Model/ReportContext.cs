@@ -35,6 +35,8 @@ namespace MonoReports.Model
 		public ReportContext ()
 		{
 		}
+
+        public object RendererContext { get; set; }
 		
 		public Dictionary<string,string> Parameters {get;set;}
 		

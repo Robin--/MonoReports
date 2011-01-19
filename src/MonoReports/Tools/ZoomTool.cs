@@ -44,26 +44,39 @@ namespace MonoReports.Tools
 			}
 		}
 
+        public string[] zoomItems = new string[] { "400%", "300%", "200%", "150%", "100%", "66%", "50%"};
 		
 		public override void BuildToolbar (Gtk.Toolbar toolBar)
 		{
-			
-			ToolBarComboBox zoomCombobox = new ToolBarComboBox (100, 4, true, new string[] { "400%", "300%", "200%", "150%", "100%", "66%", "50%" });
-			zoomCombobox.ComboBox.Changed += delegate(object sender, EventArgs e) {			
-				string text = zoomCombobox.ComboBox.ActiveText;			
-				text = text.Trim ('%');
-			
-				double percent;
-			
-				if (!double.TryParse (text, out percent))
-					return;
-				percent = Math.Min (percent, 400);
-				designService.ZoomChanged (percent / 100.0);											
+            bool setMode = false;
+			ToolBarComboBox zoomCombobox = new ToolBarComboBox (100, 4, true, zoomItems);
+            designService.OnZoomChanged += (a, b) => {
+
+                setMode = true;
+                ((Gtk.Entry)zoomCombobox.ComboBox.Child).Text = (designService.Zoom * 100).ToString() + "%";          
+                
+                setMode = false;
+            };
+			zoomCombobox.ComboBox.Changed += delegate(object sender, EventArgs e) {
+                if (!setMode)
+                {
+                    string text = zoomCombobox.ComboBox.ActiveText;
+                    text = text.Trim('%');
+
+                    double percent;
+
+                    if (!double.TryParse(text, out percent))
+                        return;
+                    percent = Math.Min(percent, 400);
+                    designService.ZoomChanged(percent / 100.0);
+                }					
 			};
 			toolBar.Insert(zoomCombobox,0);		
 			
 			
 		}
+
+       
 
 		
 	}

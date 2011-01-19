@@ -109,6 +109,7 @@
       </action>
       <action id="mediaPlayAction">
         <property name="Type">Action</property>
+        
         <property name="Label" translatable="yes">Execute</property>
         <property name="ShortLabel" translatable="yes">Execute</property>
         <property name="StockId">gtk-media-play</property>

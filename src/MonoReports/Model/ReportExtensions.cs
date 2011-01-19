@@ -92,7 +92,8 @@ namespace MonoReports.Model
 			
 			report.ExportToPdf(path);			
 		}
-		
+
+       
 		public static void ExportToPdf(this Report report ,string path) {
 			
 			double unitMultiplier = CairoExtensions.UnitMultiplier;

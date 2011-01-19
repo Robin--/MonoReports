@@ -33,6 +33,7 @@ namespace MonoReports.Model
         Size MeasureControl (Control control);
         void RenderControl (Control control);	
 		Control[] BreakOffControlAtMostAtHeight(Control control, double height);
+        object RendererContext { get;}
 	}
 }
 

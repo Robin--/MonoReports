@@ -72,6 +72,10 @@ namespace PropertyGrid
 		PropertySort propertySort = PropertySort.Categorized;
 		
 		const string PROP_HELP_KEY = "MonoDevelop.PropertyPad.ShowHelp";
+
+        public PropertyGrid(IEnumerable<TypeConverter> typeConverters)
+            : this(new EditorManager()) {
+        }
 		
 		public PropertyGrid (): this (new EditorManager ())
 		{

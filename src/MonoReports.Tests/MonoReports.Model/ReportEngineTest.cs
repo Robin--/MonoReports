@@ -90,6 +90,9 @@ namespace MonoReports.Tests
 				return new Control[]{ control.CreateControl(), control.CreateControl() };
 				
 			}
+
+            public object RendererContext { get; set; }
+
 			#endregion			
 			
 		}

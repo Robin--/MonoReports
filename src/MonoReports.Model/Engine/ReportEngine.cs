@@ -48,9 +48,7 @@ namespace MonoReports.Model.Engine
 		List<GroupInfo> groupInfos = null;
 		bool afterReportHeader = false;
 		double spanCorrection = 0;
-
 		public bool IsSubreport { get; set; }
-
 		bool dataSourceHasNextRow = true;
 		bool stop = false;
 		Dictionary<string, Field> parameters;
@@ -71,7 +69,7 @@ namespace MonoReports.Model.Engine
 				int index = (efld != null ? report.ExpressionFields.IndexOf (efld) : -1);
 				groupInfos.Add (new GroupInfo () { ExpressionFieldIndex = index });
 			}
-			context = new ReportContext { CurrentPageIndex = 0, DataSource = null, Parameters = new Dictionary<string, string>(), ReportMode = ReportMode.Preview };
+			context = new ReportContext { RendererContext = renderer.RendererContext, CurrentPageIndex = 0, DataSource = null, Parameters = new Dictionary<string, string>(), ReportMode = ReportMode.Preview };
 			Report.Pages = new List<Page> ();
 			nextPage ();
 			selectCurrentStateByTemplateSection (Report.PageFooterSection);
@@ -478,8 +476,10 @@ namespace MonoReports.Model.Engine
 
 		void nextPage ()
 		{
+
 			addControlsToCurrentPage (Report.Height - Report.PageFooterSection.Height, pageFooterControls);
 			spanCorrection = 0;
+            onAfterPageProcess();
 			context.CurrentPageIndex++;
 			currentPage = new Page { PageNumber = context.CurrentPageIndex };
 			context.HeightLeftOnCurrentPage = Report.Height;
@@ -491,9 +491,14 @@ namespace MonoReports.Model.Engine
 
 		private void onAfterReportProcess ()
 		{
-			//todo exec Report event
+			
 
 		}
+
+        private void onAfterPageProcess() {
+             
+
+        }
 
 	}
 

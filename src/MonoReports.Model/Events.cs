@@ -29,4 +29,6 @@ using MonoReports.Model.Controls;
 namespace MonoReports.Model {
 	
 	public delegate void BeforeControlProcessing(ReportContext rc, Control c);
+    public delegate void AfterPageProcessing(ReportContext rc, Page p);
+    public delegate void AfterReportProcessing(ReportContext rc);
 }
