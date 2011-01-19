@@ -245,8 +245,6 @@ namespace MonoReports.Gui.Widgets
 					Cairo.Context cr = new Cairo.Context (imagesSurface);				
 					reportRenderer.Context = cr;
 					reportEngine = new ReportEngine (designService.Report, reportRenderer);
-
-					
 					reportEngine.Process ();
 					(cr as IDisposable).Dispose ();
 					pageSpinButton.SpinButton.SetRange (1, designService.Report.Pages.Count);

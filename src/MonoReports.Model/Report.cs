@@ -55,7 +55,9 @@ namespace MonoReports.Model
 			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 16), Size = new Model.Size (Width, 10.mm()) };
 		}
 
-        public event AfterPageProcessing OnAfterPageProcessing;
+        public event AfterPageRender OnAfterPageRender;
+		
+		public event BeforePageRender OnBeforePageRender;
 
         public event AfterReportProcessing OnAfterReportProcessing;
 
@@ -220,14 +222,22 @@ namespace MonoReports.Model
 		
 		}
 
-        internal void FireOnAfterPageProcessing(ReportContext rc, Page p) {
-            if (OnAfterPageProcessing != null)
+        internal void FireOnAfterPageRender (ReportContext rc, Page p) {
+            if (OnAfterPageRender != null)
             {
-                OnAfterPageProcessing(rc, p);
+                OnAfterPageRender(rc, p);
             }
         }
+		
+		internal void FireOnBeforePageRender (ReportContext rc, Page p) {
+            if (OnBeforePageRender != null)
+            {
+                OnBeforePageRender(rc, p);
+            }
+        }
+ 
 
-        internal void FireOnAfterReportProcessing(ReportContext rc) {
+        internal void FireOnAfterReportProcessing (ReportContext rc) {
             if (OnAfterReportProcessing != null)
             {
                 OnAfterReportProcessing(rc);

@@ -130,7 +130,7 @@ namespace MonoReports.Core
 		}
 
 		public void RenderPage (Page p)
-		{					
+		{		
 			List<Control> controls = new List<Control>();
 			for (int i = 0; i < p.Controls.Count; i++) {
 				var control = p.Controls[i];
@@ -144,8 +144,12 @@ namespace MonoReports.Core
 			
 			for (int i = 0; i < controls.Count; i++) {
 				RenderControl (controls[i]);
-			}
-			 
+			}			 
+		}
+		
+		public void NewPage ()
+		{		
+			context.ShowPage();
 		}
  
 		public Size MeasureControl (Control control)
@@ -171,7 +175,7 @@ namespace MonoReports.Core
 		public Control[] BreakOffControlAtMostAtHeight(Control control, double height){
 			Control[] controls = new Control[2];
 			
-			 Type controlType = control.GetType();
+			Type controlType = control.GetType();
 			if(renderersDictionary.ContainsKey(controlType)){
 				var renderer = renderersDictionary[controlType] as IControlRenderer;							
 				 controls = renderer.BreakOffControlAtMostAtHeight(context,control,height);

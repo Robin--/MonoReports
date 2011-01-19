@@ -34,6 +34,8 @@ namespace MonoReports.Model
         void RenderControl (Control control);	
 		Control[] BreakOffControlAtMostAtHeight(Control control, double height);
         object RendererContext { get;}
+		void RenderPage (Page p);
+		void NewPage ();
 	}
 }
 

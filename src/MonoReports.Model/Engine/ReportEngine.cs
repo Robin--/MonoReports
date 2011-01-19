@@ -97,7 +97,7 @@ namespace MonoReports.Model.Engine
 			if (source != null)
 				source.Reset ();
 
-			onAfterReportProcess ();
+			 Report.FireOnAfterReportProcessing(context);
 		}
 
 		void storeSectionContextForNextPage ()
@@ -178,9 +178,7 @@ namespace MonoReports.Model.Engine
 
 			return result;
 		}
-
-	
-		
+ 
 		
 		/// <summary>
 		/// Processes the section up to heightTreshold.
@@ -476,30 +474,32 @@ namespace MonoReports.Model.Engine
 
 		void nextPage ()
 		{
-
 			addControlsToCurrentPage (Report.Height - Report.PageFooterSection.Height, pageFooterControls);
-			spanCorrection = 0;
-            onAfterPageProcess();
+			spanCorrection = 0;			
 			context.CurrentPageIndex++;
 			currentPage = new Page { PageNumber = context.CurrentPageIndex };
 			context.HeightLeftOnCurrentPage = Report.Height;
 			context.HeightUsedOnCurrentPage = 0;
-			Report.Pages.Add (currentPage);
+			Report.Pages.Add (currentPage);						
 			selectCurrentStateByTemplateSection (Report.PageHeaderSection);
+		}	
 
+		public void RenderPages(IReportRenderer renderer, Report report){
+			context.RendererContext = renderer.RendererContext;
+			context.CurrentPageIndex = 1;
+			for (int i = 0; i < report.Pages.Count; i++) {					
+				Page p = report.Pages [i];
+				report.FireOnBeforePageRender(context,p);
+				renderer.RenderPage (p);									
+				report.FireOnAfterPageRender(context,p);
+				if(context.CurrentPageIndex < report.Pages.Count) {
+					renderer.NewPage();
+					context.CurrentPageIndex++;
+				}
+			}	
 		}
-
-		private void onAfterReportProcess ()
-		{
-			
-
-		}
-
-        private void onAfterPageProcess() {
-             
-
-        }
-
+		
+ 
 	}
 
 	internal class GroupInfo

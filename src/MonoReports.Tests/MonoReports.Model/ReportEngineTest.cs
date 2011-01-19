@@ -73,8 +73,8 @@ namespace MonoReports.Tests
 			Assert.AreEqual(pageHeaderAndPageFooterHeight,heightBeforeDetails);
 		}
 		
-		class RendererMock : IReportRenderer {
-			#region IReportRenderer implementation
+		public class RendererMock : IReportRenderer {
+	
 			public Size MeasureControl (Control control)
 			{
 				return new Size(control.Size);
@@ -91,10 +91,18 @@ namespace MonoReports.Tests
 				
 			}
 
-            public object RendererContext { get; set; }
-
-			#endregion			
+			public void RenderPage (Page p)
+			{
+				
+			}
+		
+			public void NewPage ()
+			{
+				
+			}
 			
+			public object RendererContext { get; set; }
+
 		}
 	}
 }

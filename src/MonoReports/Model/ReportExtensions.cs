@@ -102,8 +102,7 @@ namespace MonoReports.Model
 			renderer.ResolutionX = 72;			
 			using (PdfSurface pdfSurface = new PdfSurface (				
 				path,report.WidthWithMargins * renderer.UnitMultipilier,
-				report.HeightWithMargins * renderer.UnitMultipilier)) {
-				
+				report.HeightWithMargins * renderer.UnitMultipilier)) {			
 				 
 				Cairo.Context cr = new Cairo.Context (pdfSurface);
 				cr.Antialias = Antialias.None;
@@ -128,10 +127,7 @@ namespace MonoReports.Model
 				Cairo.Context cr1 = new Cairo.Context (pdfSurface);
 				renderer.Context = cr1;
 				cr1.Translate(report.Margin.Left * renderer.UnitMultipilier,report.Margin.Top * renderer.UnitMultipilier);
-				for (int i = 0; i < report.Pages.Count; i++) {
-					renderer.RenderPage (report.Pages [i]);
-					cr1.ShowPage ();
-				}			
+				engine.RenderPages(renderer,report);		
 				pdfSurface.Finish ();		
 				(cr as IDisposable).Dispose ();
 				(cr1 as IDisposable).Dispose ();
