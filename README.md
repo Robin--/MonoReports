@@ -8,6 +8,9 @@ Monoreports features
 - page breaking - Monoreports engine will break or keep together report sections whatever is needed
 - generating and running reports from designer and code. 
 - can be used as simple PDF generation library
+- handy events allowing manipulate report while engine is processing 
+- allow get cairo context to make a custom "drawings" on processed report pages
+
 
 Simple code generated report example:
 		
@@ -21,15 +24,15 @@ Simple code generated report example:
 
 Status
 ------
-Monoreports is in pre 0.1 version state. 
+Monoreports is in beta 0.1 version state. 
 
 Youtube demo
 -----------
 There is a [six minutes monoreports demo on youtube](http://www.youtube.com/watch?v=P7jHXFyMstM) 
-
+(a bit old version in demo)
 Binary version
 --------------
-You can grab current binary verision in Monoreports downloads on github site
+You can grab current binary verision in Monoreports downloads on github site (remember to install gtk-sharp if you are using windows)
 
 TODO
 ----
@@ -37,12 +40,13 @@ At the moment Monoreports lack of two features commonly used in this kind of too
 
 - group section - group header section appears before details every time value of group expression is changed.
 - subreports - report in report
+
+Those two features are planed to come with version 0.2 (currently we are before 0.1)
  
 Other things in roadmap are:
 
 - improve designer to support multiselections, undo/redo
 - imporove report engine quality by writing more unit tests
-- make designer resolution independent, add milimeters and inches as units
 
 Final Remarks
 -------------
