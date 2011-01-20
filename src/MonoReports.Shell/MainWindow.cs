@@ -109,6 +109,18 @@ public partial class MainWindow: Gtk.Window
 		monoreportsdesignercontrol1.SaveAs();
 	}
 	
+	protected virtual void OnDeleteActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.DesignService.DeleteSelectedControl();
+	}
+	
+	protected virtual void OnSettingsActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.Settings();
+	}
+	
+	
+	
 	
 	
 	

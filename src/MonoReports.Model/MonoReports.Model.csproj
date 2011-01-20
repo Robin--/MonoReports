@@ -75,13 +75,14 @@
     <Compile Include="HorizontalAlignment.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="LineMode.cs" />
-    <Compile Include="Data\PropertyDataField.cs" />
     <Compile Include="Thickness.cs" />
     <Compile Include="Data\Field.cs" />
     <Compile Include="Data\FieldBuilder.cs" />
     <Compile Include="UnitExtensions.cs" />
     <Compile Include="Engine\SpanInfo.cs" />
     <Compile Include="Engine\SectionProcessingContext.cs" />
+    <Compile Include="Data\PropertyFieldValuePrivider.cs" />
+    <Compile Include="Data\SimplePropertyFieldValuePrivider.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -99,17 +99,16 @@ namespace MonoReports.Model.Data
  
                 if (rootObjectType == propertyType)
                 {
-                     genericType = typeof(SimplePropertyDataFieldPrivider<>).MakeGenericType(propertyType);
-                     f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldDataProvider;
-				 	  
+                     genericType = typeof(SimplePropertyFieldValuePrivider<>).MakeGenericType(propertyType);
+                     f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldValueProvider;				 	  
                 }
                 else
                 {
-                     genericType = typeof(PropertyDataFieldPrivider<,>).MakeGenericType(rootObjectType, propertyType);
-                     f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldDataProvider;
+                     genericType = typeof(PropertyFieldValuePrivider<,>).MakeGenericType(rootObjectType, propertyType);
+                     f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldValueProvider;
                 }
 			 if(rootObject != null && f.FieldKind == FieldKind.Parameter)
-					f.DeafaultValue = f.DataProvider.GetValue(rootObject).ToString();
+					f.DefaultValue = f.DataProvider.GetValue(rootObject).ToString();
 			
 			return f;			
 		}

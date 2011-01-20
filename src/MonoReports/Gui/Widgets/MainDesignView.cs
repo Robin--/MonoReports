@@ -188,7 +188,7 @@ namespace MonoReports.Gui.Widgets
 		{
 	
 			DrawingArea area = (DrawingArea)o;
-			if(!(designService.Report.Pages.Count > 0))
+			if(designService.IsDirty)
 				designService.ProcessReport();
 			
 			

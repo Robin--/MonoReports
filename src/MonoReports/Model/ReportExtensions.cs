@@ -40,7 +40,8 @@ using System.Linq;
 namespace MonoReports.Model
 {
 	public static class ReportExtensions
-	{
+	{		
+		
 		public static void Load (this Report r,string path) {
 			using(System.IO.FileStream file = System.IO.File.OpenRead (path)) {				 
 				byte[] bytes = new byte[file.Length];
@@ -95,8 +96,8 @@ namespace MonoReports.Model
 					var oldField = report.Parameters.FirstOrDefault(par => par.Name == parField.Name);
 					if (oldField != null) {						
 						oldField.FieldType =  parField.FieldType;
-						oldField.DeafaultValue = parField.DeafaultValue;
-					}else {
+						oldField.DefaultValue = parField.DefaultValue;
+					} else {
 						report.Parameters.Add(parField);
 					}
 				}

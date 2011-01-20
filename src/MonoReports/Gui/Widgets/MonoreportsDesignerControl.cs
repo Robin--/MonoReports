@@ -149,23 +149,30 @@ public sealed class GenerateDataSource {{
 		//mainToolbar.Insert (btn,mainToolbar.NItems);	
 		
 		mainPropertygrid.LoadMonoreportsExtensions();
- 
+ 		designService.Report = startReport;
 	}
 	 
 	
 	Report newReportTemplate(){
-		return new Report(){ 
+		Report r = new Report(){ 
 			DataScript = @"
 datasource = new [] {
-     new { Name=""Alfred"", Surname = ""Tarski"", Age = ""82"" },
-     new { Name=""Saul"", Surname = ""Kripke"", Age = ""70"" },
-     new { Name=""Gotlob"", Surname = ""Frege"", Age = ""85"" },
-     new { Name=""Kurt"", Surname = ""Gödel"", Age = ""72"" }, 
+     new { Name=""Alfred"", Surname = ""Tarski"", Age = 82 },
+     new { Name=""Saul"", Surname = ""Kripke"", Age = 70 },
+     new { Name=""Gotlob"", Surname = ""Frege"", Age = 75 },
+     new { Name=""Kurt"", Surname = ""Gödel"", Age = 72 }, 
 };
 
-parameters.Add(""Title"",new { Title = ""The Logicans"", SubTitle = ""...and philosophers...""});
+parameters.Add(""Param"",new { Title = ""The Logicans"", SubTitle = ""...and the philosophers...""});
 
 "};
+			r.Parameters.Add(new MonoReports.Model.Data.Field(){ FieldKind = MonoReports.Model.Data.FieldKind.Parameter, Name = "Param.Title"});
+			r.Parameters.Add(new MonoReports.Model.Data.Field(){ FieldKind = MonoReports.Model.Data.FieldKind.Parameter, Name = "Param.SubTitle"});
+			
+			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Name"});
+			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Surname"});
+			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(int), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Age"});
+			return r;
 	}
 		
 	protected virtual void OnMainPropertygridChanged (object sender, System.EventArgs e)

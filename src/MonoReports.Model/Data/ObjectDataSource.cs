@@ -47,9 +47,7 @@ namespace MonoReports.Model.Data
 			get { return this.currentRowIndex; }
 			set { currentRowIndex = value; }
 		}
-
-	
-
+ 
 		public ObjectDataSource (IEnumerable<T> data)
 		{			 
 			this.data = data as IEnumerable<T>;

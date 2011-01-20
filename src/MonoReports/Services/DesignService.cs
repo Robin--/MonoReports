@@ -66,6 +66,12 @@ namespace MonoReports.Services
 			set { 
 				height = value; 
 			} }
+		
+		
+		public bool IsDirty {
+			get;
+			set;
+		}
 
 		public BaseTool SelectedTool {
 			get { return ToolBoxService.SelectedTool; } 
@@ -192,13 +198,12 @@ namespace MonoReports.Services
 			IsDesign = true;
 			Report = report;
 			Zoom = 1;
-			Render = true;		
-			
+			Render = true;	
+			IsDirty = true;			
 		}
 
 		void initReport ()
 		{
-			
 			PixbufRepository.Report = report;			
 			sectionViews = new List<SectionView> ();
 			addSectionView (report.ReportHeaderSection);
@@ -314,15 +319,17 @@ namespace MonoReports.Services
 		public void DeleteSelectedControl ()
 		{
 			if (selectedControl != null) {
-				SelectedControl.ParentSection.RemoveControlView (selectedControl);				
-				SelectedControl.ParentSection.MinHeight = SelectedControl.ParentSection.Controls.Count > 0 ? SelectedControl.ParentSection.Controls.Max(ctrl=>ctrl.ControlModel.Bottom) : 0;
-				SelectedControl.ControlModel = null;
-				SelectedControl = null;
-				WorkspaceService.InvalidateDesignArea ();
+				if (!(SelectedControl is SectionView)) {
+					SelectedControl.ParentSection.RemoveControlView (selectedControl);				
+					SelectedControl.ParentSection.MinHeight = SelectedControl.ParentSection.Controls.Count > 0 ? SelectedControl.ParentSection.Controls.Max(ctrl=>ctrl.ControlModel.Bottom) : 0;
+					SelectedControl.ControlModel = null;
+					SelectedControl = null;
+					WorkspaceService.InvalidateDesignArea ();
+				}
 			}
 		}
 
-        public void Copy()
+        public void Copy ()
         {
 			if(!isDesign)
 				return;
@@ -492,8 +499,11 @@ namespace MonoReports.Services
 							mouseOverTool =  ToolBoxService.GetToolByName(sectionView.DefaultToolName);								
 						}
 							
-						if(SelectedTool == null || mouseOverTool != SelectedTool )
+						if(SelectedTool == null || mouseOverTool != SelectedTool ) {
 							mouseOverTool.OnMouseMove();
+							if(IsPressed)
+								IsDirty = true;
+						}
 					} else {
 						if(!IsPressed)
 							sectionView.IsMouseOver = false;
@@ -564,6 +574,7 @@ namespace MonoReports.Services
 			}
 			if (OnReportDataFieldsRefreshed != null)
 				OnReportDataFieldsRefreshed (this, new EventArgs ());		
+			IsDirty = false;
 		}
 		
 		
@@ -592,7 +603,7 @@ namespace MonoReports.Services
 							var oldField = Report.Parameters.FirstOrDefault(par => par.Name == newfield.Name);
 							if (oldField != null) {
 								oldField.DataProvider = newfield.DataProvider;
-								oldField.DeafaultValue = newfield.DeafaultValue;
+								oldField.DefaultValue = newfield.DefaultValue;
 								oldField.FieldType = newfield.FieldType;
 							} else {
 								Report.Parameters.Add(newfield);

@@ -1,10 +1,10 @@
 // 
-// Field.cs
+// PropertyDataField.cs
 //  
 // Author:
-//       Tomasz Kubacki <Tomasz.Kubacki (at) gmail.com>
+//       Tomasz Kubacki <tomasz (dot ) kubacki (at) gmail (dot) com>
 // 
-// Copyright (c) 2010 Tomasz Kubacki 2010
+// Copyright (c) 2010 Tomasz Kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,57 +29,49 @@ using System.Linq.Expressions;
 
 namespace MonoReports.Model.Data
 {
-	public class  Field
+	public class PropertyFieldValuePrivider<T,K> : IFieldValueProvider
 	{
-		 
-
-		public virtual string Name {
-			get;
-			set;
-		}
-		
-		public object DefaultValue {
-			get;	
-			set;
-		}
-		
-		public IFieldValueProvider DataProvider {get;set;}
-		
-		internal Expression expression;
-		
-		public Type FieldType {get;set;}
-		
-		public FieldKind FieldKind {get;set;}
  
-		public override string ToString(){
-			return Name;
-		}
-		
-		public string GetStringValue (object current, string format)
-		{			
- 
-			string returnVal = String.Empty;
-			if(current != null) {
-				try{
-					returnVal =  String.Format(format != null ? format : "{0}",DataProvider.GetValue(current) );
-				}catch(Exception exp){
-					Console.WriteLine(exp);
-				}
-			} else {
-				returnVal = String.Format(format != null ? format : "{0}", DefaultValue);
-			}
+		public PropertyFieldValuePrivider(){
 			 
+		}
+		
+		public PropertyFieldValuePrivider(Field field, ParameterExpression root, Expression parent,string propertyName) {
+			Expression<Func<T,K>> lambda = null;		
+		    lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
+			compiledMethod = lambda.Compile();
+			this.field = field;
+		    this.field.expression = lambda;			
+		}
+		
+		protected Field field = null;
+ 
+		public  object GetValue (object current)
+		{			
+			if (compiledMethod == null) {	
+				Compile();				 
+			}
+			
+			object returnVal = null;
+			
+			try {
+				returnVal = compiledMethod((T)current);
+			}catch(Exception exp){
+				Console.WriteLine(exp);
+			}
 			
 			return returnVal;
-		}		
-	}
-	
-	public interface IFieldValueProvider {
-		object GetValue (object current);
-	}
-	
-	public enum FieldKind { Data, Expression, Parameter };
+		}			
 
-	
+				
+		
+		public void Compile() {
+			compiledMethod = (Func<T,K>) (field.expression as LambdaExpression) .Compile();		 
+		}
+		
+		protected Func<T,K> compiledMethod;
+	}
+
+ 
 }
 

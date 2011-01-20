@@ -32,6 +32,7 @@ public partial class MainWindow
 	private global::Gtk.Action zoom100Action;
 	private global::Gtk.Action HelpAction;
 	private global::Gtk.Action aboutAction;
+	private global::Gtk.Action SettingsAction;
 	private global::Gtk.VBox vbox2;
 	private global::Gtk.MenuBar menubar3;
 	private global::MonoReports.Gui.Widgets.MonoreportsDesignerControl monoreportsdesignercontrol1;
@@ -126,6 +127,9 @@ public partial class MainWindow
 		this.aboutAction = new global::Gtk.Action ("aboutAction", global::Mono.Unix.Catalog.GetString ("_O programie"), null, "gtk-about");
 		this.aboutAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("_O programie");
 		w1.Add (this.aboutAction, null);
+		this.SettingsAction = new global::Gtk.Action ("SettingsAction", global::Mono.Unix.Catalog.GetString ("Settings"), null, null);
+		this.SettingsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Settings");
+		w1.Add (this.SettingsAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -136,7 +140,7 @@ public partial class MainWindow
 		this.vbox2.Name = "vbox2";
 		this.vbox2.Spacing = 6;
 		// Container child vbox2.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar3'><menu name='fileAction' action='fileAction'><menuitem name='newAction1' action='newAction1'/><menuitem name='openAction2' action='openAction2'/><menuitem name='saveAction' action='saveAction'/><menuitem name='saveAsAction' action='saveAsAction'/><menuitem name='quitAction1' action='quitAction1'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><menuitem name='cutAction' action='cutAction'/><menuitem name='copyAction1' action='copyAction1'/><menuitem name='pasteAction1' action='pasteAction1'/><menuitem name='deleteAction' action='deleteAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='zoomInAction' action='zoomInAction'/><menuitem name='zoomOutAction' action='zoomOutAction'/><menuitem name='zoom100Action' action='zoom100Action'/></menu><menu name='ProjectAction' action='ProjectAction'><menuitem name='mediaPlayAction' action='mediaPlayAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar3'><menu name='fileAction' action='fileAction'><menuitem name='newAction1' action='newAction1'/><menuitem name='openAction2' action='openAction2'/><menuitem name='saveAction' action='saveAction'/><menuitem name='saveAsAction' action='saveAsAction'/><menuitem name='quitAction1' action='quitAction1'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><menuitem name='cutAction' action='cutAction'/><menuitem name='copyAction1' action='copyAction1'/><menuitem name='pasteAction1' action='pasteAction1'/><menuitem name='deleteAction' action='deleteAction'/><menuitem name='SettingsAction' action='SettingsAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='zoomInAction' action='zoomInAction'/><menuitem name='zoomOutAction' action='zoomOutAction'/><menuitem name='zoom100Action' action='zoom100Action'/></menu><menu name='ProjectAction' action='ProjectAction'><menuitem name='mediaPlayAction' action='mediaPlayAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar3 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar3")));
 		this.menubar3.Name = "menubar3";
 		this.vbox2.Add (this.menubar3);
@@ -167,9 +171,11 @@ public partial class MainWindow
 		this.mediaPlayAction.Activated += new global::System.EventHandler (this.OnMediaPlayActionActivated);
 		this.copyAction1.Activated += new global::System.EventHandler (this.OnCopyAction1Activated);
 		this.pasteAction1.Activated += new global::System.EventHandler (this.OnPasteAction1Activated);
+		this.deleteAction.Activated += new global::System.EventHandler (this.OnDeleteActionActivated);
 		this.zoomInAction.Activated += new global::System.EventHandler (this.OnZoomInActionActivated);
 		this.zoomOutAction.Activated += new global::System.EventHandler (this.OnZoomOutActionActivated);
 		this.zoom100Action.Activated += new global::System.EventHandler (this.OnZoom100ActionActivated);
 		this.aboutAction.Activated += new global::System.EventHandler (this.OnAboutActionActivated);
+		this.SettingsAction.Activated += new global::System.EventHandler (this.OnSettingsActionActivated);
 	}
 }

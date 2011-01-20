@@ -207,8 +207,7 @@ namespace MonoReports.Gui.Widgets
 					Gtk.MenuItem addNewMenuItem = null;
 					if(path.Depth > 1 ) {
 					int index = path.Indices [1];
-					if ((index == 2 || index == 1) && path.Depth == 2) {
-					    /*TODO 3tk - at the moment user added datafields are disabled
+					if ((index == 2 || index == 1 || index == 0) && path.Depth == 2) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						if (index == 1) {
 							addNewMenuItem = new MenuItem ("add field");
@@ -223,11 +222,11 @@ namespace MonoReports.Gui.Widgets
 							pfe.Response += delegate(object oo, ResponseArgs argss) {						
 								if (argss.ResponseId == ResponseType.Ok) {
 									if (index == 1){
-										//DesignService.Report.Fields.Add (new PropertyDataField (){ Name = pfe.PropertyName});
+										DesignService.Report.DataFields.Add (new Field (){ FieldKind = FieldKind.Data, Name = pfe.PropertyName});
 										updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
 			
 									}else {
-										//DesignService.Report.Parameters.Add (new PropertyDataField< (){ Name = pfe.PropertyName, DefaultValue = pfe.DefaultValue });
+										DesignService.Report.Parameters.Add (new Field(){FieldKind = FieldKind.Parameter, Name = pfe.PropertyName, DefaultValue = pfe.DefaultValue });
 										updateTreeNode(parametersNode,designService.Report.Parameters); 
 									}
 									
@@ -242,8 +241,33 @@ namespace MonoReports.Gui.Widgets
 						
 						jBox.ShowAll ();
 						jBox.Popup ();	
-						*/
-					}else if (index == 4 && path.Depth == 2) {
+						
+					}else if ( (index == 0 || index == 1 )  && path.Depth == 3) {
+						Gtk.Menu jBox = new Gtk.Menu ();
+						 
+						Gtk.MenuItem deleteFieldItem = new MenuItem ( index == 0 ? "delete parameter" : "delete data field");
+						 
+						jBox.Add (deleteFieldItem);		
+								
+						deleteFieldItem.Activated += delegate(object sender, EventArgs e) {		
+							TreeIter fieldIter;
+							theModel.GetIter(out fieldIter,path);
+							var fieldNodeWrapper = theModel.GetValue(fieldIter,0) as TreeItemWrapper;
+							var f =  (Field) fieldNodeWrapper.Object;
+							if (index == 0) {
+								designService.Report.Parameters.Remove(f);
+ 								updateTreeNode(parametersNode,designService.Report.Parameters); 
+							} else {
+								designService.Report.DataFields.Remove(f);
+ 								updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
+							}
+							Workspace.ShowInPropertyGrid(null);
+						}; 
+						
+						jBox.ShowAll ();
+						jBox.Popup ();		
+						
+					} else if (index == 4 && path.Depth == 2) {
 						 Gtk.Menu jBox = new Gtk.Menu ();
 						 
 							addNewMenuItem = new MenuItem ("add image");
@@ -296,7 +320,7 @@ namespace MonoReports.Gui.Widgets
 						jBox.ShowAll ();
 						jBox.Popup ();		
 						
-					}
+					} 
 				} 
 	
 				} else if ( args.Event.Button == 1 ) {

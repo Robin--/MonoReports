@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -87,7 +87,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\PropertyGridEditors\DoubleMonoreportsConverter.cs" />
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ControlView\TextBlockView.cs" />
@@ -153,6 +152,7 @@
     <Compile Include="gtk-gui\MonoReports.Gui.Widgets.MonoreportsDesignerControl.cs" />
     <Compile Include="Model\ReportExtensions.cs" />
     <Compile Include="Core\MonoreportsSettings.cs" />
+    <Compile Include="Extensions\PropertyGridEditors\DoubleMonoreportsConverter.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -181,4 +181,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
 </Project>
