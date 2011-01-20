@@ -29,64 +29,59 @@ using System.Linq.Expressions;
 
 namespace MonoReports.Model.Data
 {
-	public class PropertyDataField<T,K> : Field
+	public class PropertyDataFieldPrivider<T,K> : IFieldDataProvider
 	{
 		
 		 
-		public PropertyDataField(){
+		public PropertyDataFieldPrivider(){
 			 
 		}
 		
-		public PropertyDataField(ParameterExpression root, Expression parent,string propertyName) {
-			Expression<Func<T,K>> lambda = null;
-			Type t = typeof(T);
-			Type k = typeof(K);
-			
+		public PropertyDataFieldPrivider(Field field, ParameterExpression root, Expression parent,string propertyName) {
+			Expression<Func<T,K>> lambda = null;		
 		    lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
-		
 			compiledMethod = lambda.Compile();
-			expression = lambda;			
+			this.field = field;
+		    this.field.expression = lambda;			
 		}
 		
-		object defaultValue;
-		public override  object DefaultValue {
-			get { return defaultValue; }
-			set { defaultValue = value; }
-		}
-
-		public override  string GetValue (object current, string format)
+		protected Field field = null;
+ 
+		public  object GetValue (object current)
 		{			
 			if (compiledMethod == null) {	
 				Compile();				 
 			}
 			
-			string returnVal = String.Empty;
+			object returnVal = null;
 			
-			try{
-				returnVal =  String.Format(format != null ? format : "{0}",compiledMethod((T)current) );
+			try {
+				returnVal = compiledMethod((T)current);
 			}catch(Exception exp){
 				Console.WriteLine(exp);
 			}
 			
 			return returnVal;
-		}				
+		}			
+
+				
 		
 		public void Compile() {
-			compiledMethod = (Func<T,K>) (expression as LambdaExpression) .Compile();		 
+			compiledMethod = (Func<T,K>) (field.expression as LambdaExpression) .Compile();		 
 		}
 		
 		protected Func<T,K> compiledMethod;
 	}
 
-    public class SimpleDataField<T> : PropertyDataField<T, T>
+    public class SimplePropertyDataFieldPrivider<T> : PropertyDataFieldPrivider<T, T>
     {
-        public SimpleDataField(ParameterExpression root, Expression parent, string propertyName)
+        public SimplePropertyDataFieldPrivider(Field field, ParameterExpression root, Expression parent, string propertyName)
         {
-
+		this.field = field;
         Expression<Func<T,T>> lambda = null;		
 			lambda = x => x;
 			compiledMethod = lambda.Compile();
-			expression = lambda;		
+			field.expression = lambda;		
         }
     }
 }

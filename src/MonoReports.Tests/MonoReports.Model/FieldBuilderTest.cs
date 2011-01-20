@@ -52,7 +52,7 @@ namespace MonoReports.Tests
 		public void CreateFields_ForString_ShouldCreateFieldWithName ()
 		{
 			 
-		 	var fields = FieldBuilder.CreateFields(typeof(string),"sdf",FieldKind.Parameter);
+		 	var fields = FieldBuilder.CreateFields("param Val",typeof(string),"sdf",FieldKind.Parameter);
 			
 			Assert.IsNotNull(fields);
 			Assert.AreEqual(1,fields.Length);
@@ -65,7 +65,7 @@ namespace MonoReports.Tests
 		public void CreateFields_ForNamedAWithBWithC_ShouldCreateFieldWithName_NameDotClassBDotClassC ()
 		{
 			 
-		 	var fields = FieldBuilder.CreateFields(typeof(A),"Name",FieldKind.Parameter);
+		 	var fields = FieldBuilder.CreateFields(new A(), typeof(A),"Name",FieldKind.Parameter);
 			
 			Assert.IsNotNull(fields);
 			Assert.AreEqual(1,fields.Length);
@@ -80,7 +80,7 @@ namespace MonoReports.Tests
 		public void CreateFields_ForStruct_ShouldCreateFields ()
 		{
 			 
-		 	var fields = FieldBuilder.CreateFields(typeof(MySize),"varrr",FieldKind.Parameter);
+		 	var fields = FieldBuilder.CreateFields(new MySize(), typeof(MySize),"varrr",FieldKind.Parameter);
 			
 			Assert.IsNotNull(fields);
 			Assert.AreEqual(2,fields.Length);

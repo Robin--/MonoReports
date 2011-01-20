@@ -34,7 +34,7 @@ using MonoReports.Renderers;
 using MonoReports.Model.Controls;
 using MonoReports.Model.Data;
 using MonoReports.Extensions.CairoExtensions;
-
+using System.Linq;
  
 
 namespace MonoReports.Model
@@ -63,10 +63,15 @@ namespace MonoReports.Model
 		
 		public static void Save(this Report report , string path) {		
 			
-			//TODO 3tk workaround hence can't serialize anonymous classes hidden in PropertyDataField<T,K> - 
-			//should find way to serialize anonymous types or change PropertyDataField to something else	
-			report.Parameters.Clear();
-			report.DataFields.Clear();
+			//dataproviders have to be cleaned because they could be not serializable
+		    foreach(var par in report.Parameters){
+				par.DataProvider = null;			
+			}
+			
+			foreach(var df in report.DataFields){
+				df.DataProvider = null;				
+			}		
+			
 			report.Pages.Clear();
 			report.DataSource = null;
 			using (System.IO.FileStream file = System.IO.File.OpenWrite (path)) {
@@ -83,10 +88,18 @@ namespace MonoReports.Model
 		}
 		
 		public static void ExportToPdf(this Report report ,string path, IDictionary<string,object> parameters) {
-			report.Parameters.Clear();
-			
+			 			
 			foreach (KeyValuePair<string, object> kvp in parameters) {
-					 report.Parameters.AddRange(FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter));
+				foreach(var parField in FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter))
+				{
+					var oldField = report.Parameters.FirstOrDefault(par => par.Name == parField.Name);
+					if (oldField != null) {						
+						oldField.FieldType =  parField.FieldType;
+						oldField.DeafaultValue = parField.DeafaultValue;
+					}else {
+						report.Parameters.Add(parField);
+					}
+				}
 			}
 			
 			

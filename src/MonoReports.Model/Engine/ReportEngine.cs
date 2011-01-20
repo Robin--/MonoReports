@@ -230,7 +230,7 @@ namespace MonoReports.Model.Engine
 						case FieldKind.Parameter:
 							if (parameters.ContainsKey (dataControl.FieldName)) {
 								var parameter = parameters [dataControl.FieldName];
-								dataControl.Text = parameter.GetValue (parameter.DefaultValue, dataControl.FieldTextFormat);
+								dataControl.Text = parameter.GetStringValue (null, dataControl.FieldTextFormat);
 							}
 							break;
 						case FieldKind.Expression:
@@ -379,7 +379,7 @@ namespace MonoReports.Model.Engine
 			for (int i = 0; i < Report.Groups.Count; i++) {
 				var gi = groupInfos [i];
 				gi.PreviousVal = groupInfos [i].CurrentVal;
-				gi.CurrentVal = Report.ExpressionFields [gi.ExpressionFieldIndex].GetValue (source.Current, null);
+				gi.CurrentVal = Report.ExpressionFields [gi.ExpressionFieldIndex].GetStringValue (source.Current, null);
 				gi.ValHasChanged = (gi.CurrentVal != gi.PreviousVal ? true : false);
 			}
 		}

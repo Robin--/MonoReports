@@ -232,7 +232,7 @@ parameters.Add(""Title"",new { Title = ""The Logicans"", SubTitle = ""...and phi
 	}
 		
 	public void ShowDesign() {
-		DesignService.ProcessReport ();
+ 
 		maindesignview1.ShowDesign();
 	}
 		

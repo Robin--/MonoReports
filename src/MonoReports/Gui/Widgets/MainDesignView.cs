@@ -50,8 +50,7 @@ namespace MonoReports.Gui.Widgets
 			get {
 				return this.designService;
 			}
-			set {
-				
+			set {				
 				designService = value;
 				if(designService != null) {
 					designService.OnReportChanged += HandleDesignServiceOnReportChanged;
@@ -65,7 +64,7 @@ namespace MonoReports.Gui.Widgets
 		void HandleDesignServiceOnReportChanged (object sender, EventArgs e)
 		{		
 			flag = true;
-			codeTextview.Buffer.Text = designService.Report.DataScript;					
+			codeTextview.Buffer.Text = designService.Report.DataScript;				
 			flag = false;
 		}
 		
@@ -100,7 +99,7 @@ namespace MonoReports.Gui.Widgets
 		}
 
 		ToolBarSpinButton pageSpinButton = null;
-		ReportEngine reportEngine;
+		 
 
 		public DrawingArea DesignDrawingArea { 
 			get { return drawingarea;}
@@ -116,7 +115,7 @@ namespace MonoReports.Gui.Widgets
 		{
 			this.Build ();			
 			buildPreviewToolbar ();
-			
+			reportRenderer = new ReportRenderer();
 			Gtk.Drag.DestSet (DesignDrawingArea, DestDefaults.All, new TargetEntry[]{new TargetEntry ("Field", TargetFlags.OtherWidget,2)}, DragAction.Copy);
 			codeTextview.Buffer.Changed += HandleCodeTextviewBufferChanged;
 		
@@ -189,6 +188,10 @@ namespace MonoReports.Gui.Widgets
 		{
 	
 			DrawingArea area = (DrawingArea)o;
+			if(!(designService.Report.Pages.Count > 0))
+				designService.ProcessReport();
+			
+			
 			if (designService.Report.Pages.Count > 0 ) {
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
 				cr.Antialias = Cairo.Antialias.Default;								 				 
@@ -249,15 +252,7 @@ namespace MonoReports.Gui.Widgets
 		{
 			if (designService != null) {
 				if (args.PageNum == 1) {
-					designService.IsDesign = false;
-					designService.Evaluate();
-
-					ImageSurface imagesSurface = new ImageSurface (Format.Argb32, (int)designService.Report.Width, (int)designService.Report.Height);
-					Cairo.Context cr = new Cairo.Context (imagesSurface);				
-					reportRenderer.Context = cr;
-					reportEngine = new ReportEngine (designService.Report, reportRenderer);
-					reportEngine.Process ();
-					(cr as IDisposable).Dispose ();
+					designService.IsDesign = false;					
 					pageSpinButton.SpinButton.SetRange (1, designService.Report.Pages.Count);
 					previewDrawingArea.QueueDraw ();
 				} else {

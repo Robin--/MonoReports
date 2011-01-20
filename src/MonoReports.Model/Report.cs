@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 using MonoReports.Model.Controls;
-
+using System.Linq;
 using System.Collections;
 using MonoReports.Model.Data;
 
@@ -198,7 +198,6 @@ namespace MonoReports.Model
 			get { return dataSource; } 
 			set {
 			 	dataSource = value;
-				DataFields = new List<Field> ();	
 				if (dataSource != null ) {
 
 					Type dsType = dataSource.GetType ();
@@ -248,13 +247,16 @@ namespace MonoReports.Model
  
 		public void FillFieldsFromDataSource ()
 		{
-			DataFields = new List<Field> ();				
-			if (DataSource != null) {
-				
+		 			
+			if (DataSource != null) {				
 				foreach(var field in _dataSource.DiscoverFields () ){
 				
 					field.FieldKind = FieldKind.Data;
-					DataFields.Add( field );				 					
+					var oldField = DataFields.FirstOrDefault(f => f.Name == field.Name);
+					if(oldField != null)
+						oldField.DataProvider = field.DataProvider;
+					else
+						DataFields.Add( field );				 					
 				}
 			}else 
 				throw new InvalidOperationException("Datasource can't be null while discovering data fields");
@@ -274,7 +276,13 @@ namespace MonoReports.Model
 			r.GroupFooterSections = GroupFooterSections;
 			r.Height = Height;
 			r.Width = Width;
-			r.Margin = Margin;			
+			r.Margin = Margin;				
+			foreach (var par in Parameters) {
+				r.Parameters.Add(par);
+			}
+			foreach (var df in DataFields) {
+				r.DataFields.Add(df);
+			}
 		}
 
  

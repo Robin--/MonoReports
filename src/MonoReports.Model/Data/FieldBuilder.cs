@@ -38,33 +38,32 @@ namespace MonoReports.Model.Data
  
 		public static IEnumerable<Field> CreateFields (object obj,string name, FieldKind fieldKind ) {
 			Type rootObjectType = obj.GetType();
-			foreach(var field in CreateFields (rootObjectType, name,  fieldKind )){				
-			   	field.DefaultValue = obj;
+			foreach(var field in CreateFields (obj, rootObjectType, name,  fieldKind )){							  
 				yield return field;
 			}
 			
 		}
 		
-		public static Field[] CreateFields (Type rootObjectType,string name, FieldKind fieldKind ) {
+		public static Field[] CreateFields (object rootObject,Type rootObjectType,string name, FieldKind fieldKind ) {
 			List<Field> fields = new List<Field>();
 			 
 		
 			ParameterExpression arg = Expression.Parameter(rootObjectType, name);
-			fillFields(rootObjectType,fields,arg,arg,name,rootObjectType,fieldKind);
+			fillFields(rootObject,rootObjectType,fields,arg,arg,name,rootObjectType,fieldKind);
 			return fields.ToArray ();
 		}
 		
-		static void fillFields(Type rootObjectType,List<Field> fields, ParameterExpression par,Expression parent,string namePrefix, Type t,FieldKind fieldKind) {
+		static void fillFields(object rootObject,Type rootObjectType,List<Field> fields, ParameterExpression par,Expression parent,string namePrefix, Type t,FieldKind fieldKind) {
 			
 			if(t.IsPrimitive || t == typeof(string) || t == typeof(DateTime)){
-				var field = CreateSimpleProperty(t,t,par,parent,namePrefix,fieldKind);
+				var field = CreateProperty(rootObject,t,t,par,parent,namePrefix,fieldKind);
 				field.Name = string.IsNullOrEmpty(namePrefix) ? "x": namePrefix ;
 				fields.Add(field);
 			}else {
 				PropertyInfo[] properties = t.GetProperties();
 				foreach (var property in properties) {
 					if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string) || property.PropertyType == typeof(DateTime)) {
-	 					Field field = CreateSimpleProperty(rootObjectType,property.PropertyType,par,parent,property.Name,fieldKind);
+	 					Field field = CreateProperty(rootObject,rootObjectType,property.PropertyType,par,parent,property.Name,fieldKind);
 						field.Name = string.IsNullOrEmpty(namePrefix) ?  property.Name : namePrefix + "." + property.Name;
 						fields.Add(field);
 					} else {
@@ -78,33 +77,40 @@ namespace MonoReports.Model.Data
 						}
 						string realPrefix =  string.IsNullOrEmpty(namePrefix) ? property.Name : namePrefix + "." + property.Name;
 						var expr = Expression.Property(parent, property.Name);
-						fillFields(rootObjectType,fields, par,expr,realPrefix,property.PropertyType,fieldKind);
+						fillFields(rootObject,rootObjectType,fields, par,expr,realPrefix,property.PropertyType,fieldKind);
 					}
 				}	
 			}
 		}
 		
 		
-		public static Field  CreateSimpleProperty (Type rootObjectType,
+		public static Field  CreateProperty (object rootObject,Type rootObjectType,
 			Type propertyType,
 			ParameterExpression rootParameterExpression,
 			Expression parentExpression,
 			string name,
 			FieldKind fieldKind) {
+			Field f = new Field();
+			f.FieldKind = fieldKind;
+			f.Name = name;
+			f.FieldType = propertyType;
+			
             Type genericType;
-            object p;
+ 
                 if (rootObjectType == propertyType)
                 {
-                     genericType = typeof(SimpleDataField<>).MakeGenericType(propertyType);
-                     p = Activator.CreateInstance(genericType, rootParameterExpression, parentExpression, name) as Field;
+                     genericType = typeof(SimplePropertyDataFieldPrivider<>).MakeGenericType(propertyType);
+                     f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldDataProvider;
+				 	  
                 }
                 else
                 {
-                     genericType = typeof(PropertyDataField<,>).MakeGenericType(rootObjectType, propertyType);
-                     p = Activator.CreateInstance(genericType, rootParameterExpression, parentExpression, name) as Field;
+                     genericType = typeof(PropertyDataFieldPrivider<,>).MakeGenericType(rootObjectType, propertyType);
+                     f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldDataProvider;
                 }
-			Field f = (p as Field);
-			f.FieldKind = fieldKind;
+			 if(rootObject != null && f.FieldKind == FieldKind.Parameter)
+					f.DeafaultValue = f.DataProvider.GetValue(rootObject).ToString();
+			
 			return f;			
 		}
 	}

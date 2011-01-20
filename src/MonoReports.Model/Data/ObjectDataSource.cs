@@ -68,7 +68,7 @@ namespace MonoReports.Model.Data
                 {
                     var property = propertiesDictionary[fieldName] as Field;
 					
-                    return property.GetValue(enumerator.Current, format != null ? format : "{0}");                    
+                    return property.GetStringValue(enumerator.Current, format != null ? format : "{0}");                    
                 }
 			}
 
@@ -153,7 +153,7 @@ namespace MonoReports.Model.Data
 		public Field[] DiscoverFields ()
 		{        	
 			fields.Clear();
-		    fields.AddRange( FieldBuilder.CreateFields(rootObjectType,null,FieldKind.Data));
+		    fields.AddRange( FieldBuilder.CreateFields(null,rootObjectType,null,FieldKind.Data));
  			propertiesDictionary = fields.ToDictionary(pr=>pr.Name);
 			return fields.ToArray ();
 		}

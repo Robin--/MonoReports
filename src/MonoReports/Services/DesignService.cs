@@ -36,6 +36,7 @@ using MonoReports.Model.Data;
 using MonoReports.Renderers;
 using Gtk;
 using System.Linq;
+using MonoReports.Model.Engine;
 
 
 namespace MonoReports.Services
@@ -77,7 +78,7 @@ namespace MonoReports.Services
 			get;
 			private set;
 		}
-		
+ 
 		public CompilerService Compiler {get;set;}
 
 		public Cairo.PointD EndPressPoint { get; private set; }
@@ -90,7 +91,7 @@ namespace MonoReports.Services
 
 		public bool IsPressed { get; private set; }
 
-		public bool IsMoving { get; private set; }
+		public bool IsMoving { get; private set; }				
 
 		bool isDesign;
 		public bool IsDesign { 
@@ -114,6 +115,8 @@ namespace MonoReports.Services
 				renderer = value;
 			}
 		}
+		
+		ReportEngine reportEngine;
 
 		public IWorkspaceService WorkspaceService { get; set; }
 
@@ -209,7 +212,7 @@ namespace MonoReports.Services
 			}
 			
 			addSectionView (report.PageFooterSection);
-			addSectionView (report.ReportFooterSection);					
+			addSectionView (report.ReportFooterSection);				
 		}
 
 		public void RedrawReport (Context c)
@@ -289,12 +292,7 @@ namespace MonoReports.Services
 			return sectionView;
 		}
 
-		public void RefreshDataFieldsFromDataSource ()
-		{
-			Report.FillFieldsFromDataSource ();
-			if (OnReportDataFieldsRefreshed != null)
-				OnReportDataFieldsRefreshed (this, new EventArgs ());
-		}
+		
 
 		public void KeyPress (Gdk.Key key)
 		{
@@ -555,9 +553,17 @@ namespace MonoReports.Services
 		}
 		
 		
-		public void ProcessReport() {
+		public void ProcessReport() {			
 			Evaluate();
-			RefreshDataFieldsFromDataSource();
+			ImageSurface imagesSurface = new ImageSurface (Format.Argb32, (int)Report.Width, (int)Report.Height);
+			using (Cairo.Context cr = new Cairo.Context (imagesSurface)) {				
+				renderer.Context = cr;
+				reportEngine = new ReportEngine (Report, renderer);
+				reportEngine.Process ();
+				(cr as IDisposable).Dispose ();
+			}
+			if (OnReportDataFieldsRefreshed != null)
+				OnReportDataFieldsRefreshed (this, new EventArgs ());		
 		}
 		
 		
@@ -568,30 +574,37 @@ namespace MonoReports.Services
 			object result = null;
 			string meassage = null;			 
 			bool res = false;
-			string usings = "using Newtonsoft.Json.Linq;";
-			
-			Report.Parameters.Clear();
-			Report.DataSource = null;
+			string usings = "using Newtonsoft.Json.Linq;";						
 		
 			if( Compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
 				var ds = (result as object[]);
 				var datasource = ds[0] ;
-				
-				Dictionary<string,object> parametersDictionary = ds[1] as Dictionary<string,object>;
- 				foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
-					 Report.Parameters.AddRange(FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter));
-				}
-					
+ 
 				if (datasource != null) {
-					Report.DataSource = datasource;
-					//Report.DataScript = codeTextview.Buffer.Text;		
+					Report.DataSource = datasource;					
 					res = true;
 				}
+				
+				Dictionary<string,object> parametersDictionary  = (Dictionary<string, object>) ds[1];
+				if(parametersDictionary != null)
+					foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
+						foreach(var newfield in FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter)) {
+							var oldField = Report.Parameters.FirstOrDefault(par => par.Name == newfield.Name);
+							if (oldField != null) {
+								oldField.DataProvider = newfield.DataProvider;
+								oldField.DeafaultValue = newfield.DeafaultValue;
+								oldField.FieldType = newfield.FieldType;
+							} else {
+								Report.Parameters.Add(newfield);
+							}
+						}
+						
+					}
 			}
 			
-			//outputTextview.Buffer.Text = meassage;
 			return res;
 		}
+ 
 
 		public void ExportToPdf ()
 		{
