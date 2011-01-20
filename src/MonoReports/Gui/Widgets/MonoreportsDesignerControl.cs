@@ -67,24 +67,14 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	WorkspaceService workspaceService;
 	CompilerService compilerService;	 
 	PixbufRepository pixbufRepository;
+	string lastFileName = String.Empty;
 
 	public MonoreportsDesignerControl ()  
 	{
 		Build ();
   
 		
-		Report startReport = new Report(){ 
-			DataScript = @"
-datasource = new [] {
-     new { Name=""Alfred"", Surname = ""Tarski"", Age = ""82"" },
-     new { Name=""Saul"", Surname = ""Kripke"", Age = ""70"" },
-     new { Name=""Gotlob"", Surname = ""Frege"", Age = ""85"" },
-     new { Name=""Kurt"", Surname = ""Gödel"", Age = ""72"" }, 
-};
-
-parameters.Add(""Title"",new { Title = ""The Logicans"", SubTitle = ""...and philosophers...""});
-
-"};
+		Report startReport = newReportTemplate();
 		
 		
 string template = @"
@@ -134,10 +124,10 @@ public sealed class GenerateDataSource {{
 		toolBoxService.AddTool (new ZoomTool (designService));		
 		toolBoxService.AddTool (new LineTool (designService));		
 		toolBoxService.AddTool (new LineToolV (designService));		
-		toolBoxService.AddTool (new LineToolH (designService));		
-		
+		toolBoxService.AddTool (new LineToolH (designService));				
 		toolBoxService.AddTool (new TextBlockTool (designService));
-		toolBoxService.AddTool (new SubreportTool (designService));
+		//TODO 3tk: currently not supported
+		//toolBoxService.AddTool (new SubreportTool (designService));
 		toolBoxService.AddTool (new SectionTool (designService));
 		toolBoxService.AddTool (new ImageTool (designService));
 		toolBoxService.AddTool (new RectTool (designService));
@@ -149,14 +139,35 @@ public sealed class GenerateDataSource {{
 			designService.ExportToPdf();
 		};
 		
-	
-		mainToolbar.Insert (exportPdfToolButton,7);		
+		
+	    var sep = new Gtk.SeparatorToolItem();
+		
+		mainToolbar.Insert (sep,mainToolbar.NItems);		
+		mainToolbar.Insert (exportPdfToolButton,mainToolbar.NItems);	
+			
+		//ToolBarButton btn = new ToolBarButton("gtk-media-play","execute","Execute report");
+		//mainToolbar.Insert (btn,mainToolbar.NItems);	
 		
 		mainPropertygrid.LoadMonoreportsExtensions();
  
 	}
 	 
 	
+	Report newReportTemplate(){
+		return new Report(){ 
+			DataScript = @"
+datasource = new [] {
+     new { Name=""Alfred"", Surname = ""Tarski"", Age = ""82"" },
+     new { Name=""Saul"", Surname = ""Kripke"", Age = ""70"" },
+     new { Name=""Gotlob"", Surname = ""Frege"", Age = ""85"" },
+     new { Name=""Kurt"", Surname = ""Gödel"", Age = ""72"" }, 
+};
+
+parameters.Add(""Title"",new { Title = ""The Logicans"", SubTitle = ""...and philosophers...""});
+
+"};
+	}
+		
 	protected virtual void OnMainPropertygridChanged (object sender, System.EventArgs e)
 	{
 		workspaceService.InvalidateDesignArea();
@@ -181,8 +192,13 @@ public sealed class GenerateDataSource {{
 	{
 		toolBoxService.SetToolByName ("LineTool");
 	}
+		
+	public void SaveAs () {
+		lastFileName = String.Empty;
+		Save();
+	}
 
-	public void Save()
+	public void Save ()
 	{
 		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose Monoreports file to save", ((Gtk.Window)this.Toplevel), FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Accept);
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
@@ -191,14 +207,45 @@ public sealed class GenerateDataSource {{
 		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? "untiteled.mrp" : designService.Report.Title + ".mrp";
 		
 		designService.Report.DataSource = null;
-		if (fc.Run () == (int)ResponseType.Accept) {				
-			designService.Save(fc.Filename);
+		if(string.IsNullOrEmpty(lastFileName)) {
+			if (fc.Run () == (int)ResponseType.Accept) {				
+				designService.Save(fc.Filename);
+				lastFileName = fc.Filename;
+			}				
+			fc.Destroy ();		
+		}else {
+			designService.Save(lastFileName);	
 		}
+	}
 		
-		fc.Destroy ();		
+	public void ProcessAndShowPreview() {		
+		SetCursor (Gdk.CursorType.Watch);
+		
+		DesignService.ProcessReport ();
+		ShowPreview();
+		
+		SetCursor (Gdk.CursorType.LeftPtr);	
+	}
+		
+	public void ShowPreview() {	
+		maindesignview1.ShowPreview();
+	}
+		
+	public void ShowDesign() {
+		DesignService.ProcessReport ();
+		maindesignview1.ShowDesign();
+	}
+		
+	public void New ()
+	{		
+		lastFileName = string.Empty;
+	 	Report r = newReportTemplate();
+		ShowInPropertyGrid (null);
+		designService.Report = r;			
+		workspaceService.InvalidateDesignArea ();
 	}
 
-	public void Open()
+	public void Open ()
 	{
 		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose the Monoreports file to open", ((Gtk.Window)this.Toplevel), FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
@@ -208,6 +255,7 @@ public sealed class GenerateDataSource {{
 		if (fc.Run () == (int)ResponseType.Accept) {
 			ShowInPropertyGrid (null);
 			designService.Load(fc.Filename);
+			lastFileName = fc.Filename;
 		}
 		
 		fc.Destroy ();

@@ -209,8 +209,7 @@ namespace MonoReports.Services
 			}
 			
 			addSectionView (report.PageFooterSection);
-			addSectionView (report.ReportFooterSection);
-
+			addSectionView (report.ReportFooterSection);					
 		}
 
 		public void RedrawReport (Context c)
@@ -458,12 +457,12 @@ namespace MonoReports.Services
 			
 		}
 		
+		 
 		
-		public void Load(string path){
-			Report.Load(path);
-			initReport ();
-				if (OnReportChanged != null)
-					OnReportChanged (this, new EventArgs ());
+		public void Load(string path){			
+		    Report r = new Report();
+			r.Load(path);
+			Report = r;
 		}
 		
 		public void Save(string path){

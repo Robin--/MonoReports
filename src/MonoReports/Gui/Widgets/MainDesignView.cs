@@ -58,7 +58,7 @@ namespace MonoReports.Gui.Widgets
 					 codeTextview.Buffer.Text = designService.Report.DataScript;
 				}
 			}
-		}
+		}				
 		
 		bool flag = false;
 
@@ -144,6 +144,7 @@ namespace MonoReports.Gui.Widgets
 			previewDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
 			DesignDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
 		}
+				
 
 	
 		void buildPreviewToolbar ()
@@ -161,6 +162,16 @@ namespace MonoReports.Gui.Widgets
 			previewToolbar.Insert (pageSpinButton, 1);
 			
 		}
+		
+		
+		public void ShowPreview () {
+			mainNotebook.Page = 1;
+		}
+		
+		public void ShowDesign () {
+			mainNotebook.Page = 0;
+		}
+		
 
 		protected virtual void OnDrawingareaExposeEvent (object o, Gtk.ExposeEventArgs args)
 		{

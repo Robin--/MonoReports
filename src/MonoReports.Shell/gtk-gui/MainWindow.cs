@@ -159,8 +159,10 @@ public partial class MainWindow
 		this.DefaultHeight = 759;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+		this.newAction1.Activated += new global::System.EventHandler (this.OnNewAction1Activated);
 		this.openAction2.Activated += new global::System.EventHandler (this.OnOpenAction2Activated);
 		this.saveAction.Activated += new global::System.EventHandler (this.OnSaveActionActivated);
+		this.saveAsAction.Activated += new global::System.EventHandler (this.OnSaveAsActionActivated);
 		this.quitAction1.Activated += new global::System.EventHandler (this.OnQuitAction1Activated);
 		this.mediaPlayAction.Activated += new global::System.EventHandler (this.OnMediaPlayActionActivated);
 		this.copyAction1.Activated += new global::System.EventHandler (this.OnCopyAction1Activated);

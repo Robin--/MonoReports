@@ -9,6 +9,13 @@
     <widget-library name="../../Propertygrid/bin/Debug/Propertygrid.dll" />
     <widget-library name="../../../build/MonoReports.dll" internal="true" />
   </import>
+  <icon-factory>
+    <icon-set id="gtk-media-play">
+      <source>
+        <property name="Image">stock:gtk-media-play SmallToolbar</property>
+      </source>
+    </icon-set>
+  </icon-factory>
   <widget class="Gtk.Bin" id="MonoReports.Gui.Widgets.MonoreportsDesignerControl" design-size="1047 696">
     <action-group name="Default" />
     <property name="MemberName" />

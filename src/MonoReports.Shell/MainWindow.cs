@@ -72,7 +72,8 @@ public partial class MainWindow: Gtk.Window
 	
 	protected virtual void OnMediaPlayActionActivated (object sender, System.EventArgs e)
 	{
-		monoreportsdesignercontrol1.DesignService.ProcessReport ();
+		monoreportsdesignercontrol1.ProcessAndShowPreview();
+		
 	}
 	
 	protected virtual void OnOpenAction2Activated (object sender, System.EventArgs e)
@@ -97,6 +98,18 @@ public partial class MainWindow: Gtk.Window
 		monoreportsdesignercontrol1.DesignService.Zoom = 1;
 		monoreportsdesignercontrol1.DesignService.WorkspaceService.InvalidateDesignArea();
 	}
+	
+	protected virtual void OnNewAction1Activated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.New();
+	}
+	
+	protected virtual void OnSaveAsActionActivated (object sender, System.EventArgs e)
+	{
+		monoreportsdesignercontrol1.SaveAs();
+	}
+	
+	
 	
 	
 	
