@@ -24,7 +24,7 @@ Simple code generated report example:
 
 Status
 ------
-Monoreports is in beta 0.1 version state. 
+Monoreports current version is 0.1RC
 
 Youtube demo
 -----------
