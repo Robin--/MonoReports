@@ -24,7 +24,7 @@ Simple code generated report example:
 
 Status
 ------
-Monoreports current version is 0.1RC
+Monoreports current version is 0.1.1
 
 Youtube demo
 -----------
@@ -41,7 +41,7 @@ At the moment Monoreports lack of two features commonly used in this kind of too
 - group section - group header section appears before details every time value of group expression is changed.
 - subreports - report in report
 
-Those two features are planed to come with version 0.2 (currently we are before 0.1)
+Those two features are planed to come with version 0.2
  
 Other things in roadmap are:
 
