@@ -7,15 +7,13 @@ If you can't wait to see something, here is quickstart to make 'hello world' rep
 
 1. run Monoreports designer
 
-2. press datasource tab.
-
-4. press execute button (at bottom)
+2. press F5
 
 5. go back to design tab
 
 6. drag *name* field and drop on details section
 
-7. press preview tab
+7. press F5
 
 8. press export to pdf icon
 
@@ -38,7 +36,7 @@ Monoreports consists of two main parts:
 Report
 ------
 Report is a template for result report. Every report has serveral sections. In sections you place controls.
-Controls can be bound to datasource or parameters  to display datasource data.
+Control can be bound to a datasource, parameter or expression.
 
 Sections
 --------

@@ -28,6 +28,7 @@ using MonoReports.Services;
 using MonoReports.Gui.Widgets;
 using MonoReports.Model.Controls;
 using MonoReports.ControlView;
+using MonoReports.Model;
 using Gtk;
 
 namespace MonoReports.Tools
@@ -71,7 +72,7 @@ namespace MonoReports.Tools
 		public override ControlViewBase CreateNewControl (SectionView sectionView)
 		{				
 			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);			
-			MonoReports.Model.Controls.Image img = new MonoReports.Model.Controls.Image(){ Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Width = 20, Height=5};
+			MonoReports.Model.Controls.Image img = new MonoReports.Model.Controls.Image(){ Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Width = 2.cm(), Height=1.cm()};
             return AddControl(sectionView,img);
 		}
 
