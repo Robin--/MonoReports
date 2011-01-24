@@ -38,7 +38,7 @@ namespace MonoReports.Model
 		{			
 			Width = 190.mm (); 
 			Height = 277.mm ();		
-			Margin = new Thickness (10.mm ());
+			Margin = new Thickness (10.mm (),10.mm (),10.mm (),10.mm ());
 			Groups = new List<Group> ();			
 			Parameters = new List<Field> ();
 			DataFields = new List<Field> ();
@@ -267,6 +267,7 @@ namespace MonoReports.Model
 					if (oldField != null) {
 						oldField.DataProvider = field.DataProvider;
 						oldField.FieldType = field.FieldType;
+						oldField.DefaultValue  = field.DefaultValue;
 					} else
 						DataFields.Add (field);				 					
 				}

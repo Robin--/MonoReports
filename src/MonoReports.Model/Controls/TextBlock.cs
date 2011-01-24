@@ -36,7 +36,7 @@ namespace MonoReports.Model.Controls
 
 		public TextBlock ():base()
 		{
-			Border = new Border() {WidthAll = 0, Color = new Color(0,0,0)};
+			Border = new Border( 0, new Color(0,0,0));
 			FontName = "Tahoma";
 			FontColor = new Color(0,0,0);
 			FontSize = 11;
@@ -74,6 +74,7 @@ namespace MonoReports.Model.Controls
 		public string FieldTextFormat {get;set;}
 		
 		public HorizontalAlignment HorizontalAlignment {get;set;}
+		
 		public VerticalAlignment VerticalAlignment {get;set;}
 		
 		public string Text {

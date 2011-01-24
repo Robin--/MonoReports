@@ -108,7 +108,7 @@ namespace MonoReports.Model.Data
                      f.DataProvider = Activator.CreateInstance(genericType,f, rootParameterExpression, parentExpression, name) as IFieldValueProvider;
                 }
 			 if(rootObject != null && f.FieldKind == FieldKind.Parameter)
-					f.DefaultValue = f.DataProvider.GetValue(rootObject).ToString();
+					f.DefaultValue = f.DataProvider.GetValue(rootObject);
 			
 			return f;			
 		}

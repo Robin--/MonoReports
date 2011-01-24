@@ -37,19 +37,26 @@ namespace MonoReports.Model
 		{
 			
 		}
-		
 		public Border (double all): this(all,all,all,all)
 		{
 			
 		}
 		
-		public Border (double left, double top, double right, double bottom)
+		public Border (double all, Color color): this(all,all,all,all,color)
+		{
+			
+		}
+		public Border (double left, double top, double right, double bottom):this(left,top,right,bottom,new Color(0,0,0))
+		{
+		}
+		
+		public Border (double left, double top, double right, double bottom, Color color)
 		{
 			_leftWidth = left;
 			_topWidth = top;
 			_rightWidth = right;
 			_bottomWidth = bottom;
-			Color = new Color(0,0,0);
+			Color = color;
 		}
 		
 		double _leftWidth;
@@ -61,7 +68,7 @@ namespace MonoReports.Model
 		double _bottomWidth;
 		public double BottomWidth {get { return _bottomWidth; }set { _bottomWidth = value; }}
 		
-		public double WidthAll{
+		public double WidthAll {
 			get {return LeftWidth;}
 			set {
 				_leftWidth = value;

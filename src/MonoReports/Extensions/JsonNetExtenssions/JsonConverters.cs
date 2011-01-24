@@ -89,6 +89,37 @@ namespace MonoReports.Extensions
 	
 	}
 	
+		
+	public class ThicknessConverter : CustomCreationConverter<MonoReports.Model.Thickness>
+	{
+		public override MonoReports.Model.Thickness Create (Type objectType)
+		{
+			return new MonoReports.Model.Thickness (0,0,0,0);
+		}
+		
+		public override object ReadJson (Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+		{			
+			reader.Read();
+			reader.Read();
+			reader.Read();
+			reader.Read();
+			
+			double left = double.Parse( reader.Value.ToString());
+			reader.Read();	
+			reader.Read();
+			double top = double.Parse( reader.Value.ToString());
+			reader.Read();	
+			reader.Read();
+			double right = double.Parse( reader.Value.ToString());
+			
+			reader.Read();
+			reader.Read();
+			double bottom = double.Parse( reader.Value.ToString());
+			reader.Read();
+			return new MonoReports.Model.Thickness(left,top,right,bottom);
+		}
+	
+	}
 	
 	public class ColorConverter : CustomCreationConverter<MonoReports.Model.Color>
 	{
@@ -120,5 +151,7 @@ namespace MonoReports.Extensions
 		}
 	
 	}
+	
+	 
 }
 

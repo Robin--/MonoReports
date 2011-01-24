@@ -81,11 +81,11 @@ namespace MonoReports.Extensions.PropertyGridEditors
 					    var doubles =  s.Split(';');
 					 
 					
-						if (doubles.Length > 3) {
-							
+						if (doubles.Length > 3) {							
 					    	padding = new Thickness(UnitExtensions.FromString(doubles[0]),UnitExtensions.FromString(doubles[1]),UnitExtensions.FromString(doubles[2]),UnitExtensions.FromString(doubles[3])); 
 						}else if ( doubles.Length == 1) {						
-							padding = new Thickness( UnitExtensions.FromString(doubles[0]));
+						    double v = UnitExtensions.FromString(doubles[0]);
+							padding = new Thickness(v,v,v,v);
 						}
 					}
 					if (ValueChanged != null)

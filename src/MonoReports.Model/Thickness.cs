@@ -29,6 +29,7 @@ namespace MonoReports.Model
 {
 	public struct Thickness
 	{
+		 
 		
 		public Thickness (double all) {
 			l = all;
@@ -73,7 +74,7 @@ namespace MonoReports.Model
 		
 		public override string ToString ()
 		{
-			return string.Format ("[Padding: Left={0}, Top={1},Right={2}, Bottom={3}]", l, t, r, b); 
+			return string.Format ("[Thickness: Left={0}, Top={1},Right={2}, Bottom={3}]", l, t, r, b); 
 		}
 	}
 }

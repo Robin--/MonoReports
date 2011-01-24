@@ -53,9 +53,7 @@ namespace MonoReports.Tools
 
 		public RectTool (DesignService designService) : base(designService)
 		{
-			selectBorder = new Border ();
-			selectBorder.Color = new MonoReports.Model.Color(0,0,0);
-			selectBorder.WidthAll = 1;		
+			selectBorder = new Border (1);			
 		}
 
 		public override void OnBeforeDraw (Context c)

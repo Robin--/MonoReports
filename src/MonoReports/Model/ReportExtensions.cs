@@ -54,6 +54,8 @@ namespace MonoReports.Model
 						new MonoReports.Extensions.PointConverter (), 
 						new MonoReports.Extensions.SizeConverter (),
 						new MonoReports.Extensions.ColorConverter (),
+						new MonoReports.Extensions.ThicknessConverter ()
+						
 					})  
 				});
 				report.CopyToReport(r);
@@ -149,11 +151,11 @@ public sealed class GenerateDataSource {{
 			string code = report.DataScript;
  			
 			object result = null;
-			string meassage = null;			 
+			string message = null;			 
 			bool res = false;
-			string usings = "using Newtonsoft.Json.Linq;";						
+			string usings = "using Newtonsoft.Json.Linq;using System.Linq;";						
 		
-			if( compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
+			if( compiler.Evaluate (out result, out message , new object[]{usings,code})  ) {				
 				var ds = (result as object[]);
 				var datasource = ds[0] ;
  
@@ -177,6 +179,8 @@ public sealed class GenerateDataSource {{
 						}
 						
 					}
+			}else {
+				Console.Error.WriteLine(message);
 			}
 			return res;
 		}

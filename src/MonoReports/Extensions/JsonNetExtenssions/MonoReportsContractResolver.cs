@@ -33,17 +33,19 @@ namespace MonoReports.Extensions.JsonNetExtenssions
 	public class MonoReportsContractResolver : DefaultContractResolver
 	{
 		
-		static string [] notSerilizingProperties  = {"Left", "Top", "Right", "Bottom"};
+		static string [] notSerilizingProperties  = {"WidthAll", "Left", "Top", "Right", "Bottom"};
 			
 		public MonoReportsContractResolver ()
-		{
+		{			
 		}
 		
 		protected override System.Collections.Generic.IList<JsonProperty> CreateProperties (JsonObjectContract contract)
 		{			
 			IList<JsonProperty> properties = base.CreateProperties(contract);     		
+		  
 			
-    		properties = properties.Where(p => !notSerilizingProperties.Contains(p.PropertyName) ).ToList();
+		   	if(contract.UnderlyingType != typeof(MonoReports.Model.Thickness))
+    			properties = properties.Where(p =>!notSerilizingProperties.Contains(p.PropertyName) ).ToList();
     		return properties;
 		}
 	}
