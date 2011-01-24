@@ -53,7 +53,27 @@ namespace MonoReports.Model
 			DetailSection = new Controls.DetailSection { Location = new Point (0, 9), Size = new Model.Size (Width, 10.mm()) };
 			PageFooterSection = new Controls.PageFooterSection { Location = new Point (0, 13), Size = new Model.Size (Width, 10.mm()) };
 			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 16), Size = new Model.Size (Width, 10.mm()) };
+			
+			var ef = new MonoReports.Model.Data.ExpressionField() { Name = "#RowNumber"};
+			ef.ExpressionScript = "RowIndex;";
+			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
+			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
+			ExpressionFields.Add(ef);
+			
+			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#PageNumber"};
+			ef.ExpressionScript = "CurrentPageIndex;";
+			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
+			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
+			ExpressionFields.Add(ef);
+			
+			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#NumberOfPages"};
+			ef.ExpressionScript = "CurrentPageIndex;";
+			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
+			ef.IsEvaluatedAfterProcessing = true;
+			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
+			ExpressionFields.Add(ef);
 		}
+						
 
 		public event AfterPageRender OnAfterPageRender;
 		public event BeforePageRender OnBeforePageRender;
@@ -277,7 +297,8 @@ namespace MonoReports.Model
 				r.DataFields.Add (df);
 			}
 			foreach (var ef in ExpressionFields) {
-				r.ExpressionFields.Add (ef);
+				if(!ef.Name.StartsWith("#"))
+					r.ExpressionFields.Add (ef);
 			}
 		}
 

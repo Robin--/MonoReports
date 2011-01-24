@@ -581,41 +581,7 @@ namespace MonoReports.Services
 		
 		
 		public bool Evaluate() {	
-			
-			string code = Report.DataScript;
- 
-			object result = null;
-			string meassage = null;			 
-			bool res = false;
-			string usings = "using Newtonsoft.Json.Linq;";						
-		
-			if( Compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
-				var ds = (result as object[]);
-				var datasource = ds[0] ;
- 
-				if (datasource != null) {
-					Report.DataSource = datasource;					
-					res = true;
-				}
-				
-				Dictionary<string,object> parametersDictionary  = (Dictionary<string, object>) ds[1];
-				if(parametersDictionary != null)
-					foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
-						foreach(var newfield in FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter)) {
-							var oldField = Report.Parameters.FirstOrDefault(par => par.Name == newfield.Name);
-							if (oldField != null) {
-								oldField.DataProvider = newfield.DataProvider;
-								oldField.DefaultValue = newfield.DefaultValue;
-								oldField.FieldType = newfield.FieldType;
-							} else {
-								Report.Parameters.Add(newfield);
-							}
-						}
-						
-					}
-			}
-			
-			return res;
+			return Report.EvalDataSourceScript(Compiler);
 		}
  
 

@@ -83,6 +83,16 @@ namespace MonoReports.Model.Engine
 				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
 				EvaluatorInitWasDone = true;
 			} 
+			
+			foreach (var item in report.ExpressionFields) {
+				if(item is ExpressionField){
+					var expressionField = item as ExpressionField;
+					if(expressionField.DataProvider == null)
+						expressionField.DataProvider = new ExpressionFieldValueProvider(expressionField);
+				}
+				
+			}
+			
 			MonoreportsInteractiveBase.ReportContext = context;
 		}
 

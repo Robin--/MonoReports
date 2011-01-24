@@ -72,8 +72,10 @@ namespace MonoReports.Gui.Widgets
 		
 		void HandleCodeTextviewBufferChanged (object sender, EventArgs e)
 		{
-			if(!flag)
+			if(!flag) {
 				designService.Report.DataScript = codeTextview.Buffer.Text;
+				designService.IsDirty = true;
+			}
 		}
 
 

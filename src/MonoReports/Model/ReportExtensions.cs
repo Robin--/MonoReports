@@ -116,8 +116,72 @@ namespace MonoReports.Model
 			
 			report.ExportToPdf(path);			
 		}
+		
+		public static string ScriptTemplateForDataSourceEvaluation  =@"
+using System;
+using System.Collections.Generic;
+{0}
 
+public sealed class GenerateDataSource {{
+    public object Generate()
+    {{ 
+		object datasource = null;
+		Dictionary<string,object> parameters = new Dictionary<string,object>();
+		 {1}
+        return new object[] {{datasource,parameters}};
+    }}
+}}";
+		
+	  
+		public static bool EvalDataSourceScript(this Report report) {
+ 
+		MonoReports.Services.CompilerService compiler = new MonoReports.Services.CompilerService(ScriptTemplateForDataSourceEvaluation);
+		compiler.References.Add("Newtonsoft.Json.dll");
+			
+			return EvalDataSourceScript(report,compiler);
+			 
+		}
        
+		
+		public static bool EvalDataSourceScript(this Report report, MonoReports.Services.CompilerService compiler) {
+			
+			
+			string code = report.DataScript;
+ 			
+			object result = null;
+			string meassage = null;			 
+			bool res = false;
+			string usings = "using Newtonsoft.Json.Linq;";						
+		
+			if( compiler.Evaluate (out result, out meassage , new object[]{usings,code})  ) {
+				var ds = (result as object[]);
+				var datasource = ds[0] ;
+ 
+				if (datasource != null) {
+					report.DataSource = datasource;					
+					res = true;
+				}
+				
+				Dictionary<string,object> parametersDictionary  = (Dictionary<string, object>) ds[1];
+				if(parametersDictionary != null)
+					foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
+						foreach(var newfield in FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter)) {
+							var oldField = report.Parameters.FirstOrDefault(par => par.Name == newfield.Name);
+							if (oldField != null) {
+								oldField.DataProvider = newfield.DataProvider;
+								oldField.DefaultValue = newfield.DefaultValue;
+								oldField.FieldType = newfield.FieldType;
+							} else {
+								report.Parameters.Add(newfield);
+							}
+						}
+						
+					}
+			}
+			return res;
+		}
+		
+		
 		public static void ExportToPdf(this Report report ,string path) {
 			
 			double unitMultiplier = CairoExtensions.UnitMultiplier;

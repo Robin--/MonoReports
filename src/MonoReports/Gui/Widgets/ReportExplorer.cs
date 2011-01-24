@@ -104,9 +104,7 @@ namespace MonoReports.Gui.Widgets
 			reportColumn.SetCellDataFunc(reportCellRenderer,new Gtk.TreeCellDataFunc (renderReportCell));
 			theModel = new Gtk.TreeStore (typeof(TreeItemWrapper));	
 			exporerTreeview.Model = theModel;
-			
-			
-			
+
 			reportNode =  theModel.AppendValues(new TreeItemWrapper("Report"));
 			parametersNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Parameters"));
 			dataFieldsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Data"));

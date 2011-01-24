@@ -72,39 +72,25 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	public MonoreportsDesignerControl ()  
 	{
 		Build ();
-  if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
+  		if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
 				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
 				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
 				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
 				Mono.CSharp.Evaluator.Run("using System;");
 				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
 				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
-			}
+		}
 		
 		Report startReport = newReportTemplate();
 		
 		
-string template = @"
-using System;
-using System.Collections.Generic;
-{0}
-
-public sealed class GenerateDataSource {{
-    public object Generate()
-    {{ 
-		object datasource = null;
-		Dictionary<string,object> parameters = new Dictionary<string,object>();
-		 {1}
-        return new object[] {{datasource,parameters}};
-    }}
-}}
-
-";		
+ 
 		
 		double resolutionX = ((double)  Gdk.Screen.Default.Width) / ((double) Gdk.Screen.Default.WidthMm) * 25.4;
 		
-		compilerService = new CompilerService(template);
-			compilerService.References.Add("Newtonsoft.Json.dll");
+		compilerService = new CompilerService(ReportExtensions.ScriptTemplateForDataSourceEvaluation);
+		compilerService.References.Add("Newtonsoft.Json.dll");
+			
 		pixbufRepository = new PixbufRepository () { Report = startReport };			
 		workspaceService = new WorkspaceService (this,maindesignview1.DesignDrawingArea,maindesignview1.PreviewDrawingArea,mainPropertygrid, StatusBarLabel);
 		var reportRenderer = new ReportRenderer(){ ResolutionX =  resolutionX};
@@ -179,26 +165,6 @@ parameters.Add(""Param"",new { Title = ""The Logicans"", SubTitle = ""...and the
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Name"});
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Surname"});
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(int), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Age"});
-			 
-			var ef = new MonoReports.Model.Data.ExpressionField() { Name = "#RowNumber"};
-			ef.ExpressionScript = "RowIndex;";
-			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
-			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
-			r.ExpressionFields.Add(ef);
-			
-			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#PageNumber"};
-			ef.ExpressionScript = "CurrentPageIndex;";
-			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
-			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
-			r.ExpressionFields.Add(ef);
-			
-			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#NumberOfPages"};
-			ef.ExpressionScript = "CurrentPageIndex;";
-			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
-			ef.IsEvaluatedAfterProcessing = true;
-			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
-			r.ExpressionFields.Add(ef);
-			
 			
 			return r;
 	}
