@@ -1,9 +1,18 @@
 How does report processing work
 ===============================
 
-What is report processing?
---------------------------
-Report processing is a procedure that generates report pages from a report template (later called `report`). In Monoreports, report is processed section by section, starting with Report Header, every control (textblock, image, line etc.) in that section is processed (measured, resized, spaned  etc.).
+What is report generation?
+--------------------------------------
+Report processing is a procedure that generates report pages from a report template (later called `report`). 
+There are two main phases of report generation:
+
+1. Processing - in this phase the report will be fully generated. All pages will be filled with controls. After this phase OnAfterReportProcesing will be fired. Handling this event allows change report look before converting it to output form.
+
+2. Rendering - this phase is simple conversiongenerated pages into output format (e.g. pdf)
+
+Processing
+----------------------------
+In Monoreports, report is processed section by section, starting with Report Header, every control (textblock, image, line etc.) in that section is processed (measured, resized, spaned  etc.).
 
 Each section must be completed in order to proceed to the next section. It is not possible to start processing the next section before the previous one has been finished.
 
