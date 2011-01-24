@@ -10,7 +10,7 @@ Monoreports features
 - can be used as simple PDF generation library
 - handy events allowing manipulate report while engine is processing 
 - allow get cairo context to make a custom "drawings" on processed report pages
-
+- csharp expressions fields
 
 Simple code generated report example:
 		
@@ -24,7 +24,7 @@ Simple code generated report example:
 
 Status
 ------
-Monoreports current version is 0.1RC
+Monoreports current version is 0.1.1
 
 Youtube demo
 -----------
@@ -41,7 +41,7 @@ At the moment Monoreports lack of two features commonly used in this kind of too
 - group section - group header section appears before details every time value of group expression is changed.
 - subreports - report in report
 
-Those two features are planed to come with version 0.2 (currently we are before 0.1)
+Those two features are planed to come with version 0.2
  
 Other things in roadmap are:
 
