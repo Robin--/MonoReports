@@ -10,7 +10,7 @@ Monoreports features
 - can be used as simple PDF generation library
 - handy events allowing manipulate report while engine is processing 
 - allow get cairo context to make a custom "drawings" on processed report pages
-
+- csharp expressions fields
 
 Simple code generated report example:
 		
