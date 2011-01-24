@@ -1,10 +1,10 @@
 // 
-// PropertyDataField.cs
+// Total.cs
 //  
 // Author:
-//       Tomasz Kubacki <tomasz (dot ) kubacki (at) gmail (dot) com>
+//       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
 // 
-// Copyright (c) 2010 Tomasz Kubacki
+// Copyright (c) 2011 Tomasz Kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,54 +24,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Reflection;
-using System.Linq.Expressions;
 
 namespace MonoReports.Model.Data
 {
-	public class PropertyFieldValuePrivider<T,K> : IFieldValueProvider
+	public class Total
 	{
- 
-		public PropertyFieldValuePrivider(){
-			 
+		public Total ()
+		{
 		}
 		
-		public PropertyFieldValuePrivider(Field field, ParameterExpression root, Expression parent,string propertyName) {
-			Expression<Func<T,K>> lambda = null;		
-		    lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
-			compiledMethod = lambda.Compile();
-			this.field = field;
-		    this.field.expression = lambda;			
-		}
+		public string Name {get;set;}
 		
-		protected Field field = null;
- 
-		public  object GetValue (object current)
-		{			
-			if (compiledMethod == null) {	
-				Compile();				 
-			}
-			
-			object returnVal = null;
-			
-			try {
-				returnVal = compiledMethod((T)current);
-			}catch(Exception exp){
-				Console.WriteLine(exp);
-			}
-			
-			return returnVal;
-		}			
-
-				
+		public Type Type {get;set;}
 		
-		public void Compile() {
-			compiledMethod = (Func<T,K>) (field.expression as LambdaExpression).Compile ();		 
-		}
 		
-		protected Func<T,K> compiledMethod;
 	}
-
- 
 }
 

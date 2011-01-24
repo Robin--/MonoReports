@@ -49,7 +49,7 @@ namespace MonoReports.Gui.Widgets
 		Gtk.TreeStore theModel;
 		
 		Gtk.TreeIter reportNode;
-		Gtk.TreeIter staticDataFieldsNode;
+		Gtk.TreeIter expressionsNode;
 		Gtk.TreeIter dataFieldsNode;
 		Gtk.TreeIter groupsNode;
 		Gtk.TreeIter parametersNode;
@@ -79,16 +79,19 @@ namespace MonoReports.Gui.Widgets
 
 		void HandleDesignServiceOnReportDataFieldsRefreshed (object sender, EventArgs e)
 		{
-			updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
-			updateTreeNode(parametersNode,designService.Report.Parameters); 
+			updateTreeNode (parametersNode,designService.Report.Parameters); 
+			updateTreeNode (dataFieldsNode,designService.Report.DataFields); 			
+			updateTreeNode (expressionsNode,designService.Report.ExpressionFields); 
 		}
  
 		void HandleDesignServiceOnReportChanged (object sender, EventArgs e)
-		{			
-			updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
-			updateTreeNode(parametersNode,designService.Report.Parameters); 
-			updateTreeNode(groupsNode,designService.Report.Groups); 
-			updateTreeNode(imagesNode,designService.Report.ResourceRepository); 
+		{		
+			
+			updateTreeNode (parametersNode,designService.Report.Parameters); 
+			updateTreeNode (dataFieldsNode,designService.Report.DataFields); 			
+			updateTreeNode (expressionsNode,designService.Report.ExpressionFields); 
+			updateTreeNode (groupsNode,designService.Report.Groups); 
+			updateTreeNode (imagesNode,designService.Report.ResourceRepository); 
 		}
 
 		public IWorkspaceService Workspace {get; set;}
@@ -107,18 +110,9 @@ namespace MonoReports.Gui.Widgets
 			reportNode =  theModel.AppendValues(new TreeItemWrapper("Report"));
 			parametersNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Parameters"));
 			dataFieldsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Data"));
-			staticDataFieldsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Expressions"));
+			expressionsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Expressions"));
 			
-			var pageNumberField = MonoReports.Model.Data.FieldBuilder.CreateFields(0,"#PageNumber",FieldKind.Expression).Single();
-			pageNumberField.Name = "#PageNumber";
-			var numberOfPagesField = MonoReports.Model.Data.FieldBuilder.CreateFields(0,"#NumberOfPages",FieldKind.Expression).Single();
-			numberOfPagesField.Name = "#NumberOfPages";
-			var rowNumberField = MonoReports.Model.Data.FieldBuilder.CreateFields(0,"#RowNumber",FieldKind.Expression).Single();
-			rowNumberField.Name = "#RowNumber";
-			
-			theModel.AppendValues (staticDataFieldsNode, new TreeItemWrapper(pageNumberField));
-			theModel.AppendValues (staticDataFieldsNode, new TreeItemWrapper(numberOfPagesField));
-			theModel.AppendValues (staticDataFieldsNode, new TreeItemWrapper(rowNumberField));		
+ 		
 			groupsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Groups"));
 			imagesNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Images"));
 			exporerTreeview.Selection.Changed += HandleExporerTreeviewSelectionChanged;
@@ -210,10 +204,13 @@ namespace MonoReports.Gui.Widgets
 					if ((index == 2 || index == 1 || index == 0) && path.Depth == 2) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						if (index == 1) {
-							addNewMenuItem = new MenuItem ("add field");
+							addNewMenuItem = new MenuItem ("Add data field");
 								
-						} else {
-							addNewMenuItem = new MenuItem ("add parameter");								
+						} else if (index == 0){
+							addNewMenuItem = new MenuItem ("Add parameter field");								
+						}
+						else if (index == 2){
+							addNewMenuItem = new MenuItem ("Add expression field");								
 						}
 						jBox.Add (addNewMenuItem);		
 								
@@ -221,13 +218,48 @@ namespace MonoReports.Gui.Widgets
 							PropertyFieldEditor pfe = new PropertyFieldEditor ();
 							pfe.Response += delegate(object oo, ResponseArgs argss) {						
 								if (argss.ResponseId == ResponseType.Ok) {
-									if (index == 1){
-										DesignService.Report.DataFields.Add (new Field (){ FieldKind = FieldKind.Data, Name = pfe.PropertyName});
+									if (index == 0){
+										DesignService
+										.Report
+										.Parameters
+										.Add (
+											new Field () {
+												FieldKind = FieldKind.Parameter,
+												Name = pfe.PropertyName,
+												DefaultValue = pfe.DefaultValue 
+												}
+										);
+										updateTreeNode(parametersNode,designService.Report.Parameters); 	
+		
+									} else if (index == 1){
+										DesignService
+										.Report
+										.DataFields
+										.Add (
+											new Field () { 
+												FieldKind = FieldKind.Data,
+												Name = pfe.PropertyName
+												}
+										);
+											
 										updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
-			
-									}else {
-										DesignService.Report.Parameters.Add (new Field(){FieldKind = FieldKind.Parameter, Name = pfe.PropertyName, DefaultValue = pfe.DefaultValue });
-										updateTreeNode(parametersNode,designService.Report.Parameters); 
+											
+									} else if (index == 2){
+										ExpressionField f =  new ExpressionField () {
+												FieldKind = FieldKind.Expression,
+												Name = pfe.PropertyName,											
+												DefaultValue = pfe.DefaultValue};
+										
+										f.DataProvider = new ExpressionFieldValueProvider(f);
+							
+										DesignService
+										.Report
+										.ExpressionFields
+										.Add (
+											f
+										);
+											
+										updateTreeNode(expressionsNode,designService.Report.ExpressionFields); 
 									}
 									
 									pfe.Destroy ();
@@ -242,10 +274,19 @@ namespace MonoReports.Gui.Widgets
 						jBox.ShowAll ();
 						jBox.Popup ();	
 						
-					}else if ( (index == 0 || index == 1 )  && path.Depth == 3) {
+					}else if ( (index == 0 || index == 1 || index == 2 )  && path.Depth == 3) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						 
-						Gtk.MenuItem deleteFieldItem = new MenuItem ( index == 0 ? "delete parameter" : "delete data field");
+						
+						string menuText = String.Empty;
+						if (index == 0)
+							menuText = "Delete parameter field";
+						else if (index == 2)
+							menuText = "Delete data field";
+						else if (index == 2)
+							menuText = "Delete expression field";
+							
+						Gtk.MenuItem deleteFieldItem = new MenuItem (menuText);
 						 
 						jBox.Add (deleteFieldItem);		
 								
@@ -257,9 +298,12 @@ namespace MonoReports.Gui.Widgets
 							if (index == 0) {
 								designService.Report.Parameters.Remove(f);
  								updateTreeNode(parametersNode,designService.Report.Parameters); 
-							} else {
+							} else if ( index == 1 ) {
 								designService.Report.DataFields.Remove(f);
  								updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
+							} else if ( index == 2 ) {
+								designService.Report.ExpressionFields.Remove(f);
+ 								updateTreeNode(expressionsNode,designService.Report.DataFields); 	
 							}
 							Workspace.ShowInPropertyGrid(null);
 						}; 
@@ -328,12 +372,15 @@ namespace MonoReports.Gui.Widgets
 					if (path.Depth == 3) {
 						int index = path.Indices [1];
 						try{
-						if (index == 1) {
-							Workspace.ShowInPropertyGrid( designService.Report.DataFields[path.Indices[2]]);
-						} else if (index == 0) {
-							Workspace.ShowInPropertyGrid( designService.Report.Parameters[path.Indices[2]]);
+						if (index == 0) {								
+							Workspace.ShowInPropertyGrid (designService.Report.Parameters [path.Indices [2]]);
+						} else if (index == 1) {
+							Workspace.ShowInPropertyGrid (designService.Report.DataFields [path.Indices [2]]);
+						} else if (index == 2) {
+							Workspace.ShowInPropertyGrid (designService.Report.ExpressionFields [path.Indices [2]]);
 						}
-						}catch(Exception exp){
+							
+						}catch (Exception exp){
 							//3tk to be found why sometimes can't be show in PG
 							Console.WriteLine(exp.ToString());
 						}

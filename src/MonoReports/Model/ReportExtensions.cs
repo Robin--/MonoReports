@@ -57,7 +57,13 @@ namespace MonoReports.Model
 					})  
 				});
 				report.CopyToReport(r);
-				file.Close ();				 
+				file.Close ();	
+				
+				foreach(var ef in r.ExpressionFields){
+					if(ef is ExpressionField)
+						ef.DataProvider = new ExpressionFieldValueProvider(ef as ExpressionField);				
+			}	
+			
 			}
 		}
 		
@@ -71,7 +77,11 @@ namespace MonoReports.Model
 			
 			foreach(var df in report.DataFields){
 				df.DataProvider = null;				
-			}		
+			}	
+			
+			foreach(var ef in report.ExpressionFields){
+				ef.DataProvider = null;				
+			}	
 			
 			report.Pages.Clear();
 			report.DataSource = null;

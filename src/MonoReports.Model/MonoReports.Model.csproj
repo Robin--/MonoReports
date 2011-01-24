@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="Mono.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -83,6 +84,10 @@
     <Compile Include="Engine\SectionProcessingContext.cs" />
     <Compile Include="Data\PropertyFieldValuePrivider.cs" />
     <Compile Include="Data\SimplePropertyFieldValuePrivider.cs" />
+    <Compile Include="Data\ExpressionFieldValueProvider.cs" />
+    <Compile Include="Data\MonoreportsInteractiveBase.cs" />
+    <Compile Include="Data\Total.cs" />
+    <Compile Include="Data\ExpressionField.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

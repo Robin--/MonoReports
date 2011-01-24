@@ -31,8 +31,6 @@ namespace MonoReports.Model.Data
 {
 	public class  Field
 	{
-		 
-
 		public virtual string Name {
 			get;
 			set;
@@ -49,13 +47,15 @@ namespace MonoReports.Model.Data
 		
 		public Type FieldType {get;set;}
 		
+		
+		
 		public FieldKind FieldKind {get;set;}
  
 		public override string ToString(){
 			return Name;
 		}
 		
-		public string GetStringValue (object current, string format)
+		public  string GetStringValue (object current, string format)
 		{			
  
 			string returnVal = String.Empty;

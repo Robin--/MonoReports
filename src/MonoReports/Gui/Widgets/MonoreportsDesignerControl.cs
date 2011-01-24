@@ -72,7 +72,14 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	public MonoreportsDesignerControl ()  
 	{
 		Build ();
-  
+  if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
+				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
+				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
+				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
+				Mono.CSharp.Evaluator.Run("using System;");
+				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
+			}
 		
 		Report startReport = newReportTemplate();
 		
@@ -172,11 +179,33 @@ parameters.Add(""Param"",new { Title = ""The Logicans"", SubTitle = ""...and the
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Name"});
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Surname"});
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(int), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Age"});
+			 
+			var ef = new MonoReports.Model.Data.ExpressionField() { Name = "#RowNumber"};
+			ef.ExpressionScript = "RowIndex;";
+			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
+			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
+			r.ExpressionFields.Add(ef);
+			
+			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#PageNumber"};
+			ef.ExpressionScript = "CurrentPageIndex;";
+			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
+			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
+			r.ExpressionFields.Add(ef);
+			
+			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#NumberOfPages"};
+			ef.ExpressionScript = "CurrentPageIndex;";
+			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
+			ef.IsEvaluatedAfterProcessing = true;
+			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
+			r.ExpressionFields.Add(ef);
+			
+			
 			return r;
 	}
 		
 	protected virtual void OnMainPropertygridChanged (object sender, System.EventArgs e)
 	{
+		designService.IsDirty = true;
 		workspaceService.InvalidateDesignArea();
 	}
 

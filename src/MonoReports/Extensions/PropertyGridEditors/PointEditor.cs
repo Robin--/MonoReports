@@ -80,7 +80,7 @@ namespace MonoReports.Extensions.PropertyGridEditors
 						s = s.Replace("[",String.Empty);
 						s = s.Replace("]",String.Empty);
 					    var doubles =  s.Split(';');
-					    point = new Point(double.Parse(doubles[0]),double.Parse(doubles[1])); 
+					    point = new Point( UnitExtensions.FromString( doubles[0]), UnitExtensions.FromString(doubles[1])); 
 					}
 					if (ValueChanged != null)
 						ValueChanged (this, a);

@@ -62,6 +62,10 @@ public partial class MainWindow: Gtk.Window
 	protected virtual void OnCopyAction1Activated (object sender, System.EventArgs e)
 	{
 		monoreportsdesignercontrol1.DesignService.Copy();
+	//	if(this.Focus != null)
+	//		this.Focus.
+				
+			 
 		
 	}
 	

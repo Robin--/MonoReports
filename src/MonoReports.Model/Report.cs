@@ -45,6 +45,7 @@ namespace MonoReports.Model
 			ExpressionFields = new List<Field> ();
 			GroupHeaderSections = new List<GroupHeaderSection> ();
 			GroupFooterSections = new List<GroupFooterSection> ();
+			Totals = new List<Total>();
 			Pages = new List<Page> ();
 			ResourceRepository = new Dictionary<string,byte[]> ();
 			ReportHeaderSection = new Controls.ReportHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 10.mm()) };
@@ -71,6 +72,8 @@ namespace MonoReports.Model
 		public ReportFooterSection ReportFooterSection { get; set; }
 
 		public DetailSection DetailSection { get; internal set; }
+		
+		public List<Total> Totals { get; set; }
 
 		public List<GroupHeaderSection> GroupHeaderSections { get; set; }
 
@@ -272,6 +275,9 @@ namespace MonoReports.Model
 			}
 			foreach (var df in DataFields) {
 				r.DataFields.Add (df);
+			}
+			foreach (var ef in ExpressionFields) {
+				r.ExpressionFields.Add (ef);
 			}
 		}
 

@@ -199,7 +199,7 @@ namespace MonoReports.Services
 			Report = report;
 			Zoom = 1;
 			Render = true;	
-			IsDirty = true;			
+			IsDirty = true;				
 		}
 
 		void initReport ()
@@ -245,6 +245,7 @@ namespace MonoReports.Services
 			var sectionView = getSectionViewByXY (point);
 			
 			if (sectionView != null) {
+				IsDirty = true;
 				var localpoint = sectionView.PointInSectionByAbsolutePoint (point);	
 				ToolBoxService.SetToolByName ("TextBlockTool");							
 				SelectedTool.CreateNewControl (sectionView);
@@ -267,6 +268,7 @@ namespace MonoReports.Services
 			SelectedTool.CreateNewControl (sectionView);
 			var image = (SelectedControl.ControlModel as MonoReports.Model.Controls.Image);
 			image.ImageKey = imageKey;
+			IsDirty = true;
 			if(PixbufRepository.ContainsKey(imageKey)){
 				image.Width =  PixbufRepository.pixbufDictionary[imageKey].Width / Renderer.UnitMultipilier;
 				image.Height = PixbufRepository.pixbufDictionary[imageKey].Height / Renderer.UnitMultipilier;
@@ -346,7 +348,7 @@ namespace MonoReports.Services
         {
 			if(!isDesign)
 				return;
-			
+			IsDirty = true;
             var clipboard = Gtk.Clipboard.Get(Gdk.Atom.Intern("monoreports_control",false));
             if (clipboard != null)
             {
@@ -388,7 +390,7 @@ namespace MonoReports.Services
                     }
                     newControl.Left = newLeft;
                     newControl.Top = newTop;
-                    //3tk todo dirty hack - there should be easier wy to get default tool for control
+                    //3tk TODO dirty hack - find easier way to get default tool for control
                     //see lineTool for corner cases before implement
                     var newControlView = controlViewFactory.CreateControlView(newControl, SelectedSection);
                     ToolBoxService.SetToolByName (newControlView.DefaultToolName);

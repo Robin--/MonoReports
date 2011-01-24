@@ -51,7 +51,8 @@ namespace MonoReports.Model.Engine
 		public bool IsSubreport { get; set; }
 		bool dataSourceHasNextRow = true;
 		bool stop = false;
-		Dictionary<string, Field> parameters;
+		public static bool EvaluatorInitWasDone {get;set;}
+		List<IDataControl> controlsToEvalAfterReportProcessing = null;
 
 		public ReportEngine (Report report,IReportRenderer renderer)
 		{
@@ -59,7 +60,7 @@ namespace MonoReports.Model.Engine
 			source = Report._dataSource;
 			pageFooterControls = new List<Control> ();
 			sectionContextDictionary = new Dictionary<string, SectionProcessingContext> ();
-			parameters = Report.Parameters.ToDictionary (rp => rp.Name);
+			controlsToEvalAfterReportProcessing = new List<IDataControl>();
 			if (source == null)
 				source = new DummyDataSource ();
 			ReportRenderer = renderer;         
@@ -69,10 +70,20 @@ namespace MonoReports.Model.Engine
 				int index = (efld != null ? report.ExpressionFields.IndexOf (efld) : -1);
 				groupInfos.Add (new GroupInfo () { ExpressionFieldIndex = index });
 			}
-			context = new ReportContext { RendererContext = renderer.RendererContext, CurrentPageIndex = 0, DataSource = null, Parameters = new Dictionary<string, string>(), ReportMode = ReportMode.Preview };
+			context = new ReportContext(report) { RendererContext = renderer.RendererContext, CurrentPageIndex = 0, DataSource = source, ReportMode = ReportMode.Preview };
 			Report.Pages = new List<Page> ();
 			nextPage ();
 			selectCurrentStateByTemplateSection (Report.PageFooterSection);
+			
+			if (!ReportEngine.EvaluatorInitWasDone) {
+				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
+				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
+				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoreportsInteractiveBase));
+				Mono.CSharp.Evaluator.Run("using System;");
+				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+				EvaluatorInitWasDone = true;
+			} 
+			MonoreportsInteractiveBase.ReportContext = context;
 		}
 
 		public void Process ()
@@ -83,17 +94,14 @@ namespace MonoReports.Model.Engine
 			while (!ProcessReportPage ()) {
 				nextPage ();
 			}
-			for (int i = 0; i < Report.Pages.Count; i++) {
-				foreach (var item in Report.Pages [i].Controls) {
-					if (item is IDataControl) {
-						IDataControl dc = item as IDataControl;
-						try{
-							if (dc.FieldName == "#NumberOfPages") 
-								dc.Text = string.Format (string.IsNullOrEmpty (dc.FieldTextFormat) ? "{0}" : dc.FieldTextFormat, Report.Pages.Count);
-						} catch {}						
-					}
-				}
+			 
+			foreach (var dc in controlsToEvalAfterReportProcessing) {
+				try {
+					if (context.ExpressionFieldsDict.ContainsKey (dc.FieldName)) 
+						dc.Text = context.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
+					} catch {}						
 			}
+			 
 			if (source != null)
 				source.Reset ();
 
@@ -228,24 +236,21 @@ namespace MonoReports.Model.Engine
 
 						switch (dataControl.FieldKind) {
 						case FieldKind.Parameter:
-							if (parameters.ContainsKey (dataControl.FieldName)) {
-								var parameter = parameters [dataControl.FieldName];
+							if (context.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
+								var parameter = context.ParameterFieldsDict [dataControl.FieldName];
 								dataControl.Text = parameter.GetStringValue (null, dataControl.FieldTextFormat);
 							}
 							break;
 						case FieldKind.Expression:
-							if (dataControl.FieldName == "#PageNumber") {
-								try {
-									dataControl.Text = string.Format (string.IsNullOrEmpty (dataControl.FieldTextFormat) ? "{0}" : dataControl.FieldTextFormat, context.CurrentPageIndex);
-								} catch {
-								}
-							} else if (dataControl.FieldName == "#RowNumber") {
-								try {
-									dataControl.Text = string.Format (string.IsNullOrEmpty (dataControl.FieldTextFormat) ? "{0}" : dataControl.FieldTextFormat, context.RowIndex);
-								} catch {
-								}
+							if (context.ExpressionFieldsDict.ContainsKey (dataControl.FieldName)) {
+							 
+								var expression = context.ExpressionFieldsDict [dataControl.FieldName] as ExpressionField;
+								
+								if(!expression.IsEvaluatedAfterProcessing)
+									dataControl.Text = expression.GetStringValue (dataControl.FieldName, dataControl.FieldTextFormat);
+								else
+									controlsToEvalAfterReportProcessing.Add(dataControl);
 							}
-
 							break;
 						case FieldKind.Data:
 							if (source.ContainsField (dataControl.FieldName))

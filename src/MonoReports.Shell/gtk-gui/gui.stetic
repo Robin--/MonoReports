@@ -10,6 +10,13 @@
     <widget-library name="../../Propertygrid/bin/Debug/Propertygrid.dll" />
     <widget-library name="../../../build/MonoReports.Shell.exe" internal="true" />
   </import>
+  <icon-factory>
+    <icon-set id="gtk-media-play">
+      <source>
+        <property name="Image">stock:gtk-media-play Menu</property>
+      </source>
+    </icon-set>
+  </icon-factory>
   <widget class="Gtk.Window" id="MainWindow" design-size="1082 759">
     <action-group name="Default">
       <action id="copyAction">

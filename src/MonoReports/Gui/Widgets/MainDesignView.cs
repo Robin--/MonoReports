@@ -37,6 +37,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using MonoReports.Model.Data;
 using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Text;
 
 
 namespace MonoReports.Gui.Widgets
@@ -142,9 +144,27 @@ namespace MonoReports.Gui.Widgets
 			
 			previewDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
 			DesignDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
+			StringWriter messageOutput = new StringWriter ();
+		 
+			
+			GuiStream error_stream = new GuiStream ("Error", (x, y) => Output (x, y));
+			StreamWriter gui_output = new StreamWriter (error_stream);
+			gui_output.AutoFlush = true;
+			Console.SetError (gui_output);
+			
+			GuiStream stdout_stream = new GuiStream ("Stdout", (x, y) => Output (x, y));
+			gui_output = new StreamWriter (stdout_stream);
+			gui_output.AutoFlush = true;
+			Console.SetOut (gui_output);
+		 
 		}
-				
-
+	
+					
+		public void Output (string kind, string s)
+		{
+			TextIter end = outputTextview.Buffer.EndIter;
+			outputTextview.Buffer.InsertWithTagsByName (ref end, s, kind);
+		}
 	
 		void buildPreviewToolbar ()
 		{
@@ -279,6 +299,38 @@ namespace MonoReports.Gui.Widgets
 		}
 		
 		
+	}
+	
+	/// <summary>
+	/// Taken from GsSharp https://github.com/mono/mono-tools/blob/master/gsharp/Shell.cs
+	/// </summary>
+	public class GuiStream : Stream {
+		string kind;
+		Action<string,string> callback;
+
+		public GuiStream (string k, Action<string, string> cb)
+		{
+			kind = k;
+			callback = cb;
+		}
+
+		public override bool CanRead { get { return false; } }
+		public override bool CanSeek { get { return false; } }
+		public override bool CanWrite { get { return true; } }
+
+
+		public override long Length { get { return 0; } } 
+		public override long Position { get { return 0; } set {} }
+		public override void Flush () { }
+		public override int Read  ( byte[] buffer, int offset, int count) { return -1; }
+
+		public override long Seek (long offset, SeekOrigin origin) { return 0; }
+
+		public override void SetLength (long value) { }
+
+		public override void Write (byte[] buffer, int offset, int count) {
+			callback (kind, Encoding.UTF8.GetString (buffer, offset, count));
+		}
 	}
 }
 

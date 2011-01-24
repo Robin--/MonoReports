@@ -111,22 +111,22 @@ namespace MonoReports.Model
 		
 		static DoubleConverter converter = new DoubleConverter();
 		
-		public static double FromString( string text){
+		public static double FromString (string text) {
 			double val = 0;
-				if(text.EndsWith("mm")) {
-						text = text.Replace("mm",string.Empty);
+				if (text.EndsWith ("mm")) {
+						text = text.Replace ("mm",string.Empty);
 						val = (double)  converter.ConvertFromString (text);
 						return val.mm();
-					}else if(text.EndsWith("cm")){
-						text = text.Replace("cm",string.Empty);
+					}else if (text.EndsWith ("cm")){
+						text = text.Replace ("cm",string.Empty);
 						val = (double)  converter.ConvertFromString (text);
 						return val.cm();
-					}else if(text.EndsWith("in")){
-						text = text.Replace("in",string.Empty);
+					}else if(text.EndsWith ("in")) {
+						text = text.Replace ("in",string.Empty);
 						val = (double)  converter.ConvertFromString (text);
-						return val.inch();
-					}else if(text.EndsWith("pt")){
-						text = text.Replace("pt",string.Empty);
+						return val.inch ();
+					}else if(text.EndsWith ("pt")){
+						text = text.Replace ("pt",string.Empty);
 						val = (double)  converter.ConvertFromString (text);
 						return val.pt();
 					}

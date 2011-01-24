@@ -1,10 +1,10 @@
 // 
-// PropertyDataField.cs
+// ExpressionFieldValueProvider.cs
 //  
 // Author:
-//       Tomasz Kubacki <tomasz (dot ) kubacki (at) gmail (dot) com>
+//       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
 // 
-// Copyright (c) 2010 Tomasz Kubacki
+// Copyright (c) 2011 Tomasz Kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,54 +24,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Reflection;
 using System.Linq.Expressions;
+using System.Reflection;
+
 
 namespace MonoReports.Model.Data
 {
-	public class PropertyFieldValuePrivider<T,K> : IFieldValueProvider
+	public class ExpressionFieldValueProvider : IFieldValueProvider
 	{
+		
+		public ExpressionFieldValueProvider(ExpressionField field) { 
+			this.field =  field;
+			Refresh();
+		}
+		
+		public void Refresh(){
+			
+			if(!string.IsNullOrEmpty( field.ExpressionScript ))
+				cm = Mono.CSharp.Evaluator.Compile(field.ExpressionScript);
+		}
+		
+		ExpressionField field = null;
+		Mono.CSharp.CompiledMethod cm = null;
+		
+		#region IFieldValueProvider implementation
+		public object GetValue (object current)
+		{
+			object retVal = new object();	
+			if(cm != null)
+				cm(ref retVal);
+			else
+				retVal = field.DefaultValue;
+			
+			return retVal;			
+		}
+		#endregion		
  
-		public PropertyFieldValuePrivider(){
-			 
-		}
-		
-		public PropertyFieldValuePrivider(Field field, ParameterExpression root, Expression parent,string propertyName) {
-			Expression<Func<T,K>> lambda = null;		
-		    lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
-			compiledMethod = lambda.Compile();
-			this.field = field;
-		    this.field.expression = lambda;			
-		}
-		
-		protected Field field = null;
- 
-		public  object GetValue (object current)
-		{			
-			if (compiledMethod == null) {	
-				Compile();				 
-			}
-			
-			object returnVal = null;
-			
-			try {
-				returnVal = compiledMethod((T)current);
-			}catch(Exception exp){
-				Console.WriteLine(exp);
-			}
-			
-			return returnVal;
-		}			
-
-				
-		
-		public void Compile() {
-			compiledMethod = (Func<T,K>) (field.expression as LambdaExpression).Compile ();		 
-		}
-		
-		protected Func<T,K> compiledMethod;
 	}
-
- 
 }
 
