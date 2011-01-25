@@ -28,9 +28,7 @@ Monoreports current version is 0.1.1
 
 Question - Help etc.
 ----------------------------
-Monoreports has it's own google group here:
-
-https://groups.google.com/group/monoreports
+Monoreports has it's own [Monoreports google group](https://groups.google.com/group/monoreports)
 
 Youtube demo (outdated)
 -----------
