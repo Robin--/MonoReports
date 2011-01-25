@@ -23,10 +23,16 @@ Simple code generated report example:
 - reporting engine is not tightly coupled with gtk/cairo stuff, therefore it's reasonably easy to write new export backends (e.g. html, xls etc)
 
 Status
-------
+----------
 Monoreports current version is 0.1.1
 
-Youtube demo
+Question - Help etc.
+----------------------------
+Monoreports has it's own google group here:
+
+https://groups.google.com/group/monoreports
+
+Youtube demo (outdated)
 -----------
 There is a [six minutes monoreports demo on youtube](http://www.youtube.com/watch?v=P7jHXFyMstM) 
 (a bit old version in demo)
