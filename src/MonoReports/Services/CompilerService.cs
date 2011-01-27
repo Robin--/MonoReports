@@ -58,7 +58,7 @@ namespace MonoReports.Services
 				
 		}
 
-		public bool Evaluate (out object result,out string message, object[] inputs)
+		public bool Evaluate (out object result,out string message,string[] codeTemplateValues)
 		{
 			cmp = new LanguageCompiler (LangType.CSharp,false,true,true);
 			foreach(string refAsm in References)
@@ -68,7 +68,7 @@ namespace MonoReports.Services
 			message = String.Empty;
 			result = new  object ();
 			try {
-				cmp.Code = String.Format(CodeTemplate,inputs);				
+				cmp.Code = String.Format(CodeTemplate,codeTemplateValues);				
 			}catch(Exception exp){
 				message = exp.ToString();
 				return false;

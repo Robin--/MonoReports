@@ -202,11 +202,18 @@
         <property name="StockId">gtk-about</property>
         <signal name="Activated" handler="OnAboutActionActivated" />
       </action>
-      <action id="SettingsAction">
+      <action id="PreferencesAction">
         <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Settings</property>
-        <property name="ShortLabel" translatable="yes">Settings</property>
-        <signal name="Activated" handler="OnSettingsActionActivated" />
+        <property name="Label" translatable="yes">Preferences</property>
+        <property name="ShortLabel" translatable="yes">Preferences</property>
+        <signal name="Activated" handler="OnPreferencesActionActivated" />
+      </action>
+      <action id="zoom100Action1">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Zwykły rozmiar</property>
+        <property name="ShortLabel" translatable="yes">_Zwykły rozmiar</property>
+        <property name="StockId">gtk-zoom-100</property>
+        <signal name="Activated" handler="OnZoom100ActionActivated" />
       </action>
     </action-group>
     <property name="MemberName" />
@@ -235,12 +242,12 @@
                 <node type="Menuitem" action="copyAction1" />
                 <node type="Menuitem" action="pasteAction1" />
                 <node type="Menuitem" action="deleteAction" />
-                <node type="Menuitem" action="SettingsAction" />
+                <node type="Menuitem" action="PreferencesAction" />
               </node>
               <node type="Menu" action="ViewAction">
                 <node type="Menuitem" action="zoomInAction" />
                 <node type="Menuitem" action="zoomOutAction" />
-                <node type="Menuitem" action="zoom100Action" />
+                <node type="Menuitem" action="zoom100Action1" />
               </node>
               <node type="Menu" action="ProjectAction">
                 <node type="Menuitem" action="mediaPlayAction" />

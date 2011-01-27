@@ -146,9 +146,6 @@ namespace MonoReports.Gui.Widgets
 			
 			previewDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
 			DesignDrawingArea.ModifyBg(Gtk.StateType.Normal,base.Style.Background (StateType.Insensitive));
-			StringWriter messageOutput = new StringWriter ();
-		 
-			
 			GuiStream error_stream = new GuiStream ("Error", (x, y) => Output (x, y));
 			StreamWriter gui_output = new StreamWriter (error_stream);
 			gui_output.AutoFlush = true;

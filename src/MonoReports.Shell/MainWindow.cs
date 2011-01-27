@@ -118,9 +118,9 @@ public partial class MainWindow: Gtk.Window
 		monoreportsdesignercontrol1.DesignService.DeleteSelectedControl();
 	}
 	
-	protected virtual void OnSettingsActionActivated (object sender, System.EventArgs e)
+	protected virtual void OnPreferencesActionActivated (object sender, System.EventArgs e)
 	{
-		monoreportsdesignercontrol1.Settings();
+		monoreportsdesignercontrol1.Preferences();
 	}
 	
 	

@@ -199,7 +199,7 @@ namespace MonoReports.Gui.Widgets
 					Gtk.MenuItem addNewMenuItem = null;
 					if(path.Depth > 1 ) {
 					int index = path.Indices [1];
-					if ((index == 2 || index == 1 || index == 0) && path.Depth == 2) {
+					if ((index == 0 || index == 1) && path.Depth == 2) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						if (index == 1) {
 							addNewMenuItem = new MenuItem ("Add data field");
@@ -207,9 +207,7 @@ namespace MonoReports.Gui.Widgets
 						} else if (index == 0){
 							addNewMenuItem = new MenuItem ("Add parameter field");								
 						}
-						else if (index == 2){
-							addNewMenuItem = new MenuItem ("Add expression field");								
-						}
+						
 						jBox.Add (addNewMenuItem);		
 								
 						addNewMenuItem.Activated += delegate(object sender, EventArgs e) {					
@@ -242,11 +240,33 @@ namespace MonoReports.Gui.Widgets
 											
 										updateTreeNode(dataFieldsNode,designService.Report.DataFields); 
 											
-									} else if (index == 2){
+									} 
+									
+								}
+									
+								pfe.Destroy ();
+								
+							};
+							pfe.Show ();
+						}; 
+						
+						jBox.ShowAll ();
+						jBox.Popup ();	
+						
+					}else if (index == 2 && path.Depth == 2) {
+						Gtk.Menu jBox = new Gtk.Menu ();
+						addNewMenuItem = new MenuItem ("Add expression field");								
+						jBox.Add (addNewMenuItem);		
+								
+						addNewMenuItem.Activated += delegate(object sender, EventArgs e) {					
+							ExpressionFieldEditor efe = new ExpressionFieldEditor ();
+							efe.Response += delegate(object oo, ResponseArgs argss) {						
+								if (argss.ResponseId == ResponseType.Ok) {
+									  if (index == 2){
 										ExpressionField f =  new ExpressionField () {
 												FieldKind = FieldKind.Expression,
-												Name = pfe.PropertyName,											
-												DefaultValue = pfe.DefaultValue};
+												Name = efe.PropertyName,											
+												ExpressionScript = efe.ExpressionScript};
 										
 										f.DataProvider = new ExpressionFieldValueProvider(f);
 							
@@ -260,13 +280,12 @@ namespace MonoReports.Gui.Widgets
 										updateTreeNode(expressionsNode,designService.Report.ExpressionFields); 
 									}
 									
-									pfe.Destroy ();
-									
-								}else {
-									pfe.Destroy ();
 								}
+									
+								efe.Destroy ();
+								
 							};
-							pfe.Show ();
+							efe.Show ();
 						}; 
 						
 						jBox.ShowAll ();
@@ -279,7 +298,7 @@ namespace MonoReports.Gui.Widgets
 						string menuText = String.Empty;
 						if (index == 0)
 							menuText = "Delete parameter field";
-						else if (index == 2)
+						else if (index == 1)
 							menuText = "Delete data field";
 						else if (index == 2)
 							menuText = "Delete expression field";

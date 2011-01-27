@@ -112,7 +112,7 @@ namespace MonoReports.Model
 		static DoubleConverter converter = new DoubleConverter();
 		
 		public static double FromString (string text) {
-			double val = 0;
+			double val = double.NaN;
 				if (text.EndsWith ("mm")) {
 						text = text.Replace ("mm",string.Empty);
 						val = (double)  converter.ConvertFromString (text);
@@ -130,7 +130,9 @@ namespace MonoReports.Model
 						val = (double)  converter.ConvertFromString (text);
 						return val.pt();
 					}
-			val = (double)  converter.ConvertFromString (text);
+			try{
+				val = (double)  converter.ConvertFromString (text);
+			}catch {}
 				
 			return val;
 		}

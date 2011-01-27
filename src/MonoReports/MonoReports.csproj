@@ -148,8 +148,6 @@
     <Compile Include="Tools\LineToolV.cs" />
     <Compile Include="Tools\LineToolH.cs" />
     <Compile Include="Extensions\PropertyGridEditors\ThicknessEditor.cs" />
-    <Compile Include="Gui\Widgets\ReportSettingsEditor.cs" />
-    <Compile Include="gtk-gui\MonoReports.Gui.Widgets.ReportSettingsEditor.cs" />
     <Compile Include="Extensions\PropertyGridEditors\PropertyGridExtensions.cs" />
     <Compile Include="Renderers\SectionRenderer.cs" />
     <Compile Include="Gui\Widgets\MonoreportsDesignerControl.cs" />
@@ -157,6 +155,10 @@
     <Compile Include="Model\ReportExtensions.cs" />
     <Compile Include="Core\MonoreportsSettings.cs" />
     <Compile Include="Extensions\PropertyGridEditors\DoubleMonoreportsConverter.cs" />
+    <Compile Include="Gui\Widgets\ExpressionFieldEditor.cs" />
+    <Compile Include="gtk-gui\MonoReports.Gui.Widgets.ExpressionFieldEditor.cs" />
+    <Compile Include="Gui\Widgets\PreferencesEditor.cs" />
+    <Compile Include="gtk-gui\MonoReports.Gui.Widgets.PreferencesEditor.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

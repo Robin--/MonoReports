@@ -35,6 +35,7 @@ using MonoReports.Model.Controls;
 using MonoReports.Model.Data;
 using MonoReports.Extensions.CairoExtensions;
 using System.Linq;
+using System.Text;
  
 
 namespace MonoReports.Model
@@ -137,8 +138,10 @@ public sealed class GenerateDataSource {{
 	  
 		public static bool EvalDataSourceScript(this Report report) {
  
-		MonoReports.Services.CompilerService compiler = new MonoReports.Services.CompilerService(ScriptTemplateForDataSourceEvaluation);
-		compiler.References.Add("Newtonsoft.Json.dll");
+			MonoReports.Services.CompilerService compiler = new MonoReports.Services.CompilerService(ScriptTemplateForDataSourceEvaluation);			 
+			foreach (string r in report.References) {
+				compiler.References.Add(r);
+			}
 			
 			return EvalDataSourceScript(report,compiler);
 			 
@@ -153,9 +156,25 @@ public sealed class GenerateDataSource {{
 			object result = null;
 			string message = null;			 
 			bool res = false;
-			string usings = "using Newtonsoft.Json.Linq;using System.Linq;";						
-		
-			if( compiler.Evaluate (out result, out message , new object[]{usings,code})  ) {				
+			StringBuilder stb = new StringBuilder();
+			stb.AppendLine("using Newtonsoft.Json.Linq;");
+			stb.AppendLine("using System.Linq;");
+			foreach (string s in report.Usings) {
+				stb.Append("using ");
+				stb.Append(s);				
+				stb.AppendLine(";");				
+			}
+			string usings = stb.ToString();
+			
+			compiler.References.Clear();  
+			compiler.References.Add("Newtonsoft.Json.dll");
+			compiler.References.Add("MonoReports.Model.dll");
+			foreach (string r in report.References) {
+				if(!compiler.References.Contains(r))
+					compiler.References.Add(r);
+			}
+
+			if( compiler.Evaluate (out result, out message , new string[]{usings,code})  ) {				
 				var ds = (result as object[]);
 				var datasource = ds[0] ;
  

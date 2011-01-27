@@ -42,6 +42,8 @@ namespace MonoReports.Model
 			Groups = new List<Group> ();			
 			Parameters = new List<Field> ();
 			DataFields = new List<Field> ();
+			References = new List<string>();
+			Usings = new List<string>();
 			ExpressionFields = new List<Field> ();
 			GroupHeaderSections = new List<GroupHeaderSection> ();
 			GroupFooterSections = new List<GroupFooterSection> ();
@@ -76,7 +78,9 @@ namespace MonoReports.Model
 						
 
 		public event AfterPageRender OnAfterPageRender;
+		
 		public event BeforePageRender OnBeforePageRender;
+		
 		public event AfterReportProcessing OnAfterReportProcessing;
 
 		public string Title { get; set; }
@@ -104,6 +108,10 @@ namespace MonoReports.Model
 		public List<Field> Parameters { get; private set; }
 
 		public List<Field> DataFields { get; private set; }
+		
+		public List<string> References { get; private set; }
+		
+		public List<string> Usings { get; private set; }
 
 		public List<Field> ExpressionFields { get; private set; }		
 
@@ -290,13 +298,14 @@ namespace MonoReports.Model
 			r.GroupFooterSections = GroupFooterSections;
 			r.Height = Height;
 			r.Width = Width;
-			r.Margin = Margin;				
-			foreach (var par in Parameters) {
-				r.Parameters.Add (par);
-			}
-			foreach (var df in DataFields) {
-				r.DataFields.Add (df);
-			}
+			r.Margin = Margin;	
+			r.Parameters.AddRange(Parameters);
+			r.DataFields.AddRange(DataFields);
+			r.Totals.AddRange(Totals);
+			r.References.AddRange(References);
+			r.Usings.AddRange(Usings);
+			 
+			 
 			foreach (var ef in ExpressionFields) {
 				if(!ef.Name.StartsWith("#"))
 					r.ExpressionFields.Add (ef);

@@ -89,7 +89,7 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 		double resolutionX = ((double)  Gdk.Screen.Default.Width) / ((double) Gdk.Screen.Default.WidthMm) * 25.4;
 		
 		compilerService = new CompilerService(ReportExtensions.ScriptTemplateForDataSourceEvaluation);
-		compilerService.References.Add("Newtonsoft.Json.dll");
+		
 			
 		pixbufRepository = new PixbufRepository () { Report = startReport };			
 		workspaceService = new WorkspaceService (this,maindesignview1.DesignDrawingArea,maindesignview1.PreviewDrawingArea,mainPropertygrid, StatusBarLabel);
@@ -303,10 +303,10 @@ THE SOFTWARE.
 		about.Show();
 	}
 	
-	public void Settings()
+	public void Preferences()
 	{
 		
-		ReportSettingsEditor reportSettingsEditor = new ReportSettingsEditor();
+		PreferencesEditor reportSettingsEditor = new PreferencesEditor();
 	
 		reportSettingsEditor.Report = designService.Report;
  

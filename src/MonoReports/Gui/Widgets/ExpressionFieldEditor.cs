@@ -1,10 +1,10 @@
 // 
-// ReportSettingsEditor.cs
+// ExpressionFieldEditor.cs
 //  
 // Author:
-//       Tomasz Kubacki <tomasz (dot ) kubacki (at) gmail (dot) com>
+//       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
 // 
-// Copyright (c) 2010 Tomasz Kubacki
+// Copyright (c) 2011 Tomasz Kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using MonoReports.Model;
-using MonoReports.Extensions.PropertyGridEditors;
-using MonoReports.Core;
 
 namespace MonoReports.Gui.Widgets
 {
-	public partial class ReportSettingsEditor : Gtk.Dialog
+	public partial class ExpressionFieldEditor : Gtk.Dialog
 	{
-		public ReportSettingsEditor ()
+		public ExpressionFieldEditor ()
 		{
 			this.Build ();
-			reportPropertygrid.LoadMonoreportsExtensions();
-			settingsPeportPropertygrid.LoadMonoreportsExtensions();
-			settingsPeportPropertygrid.CurrentObject =  new MonoreportsSettings();
+			buttonOk.Sensitive = false;	
 		}
 		
+		public String PropertyName {
+			get {return nameEntry.Text;  }
+			set {nameEntry.Text = value;  }
+		}
 		
-		 
-		public Report Report {
-			get { return reportPropertygrid.CurrentObject  as Report; }
-			set { 							
-				reportPropertygrid.CurrentObject = value;			
+		public String ExpressionScript {
+			get {return sciptTextview.Buffer.Text;  }
+			set {sciptTextview.Buffer.Text = value;  }
+		}
+		
+		protected virtual void OnNameEntryChanged (object sender, System.EventArgs e)
+		{
+			if(string.IsNullOrEmpty(nameEntry.Text)){
+				buttonOk.Sensitive = false;		
+			}else{
+				buttonOk.Sensitive = true;		
 			}
 		}
 	}
