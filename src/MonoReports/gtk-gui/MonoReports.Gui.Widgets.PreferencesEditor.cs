@@ -313,6 +313,7 @@ namespace MonoReports.Gui.Widgets
 			w26.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.alternativeRefEntry = new global::Gtk.Entry ();
+			this.alternativeRefEntry.TooltipMarkup = "This is alternative path for datascript  assemblies to be searched.";
 			this.alternativeRefEntry.CanFocus = true;
 			this.alternativeRefEntry.Name = "alternativeRefEntry";
 			this.alternativeRefEntry.IsEditable = true;

@@ -205,7 +205,7 @@ public sealed class GenerateDataSource {{
 			
 			foreach (string r in report.References) {
 				string toAdd = r;								
-				if (System.IO.File.Exists (r))
+				if (!System.IO.File.Exists (r))
 					if(!string.IsNullOrEmpty (report.AlternativeReferencedAssembliesPath))
 						toAdd = System.IO.Path.Combine (report.AlternativeReferencedAssembliesPath,System.IO.Path.GetFileName (r));
 				
