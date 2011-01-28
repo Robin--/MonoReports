@@ -124,6 +124,8 @@ namespace MonoReports.Model
 		public double HeightWithMargins {
 			get { return Height + Margin.Top + Margin.Bottom;}
 		}		
+		
+		public string AlternativeReferencedAssembliesPath {get;set;}
 
 		double width;
 
@@ -304,7 +306,7 @@ namespace MonoReports.Model
 			r.Totals.AddRange(Totals);
 			r.References.AddRange(References);
 			r.Usings.AddRange(Usings);
-			 
+			r.AlternativeReferencedAssembliesPath = AlternativeReferencedAssembliesPath; 
 			 
 			foreach (var ef in ExpressionFields) {
 				if(!ef.Name.StartsWith("#"))
