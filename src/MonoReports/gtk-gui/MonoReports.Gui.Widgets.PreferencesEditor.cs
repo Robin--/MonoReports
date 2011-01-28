@@ -31,6 +31,9 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.Entry usingEntry;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 		private global::Gtk.NodeView usingsNodeview;
+		private global::Gtk.HBox hbox2;
+		private global::Gtk.Label label11;
+		private global::Gtk.Entry alternativeRefEntry;
 		private global::Gtk.Label label2;
 		private global::PropertyGrid.PropertyGrid generalSettingsPropertygrid;
 		private global::Gtk.Label label3;
@@ -295,9 +298,36 @@ namespace MonoReports.Gui.Widgets
 			this.vbox4.Add (this.GtkScrolledWindow1);
 			global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.GtkScrolledWindow1]));
 			w25.Position = 5;
+			// Container child vbox4.Gtk.Box+BoxChild
+			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2.Name = "hbox2";
+			this.hbox2.Spacing = 6;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.label11 = new global::Gtk.Label ();
+			this.label11.Name = "label11";
+			this.label11.LabelProp = global::Mono.Unix.Catalog.GetString ("Alternative Refereces path");
+			this.hbox2.Add (this.label11);
+			global::Gtk.Box.BoxChild w26 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.label11]));
+			w26.Position = 0;
+			w26.Expand = false;
+			w26.Fill = false;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.alternativeRefEntry = new global::Gtk.Entry ();
+			this.alternativeRefEntry.CanFocus = true;
+			this.alternativeRefEntry.Name = "alternativeRefEntry";
+			this.alternativeRefEntry.IsEditable = true;
+			this.alternativeRefEntry.InvisibleChar = '•';
+			this.hbox2.Add (this.alternativeRefEntry);
+			global::Gtk.Box.BoxChild w27 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.alternativeRefEntry]));
+			w27.Position = 1;
+			this.vbox4.Add (this.hbox2);
+			global::Gtk.Box.BoxChild w28 = ((global::Gtk.Box.BoxChild)(this.vbox4 [this.hbox2]));
+			w28.Position = 6;
+			w28.Expand = false;
+			w28.Fill = false;
 			this.mainNotebook.Add (this.vbox4);
-			global::Gtk.Notebook.NotebookChild w26 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.vbox4]));
-			w26.Position = 1;
+			global::Gtk.Notebook.NotebookChild w29 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.vbox4]));
+			w29.Position = 1;
 			// Notebook tab
 			this.label2 = new global::Gtk.Label ();
 			this.label2.Name = "label2";
@@ -310,8 +340,8 @@ namespace MonoReports.Gui.Widgets
 			this.generalSettingsPropertygrid.ShowToolbar = false;
 			this.generalSettingsPropertygrid.ShowHelp = false;
 			this.mainNotebook.Add (this.generalSettingsPropertygrid);
-			global::Gtk.Notebook.NotebookChild w27 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.generalSettingsPropertygrid]));
-			w27.Position = 2;
+			global::Gtk.Notebook.NotebookChild w30 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.generalSettingsPropertygrid]));
+			w30.Position = 2;
 			// Notebook tab
 			this.label3 = new global::Gtk.Label ();
 			this.label3.Name = "label3";
@@ -319,14 +349,14 @@ namespace MonoReports.Gui.Widgets
 			this.mainNotebook.SetTabLabel (this.generalSettingsPropertygrid, this.label3);
 			this.label3.ShowAll ();
 			w1.Add (this.mainNotebook);
-			global::Gtk.Box.BoxChild w28 = ((global::Gtk.Box.BoxChild)(w1 [this.mainNotebook]));
-			w28.Position = 0;
+			global::Gtk.Box.BoxChild w31 = ((global::Gtk.Box.BoxChild)(w1 [this.mainNotebook]));
+			w31.Position = 0;
 			// Internal child MonoReports.Gui.Widgets.PreferencesEditor.ActionArea
-			global::Gtk.HButtonBox w29 = this.ActionArea;
-			w29.Name = "dialog1_ActionArea";
-			w29.Spacing = 10;
-			w29.BorderWidth = ((uint)(5));
-			w29.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w32 = this.ActionArea;
+			w32.Name = "dialog1_ActionArea";
+			w32.Spacing = 10;
+			w32.BorderWidth = ((uint)(5));
+			w32.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
@@ -336,14 +366,14 @@ namespace MonoReports.Gui.Widgets
 			this.buttonOk.UseUnderline = true;
 			this.buttonOk.Label = "gtk-ok";
 			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w30 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w29 [this.buttonOk]));
-			w30.Expand = false;
-			w30.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w33 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w32 [this.buttonOk]));
+			w33.Expand = false;
+			w33.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 597;
-			this.DefaultHeight = 551;
+			this.DefaultWidth = 633;
+			this.DefaultHeight = 612;
 			this.Show ();
 			this.topMarginEntry.Changed += new global::System.EventHandler (this.OnTopMarginEntryChanged);
 			this.rightMarginEntry.Changed += new global::System.EventHandler (this.OnRightMarginEntryChanged);
@@ -356,6 +386,7 @@ namespace MonoReports.Gui.Widgets
 			this.addUsingButton.Clicked += new global::System.EventHandler (this.OnAddUsingButtonClicked);
 			this.usingEntry.Changed += new global::System.EventHandler (this.OnUsingEntryChanged);
 			this.usingsNodeview.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnUsingsNodeviewButtonPressEvent);
+			this.alternativeRefEntry.Changed += new global::System.EventHandler (this.OnAlternativeRefEntryChanged);
 		}
 	}
 }

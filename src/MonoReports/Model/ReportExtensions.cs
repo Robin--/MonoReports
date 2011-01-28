@@ -36,12 +36,20 @@ using MonoReports.Model.Data;
 using MonoReports.Extensions.CairoExtensions;
 using System.Linq;
 using System.Text;
+using System.Reflection;
  
 
 namespace MonoReports.Model
 {
 	public static class ReportExtensions
 	{		
+		static bool assemblyResolverHandlerSet;
+		
+		
+		static ReportExtensions(){
+			assemblyResolverHandlerSet = false;
+		}
+		
 		
 		public static void Load (this Report r,string path) {
 			using(System.IO.FileStream file = System.IO.File.OpenRead (path)) {				 
@@ -55,10 +63,10 @@ namespace MonoReports.Model
 						new MonoReports.Extensions.PointConverter (), 
 						new MonoReports.Extensions.SizeConverter (),
 						new MonoReports.Extensions.ColorConverter (),
-						new MonoReports.Extensions.ThicknessConverter ()
-						
+						new MonoReports.Extensions.ThicknessConverter ()						
 					})  
 				});
+				
 				report.CopyToReport(r);
 				file.Close ();	
 				
@@ -150,6 +158,31 @@ public sealed class GenerateDataSource {{
 		
 		public static bool EvalDataSourceScript(this Report report, MonoReports.Services.CompilerService compiler) {
 			
+			if(!assemblyResolverHandlerSet) {
+				 
+				AppDomain
+					.CurrentDomain
+						.AssemblyResolve+=  delegate(object sender, ResolveEventArgs args) {	
+							Assembly myAssembly = null;
+							string asmName = args.Name.Substring(0,	args.Name.IndexOf(',')) +".dll";
+						
+							string assemblyPath = report.References.FirstOrDefault(asm => asm.EndsWith(asmName));
+							if( !string.IsNullOrEmpty(assemblyPath) && System.IO.File.Exists(assemblyPath))
+								return  Assembly.LoadFrom(assemblyPath);
+							assemblyPath = System.IO.Path.Combine(report.AlternativeReferencedAssembliesPath,asmName);
+							if(System.IO.File.Exists(assemblyPath))
+								return  Assembly.LoadFrom(assemblyPath);
+					
+							assemblyPath = System.IO.Path.Combine(Assembly.GetExecutingAssembly().Location,asmName);
+							if(System.IO.File.Exists(assemblyPath))
+								return  Assembly.LoadFrom(assemblyPath);
+ 
+							return  myAssembly;
+						}; 
+				assemblyResolverHandlerSet = true;
+			}
+			
+			
 			
 			string code = report.DataScript;
  			
@@ -169,9 +202,15 @@ public sealed class GenerateDataSource {{
 			compiler.References.Clear();  
 			compiler.References.Add("Newtonsoft.Json.dll");
 			compiler.References.Add("MonoReports.Model.dll");
+			
 			foreach (string r in report.References) {
-				if(!compiler.References.Contains(r))
-					compiler.References.Add(r);
+				string toAdd = r;								
+				if (System.IO.File.Exists (r))
+					if(!string.IsNullOrEmpty (report.AlternativeReferencedAssembliesPath))
+						toAdd = System.IO.Path.Combine (report.AlternativeReferencedAssembliesPath,System.IO.Path.GetFileName (r));
+				
+				if (!compiler.References.Contains (toAdd))
+					compiler.References.Add (toAdd);
 			}
 
 			if( compiler.Evaluate (out result, out message , new string[]{usings,code})  ) {				
@@ -203,10 +242,14 @@ public sealed class GenerateDataSource {{
 			}
 			return res;
 		}
+
+	 
 		
+		
+
 		
 		public static void ExportToPdf(this Report report ,string path) {
-			
+									
 			double unitMultiplier = CairoExtensions.UnitMultiplier;
 			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
 			ReportRenderer renderer = new ReportRenderer ();

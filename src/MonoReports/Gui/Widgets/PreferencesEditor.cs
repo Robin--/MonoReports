@@ -66,6 +66,7 @@ namespace MonoReports.Gui.Widgets
 				this.usingsNodeview.NodeStore = usingsStore;
 				
 				IsInEditMode = false;
+				alternativeRefEntry.Text = report.AlternativeReferencedAssembliesPath;
 				leftMarginEntry.Text = report.Margin.Left.ToString();
 				topMarginEntry.Text = report.Margin.Top.ToString();
 				rightMarginEntry.Text = report.Margin.Right.ToString();
@@ -228,14 +229,12 @@ namespace MonoReports.Gui.Widgets
 			}
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
+		protected virtual void OnAlternativeRefEntryChanged (object sender, System.EventArgs e)
+		{
+			if (IsInEditMode) {
+				report.AlternativeReferencedAssembliesPath = alternativeRefEntry.Text;
+			}			
+		}				
 		
 	}
 	
