@@ -41,7 +41,6 @@ namespace MonoReports.Model.Data
 		int currentRowIndex = -1;
 		List<Field> fields;
 		Dictionary<string, Field> propertiesDictionary;
-		Type rootObjectType;
 		
 		public int CurrentRowIndex {
 			get { return this.currentRowIndex; }
@@ -52,8 +51,7 @@ namespace MonoReports.Model.Data
 		{			 
 			this.data = data as IEnumerable<T>;
 			fields = new List<Field> ();
-			rootObjectType = typeof(T);	
-			DiscoverFields();
+			propertiesDictionary = new Dictionary<string, Field>();	
             nextRes = true;
 		}
 		
@@ -90,6 +88,7 @@ namespace MonoReports.Model.Data
 		}
 
 		bool isFirstOrdering;
+		
 		void prepareObjectDataSource ()
 		{
 			var queryableData = data.AsQueryable ();
@@ -108,12 +107,37 @@ namespace MonoReports.Model.Data
 				}
 				
 			
-			}						
+			}	
+			
 			enumerator = queryableData.GetEnumerator ();
 			enumerator = data.GetEnumerator();
 		}
 		
 		
+		public void AddField<K>(string fieldName, Expression<Func<T,K>> lambda){
+			
+			Field f =  Field.CreateLambdaExpressionField<T,K>(fieldName,lambda);
+			f.FieldKind = FieldKind.Data;
+			
+			
+			
+			if(propertiesDictionary.ContainsKey(f.Name)) {
+				propertiesDictionary[f.Name] = f;
+				int index = -1;
+				for(int i = 0 ; i < fields.Count;i++){
+					if(fields[i].Name == f.Name) {
+						index = i;
+						break;
+					}				
+				}			
+				if(index >= 0)
+					fields[index] = f;
+			}
+			else{
+				propertiesDictionary.Add(f.Name,f);
+				fields.Add(f);
+			}
+		}
 		 
 
  
@@ -149,16 +173,15 @@ namespace MonoReports.Model.Data
 		}
 
 		public Field[] DiscoverFields ()
-		{        	
-			fields.Clear();
-		    fields.AddRange( FieldBuilder.CreateFields(null,rootObjectType,null,FieldKind.Data));
- 			propertiesDictionary = fields.ToDictionary(pr=>pr.Name);
+		{        				
 			return fields.ToArray ();
 		}
  
 		public void Reset ()
-		{			
+		{	
+			try{
 			enumerator.Reset ();
+			}catch{}
 			currentRowIndex = -1;
 			nextRes = true;
 		}

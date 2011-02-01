@@ -57,7 +57,7 @@ namespace MonoReports.Model.Engine
 		public ReportEngine (Report report,IReportRenderer renderer)
 		{
 			Report = report;
-			source = Report._dataSource;
+			source = Report.DataSource;
 			pageFooterControls = new List<Control> ();
 			sectionContextDictionary = new Dictionary<string, SectionProcessingContext> ();
 			controlsToEvalAfterReportProcessing = new List<IDataControl>();
@@ -248,7 +248,10 @@ namespace MonoReports.Model.Engine
 						case FieldKind.Parameter:
 							if (context.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
 								var parameter = context.ParameterFieldsDict [dataControl.FieldName];
-								dataControl.Text = parameter.GetStringValue (null, dataControl.FieldTextFormat);
+								if(this.Report.ParameterValues.ContainsKey(dataControl.FieldName))
+									dataControl.Text = parameter.GetStringValue (this.Report.ParameterValues, dataControl.FieldTextFormat);
+								else
+									dataControl.Text = parameter.GetStringValue (null, dataControl.FieldTextFormat);
 							}
 							break;
 						case FieldKind.Expression:

@@ -26,6 +26,7 @@
 using System;
 using System.Reflection;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace MonoReports.Model.Data
 {
@@ -63,7 +64,7 @@ namespace MonoReports.Model.Data
 				try{
 					returnVal =  String.Format(format != null ? format : "{0}",DataProvider.GetValue(current) );
 				}catch(Exception exp){
-					Console.WriteLine(exp);
+					Console.WriteLine( String.Format("Field {0} exp: {1}",this.Name, exp));
 				}
 			} else {
 				returnVal = String.Format(format != null ? format : "{0}", DefaultValue);
@@ -71,7 +72,26 @@ namespace MonoReports.Model.Data
 			 
 			
 			return returnVal;
-		}		
+		}	
+		
+		public static Field CreateLambdaExpressionField<T,K>(string fieldName, Expression<Func<T,K>> lambda){
+			
+			Field f = new Field();
+			f.Name = fieldName;
+			f.FieldType = typeof(K);
+		    LambdaFieldValueProvider<T,K> lfvp = new LambdaFieldValueProvider<T,K>(lambda);
+			f.DataProvider = lfvp;
+			return f; 
+		}
+		
+		public static Field CreateParameterField<K>(string fieldName, K theValue ){
+			
+			Field f = CreateLambdaExpressionField<IDictionary<string,object>,K>(fieldName, x => (K) x[fieldName]);									
+			f.FieldType = theValue.GetType();		    
+			f.FieldKind = FieldKind.Parameter;
+			f.DefaultValue = theValue;
+			return f; 
+		}
 	}
 	
 	public interface IFieldValueProvider {

@@ -33,7 +33,7 @@ namespace MonoReports.Extensions.JsonNetExtenssions
 	public class MonoReportsContractResolver : DefaultContractResolver
 	{
 		
-		static string [] notSerilizingProperties  = {"WidthAll", "Left", "Top", "Right", "Bottom"};
+		static string [] notSerilizingProperties  = { "DataSource","ParameterValues", "WidthAll", "Left", "Top", "Right", "Bottom"};
 			
 		public MonoReportsContractResolver ()
 		{			

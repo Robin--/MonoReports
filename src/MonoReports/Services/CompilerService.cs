@@ -58,7 +58,7 @@ namespace MonoReports.Services
 				
 		}
 
-		public bool Evaluate (out object result,out string message,string[] codeTemplateValues)
+		public bool Evaluate (out object result,out string message,string[] codeTemplateValues, object[] arguments)
 		{
 			cmp = new LanguageCompiler (LangType.CSharp,false,true,true);
 			foreach(string refAsm in References)
@@ -75,7 +75,7 @@ namespace MonoReports.Services
 			}
 				
 
-			result_set = cmp.RunCode ("GenerateDataSource", "Generate", new object[]{});
+			result_set = cmp.RunCode ("GenerateDataSource", "Generate", arguments);
 			if (result_set) {
 				result = cmp.ResultObject;
 				message = cmp.CompileErrors;

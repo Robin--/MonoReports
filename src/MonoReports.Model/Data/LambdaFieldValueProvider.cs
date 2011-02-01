@@ -1,5 +1,5 @@
 // 
-// PropertyDataField.cs
+// LambdaFieldValueProvider.cs
 //  
 // Author:
 //       Tomasz Kubacki <tomasz (dot ) kubacki (at) gmail (dot) com>
@@ -29,22 +29,20 @@ using System.Linq.Expressions;
 
 namespace MonoReports.Model.Data
 {
-	public class PropertyFieldValuePrivider<T,K> : IFieldValueProvider
+	public class LambdaFieldValueProvider<T,K> : IFieldValueProvider
 	{
  
-		public PropertyFieldValuePrivider(){
+		public LambdaFieldValueProvider(){
 			 
 		}
 		
-		public PropertyFieldValuePrivider(Field field, ParameterExpression root, Expression parent,string propertyName) {
-			Expression<Func<T,K>> lambda = null;		
-		    lambda = Expression.Lambda<Func<T,K>>(Expression.Property(parent,propertyName),root);
-			compiledMethod = lambda.Compile();
-			this.field = field;
-		    this.field.expression = lambda;			
+		public LambdaFieldValueProvider(Expression<Func<T, K>>  lambda) {
+			this.lambda = lambda;
+			Compile();			 
 		}
 		
-		protected Field field = null;
+		Expression<Func<T, K>>  lambda;
+	 
  
 		public  object GetValue (object current)
 		{			
@@ -66,7 +64,7 @@ namespace MonoReports.Model.Data
 				
 		
 		public void Compile() {
-			compiledMethod = (Func<T,K>) (field.expression as LambdaExpression).Compile ();		 
+			compiledMethod =  lambda.Compile ();		 
 		}
 		
 		protected Func<T,K> compiledMethod;

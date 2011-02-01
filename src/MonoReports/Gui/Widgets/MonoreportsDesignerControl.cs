@@ -149,22 +149,23 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	Report newReportTemplate(){
 		Report r = new Report(){ 
 			DataScript = @"
-datasource = new [] {
-     new { Name=""Alfred"", Surname = ""Tarski"", Age = 82 },
-     new { Name=""Saul"", Surname = ""Kripke"", Age = 70 },
-     new { Name=""Gotlob"", Surname = ""Frege"", Age = 75 },
-     new { Name=""Kurt"", Surname = ""Gödel"", Age = 72 }, 
-};
+//datasource have to be IEnumerable<T>. T can be anything - below T is string
+string[]  strings = new string[] { ""my"", ""name"", ""is""};
 
-parameters.Add(""Param"",new { Title = ""The Logicans"", SubTitle = ""...and the philosophers...""});
+//creating IDataSource ObjectDataSource<T>. T = is the same T as in the above line. 
+//datasource's name has to be ""ds"" and it has to implement Monoreports.Model.Data.IDataSource
 
+ObjectDataSource<string> ds  =  new ObjectDataSource<string>(strings);
+
+//adding Field (""Column"") to datasource. Second param says how to get field's value assuming x is T
+ds.AddField(""Name"" , x => x);
+
+//adding paramaters. parameters type is IDictionary<string,object>
+parameters.Add(""Price"",242342.545);
 "};
-			r.Parameters.Add(new MonoReports.Model.Data.Field(){ FieldKind = MonoReports.Model.Data.FieldKind.Parameter, Name = "Param.Title"});
-			r.Parameters.Add(new MonoReports.Model.Data.Field(){ FieldKind = MonoReports.Model.Data.FieldKind.Parameter, Name = "Param.SubTitle"});
+			r.Parameters.Add(new MonoReports.Model.Data.Field(){ FieldKind = MonoReports.Model.Data.FieldKind.Parameter, Name = "Price"});			
 			
 			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Name"});
-			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(string), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Surname"});
-			r.DataFields.Add(new MonoReports.Model.Data.Field(){ FieldType = typeof(int), FieldKind = MonoReports.Model.Data.FieldKind.Data, Name = "Age"});
 			
 			return r;
 	}
@@ -206,9 +207,7 @@ parameters.Add(""Param"",new { Title = ""The Logicans"", SubTitle = ""...and the
 		var fileFilter = new FileFilter { Name = "Monoreports project" };
 		fileFilter.AddPattern ("*.mrp");
 		fc.AddFilter (fileFilter);
-		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? "untiteled.mrp" : designService.Report.Title + ".mrp";
-		
-		designService.Report.DataSource = null;
+		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? "untiteled.mrp" : designService.Report.Title + ".mrp";				
 		if(string.IsNullOrEmpty(lastFileName)) {
 			if (fc.Run () == (int)ResponseType.Accept) {				
 				designService.Save(fc.Filename);

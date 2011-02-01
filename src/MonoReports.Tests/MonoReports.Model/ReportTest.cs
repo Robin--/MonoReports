@@ -41,9 +41,8 @@ namespace MonoReports.Tests
 		public void FillFieldsFromDataSource_WithNullDataSource_ShouldThrowException ()
 		{
 			
-			Report r = new Report();
+			Report r = new Report();			 
 			r.FillFieldsFromDataSource();
-			
 		}
 	}
 }

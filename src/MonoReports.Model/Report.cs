@@ -49,6 +49,7 @@ namespace MonoReports.Model
 			GroupFooterSections = new List<GroupFooterSection> ();
 			Totals = new List<Total>();
 			Pages = new List<Page> ();
+			ParameterValues = new Dictionary<string,object>();
 			ResourceRepository = new Dictionary<string,byte[]> ();
 			ReportHeaderSection = new Controls.ReportHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 10.mm()) };
 			PageHeaderSection = new Controls.PageHeaderSection { Location = new Point (0, 0), Size = new Model.Size (Width, 10.mm()) };
@@ -126,6 +127,8 @@ namespace MonoReports.Model
 		}		
 		
 		public string AlternativeReferencedAssembliesPath {get;set;}
+		
+		public IDictionary<string,object> ParameterValues {get;set;}
 
 		double width;
 
@@ -213,36 +216,7 @@ namespace MonoReports.Model
 				GroupFooterSections.RemoveAt (index);
 			}
 		}
-
-		object dataSource;
-
-		public object DataSource { 
-			get { return dataSource; } 
-			set {
-				dataSource = value;
-				if (dataSource != null) {
-
-					Type dsType = dataSource.GetType ();
-					Type elementType = dsType.GetElementType ();
-					if (elementType == null) {
-						Type genericArgumentTypes = dsType.GetGenericArguments () [0];
-						Type genericType = typeof(ObjectDataSource<>); 
-						var genericDatasourceType = genericType.MakeGenericType (new Type[]{genericArgumentTypes});
-						_dataSource = (Activator.CreateInstance (genericDatasourceType, dataSource))  as IDataSource;
-					} else {
-						Type genericType = typeof(ObjectDataSource<>); 
-						var realGeneric = genericType.MakeGenericType (new Type[]{elementType});
-						_dataSource = (Activator.CreateInstance (realGeneric, dataSource))  as IDataSource;
-					}
-					FillFieldsFromDataSource ();
-				} else {
-					_dataSource = null;
-				}
-				
-			} 
-		
-		}
-
+ 
 		internal void FireOnAfterPageRender (ReportContext rc, Page p)
 		{
 			if (OnAfterPageRender != null) {
@@ -264,13 +238,13 @@ namespace MonoReports.Model
 			}
 		}
 
-		internal IDataSource _dataSource {get; set;}
+		public  IDataSource DataSource {get; set;}
 
 		public void FillFieldsFromDataSource ()
 		{
 						
 			if (DataSource != null) {				
-				foreach (var field in _dataSource.DiscoverFields ()) {
+				foreach (var field in DataSource.DiscoverFields ()) {
 				
 					field.FieldKind = FieldKind.Data;
 					var oldField = DataFields.FirstOrDefault (f => f.Name == field.Name);

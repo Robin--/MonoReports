@@ -95,7 +95,6 @@ namespace MonoReports.Model
 			}	
 			
 			report.Pages.Clear();
-			report.DataSource = null;
 			using (System.IO.FileStream file = System.IO.File.OpenWrite (path)) {
 					var serializedProject = JsonConvert.SerializeObject (report,
 					Formatting.None, 
@@ -109,22 +108,10 @@ namespace MonoReports.Model
 			}
 		}
 		
-		public static void ExportToPdf(this Report report ,string path, IDictionary<string,object> parameters) {
-			 			
-			foreach (KeyValuePair<string, object> kvp in parameters) {
-				foreach(var parField in FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter))
-				{
-					var oldField = report.Parameters.FirstOrDefault(par => par.Name == parField.Name);
-					if (oldField != null) {						
-						oldField.FieldType =  parField.FieldType;
-						oldField.DefaultValue = parField.DefaultValue;
-					} else {
-						report.Parameters.Add(parField);
-					}
-				}
-			}
+		public static void ExportToPdf(this Report report, string path, IDictionary<string,object> parameterValues) {
 			
-			
+			report.ParameterValues = parameterValues;
+			updateReportWithParamaters(report);			
 			report.ExportToPdf(path);			
 		}
 		
@@ -133,13 +120,17 @@ using System;
 using System.Collections.Generic;
 {0}
 
+
+
 public sealed class GenerateDataSource {{
-    public object Generate()
+
+IDictionary<string,object> parameters = new Dictionary<string,object>();
+
+    public void Generate(MonoReports.Model.Report r)
     {{ 
-		object datasource = null;
-		Dictionary<string,object> parameters = new Dictionary<string,object>();
-		 {1}
-        return new object[] {{datasource,parameters}};
+ 		{1}
+		r.DataSource = ds;
+		r.ParameterValues = parameters;
     }}
 }}";
 		
@@ -155,6 +146,24 @@ public sealed class GenerateDataSource {{
 			 
 		}
        
+		static void updateReportWithParamaters(Report report ){
+			
+		 
+    	  foreach (KeyValuePair<string, object> kvp in report.ParameterValues) {
+				  	var f1 = Field.CreateParameterField(kvp.Key,kvp.Value);
+ 
+					var param = report.Parameters.FirstOrDefault(pr => pr.Name == kvp.Key);
+					if(param != null){
+						param.DataProvider = f1.DataProvider;
+						param.FieldType = f1.FieldType;
+						
+					}else {
+						 
+						report.Parameters.Add(f1);
+					}
+				}
+			
+		}
 		
 		public static bool EvalDataSourceScript(this Report report, MonoReports.Services.CompilerService compiler) {
 			
@@ -192,6 +201,8 @@ public sealed class GenerateDataSource {{
 			StringBuilder stb = new StringBuilder();
 			stb.AppendLine("using Newtonsoft.Json.Linq;");
 			stb.AppendLine("using System.Linq;");
+			stb.AppendLine("using MonoReports.Model.Data;");
+			
 			foreach (string s in report.Usings) {
 				stb.Append("using ");
 				stb.Append(s);				
@@ -213,47 +224,27 @@ public sealed class GenerateDataSource {{
 					compiler.References.Add (toAdd);
 			}
 
-			if( compiler.Evaluate (out result, out message , new string[]{usings,code})  ) {				
-				var ds = (result as object[]);
-				var datasource = ds[0] ;
+			if( compiler.Evaluate (out result, out message , new string[]{usings,code}, new object[]{ report })  ) {				
  
-				if (datasource != null) {
-					report.DataSource = datasource;					
-					res = true;
-				}
+				report.FillFieldsFromDataSource();
 				
-				Dictionary<string,object> parametersDictionary  = (Dictionary<string, object>) ds[1];
-				if(parametersDictionary != null)
-					foreach (KeyValuePair<string, object> kvp in parametersDictionary) {
-						foreach(var newfield in FieldBuilder.CreateFields(kvp.Value, kvp.Key,FieldKind.Parameter)) {
-							var oldField = report.Parameters.FirstOrDefault(par => par.Name == newfield.Name);
-							if (oldField != null) {
-								oldField.DataProvider = newfield.DataProvider;
-								oldField.DefaultValue = newfield.DefaultValue;
-								oldField.FieldType = newfield.FieldType;
-							} else {
-								report.Parameters.Add(newfield);
-							}
-						}
-						
-					}
+				updateReportWithParamaters(report);
+				
+				
 			}else {
 				Console.Error.WriteLine(message);
 			}
 			return res;
 		}
 
-	 
-		
-		
-
 		
 		public static void ExportToPdf(this Report report ,string path) {
-									
+			report.EvalDataSourceScript();						
 			double unitMultiplier = CairoExtensions.UnitMultiplier;
 			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
 			ReportRenderer renderer = new ReportRenderer ();
-			renderer.ResolutionX = 72;			
+			renderer.ResolutionX = 72;	
+			
 			using (PdfSurface pdfSurface = new PdfSurface (				
 				path,report.WidthWithMargins * renderer.UnitMultipilier,
 				report.HeightWithMargins * renderer.UnitMultipilier)) {			
