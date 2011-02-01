@@ -53,6 +53,17 @@ namespace MonoReports.Model.Engine
 		bool stop = false;
 		public static bool EvaluatorInitWasDone {get;set;}
 		List<IDataControl> controlsToEvalAfterReportProcessing = null;
+		
+		public static void EvaluatorInit(){
+			if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
+				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
+				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
+				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
+				Mono.CSharp.Evaluator.Run("using System;");
+				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
+			}
+		}
 
 		public ReportEngine (Report report,IReportRenderer renderer)
 		{

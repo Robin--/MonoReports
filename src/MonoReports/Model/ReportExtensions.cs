@@ -52,6 +52,9 @@ namespace MonoReports.Model
 		
 		
 		public static void Load (this Report r,string path) {
+			
+			MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
+			
 			using(System.IO.FileStream file = System.IO.File.OpenRead (path)) {				 
 				byte[] bytes = new byte[file.Length];
 				file.Read (bytes, 0, (int)file.Length);

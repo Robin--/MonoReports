@@ -1,5 +1,5 @@
 // 
-// ExpressionFieldValueProvider.cs
+// Main.cs
 //  
 // Author:
 //       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
@@ -24,45 +24,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq.Expressions;
-using System.Reflection;
+using MonoReports.Model;
+using System.IO;
+using System.Collections.Generic;
 
-
-namespace MonoReports.Model.Data
+namespace testRepo
 {
-	public class ExpressionFieldValueProvider : IFieldValueProvider
+	class MainClass
 	{
-		static ExpressionFieldValueProvider(){
-			MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
-		}
-		
-		public ExpressionFieldValueProvider(ExpressionField field) { 
-			this.field =  field;
-			Refresh();
-		}
-		
-		public void Refresh(){
-			
-			if(!string.IsNullOrEmpty( field.ExpressionScript ))
-				cm = Mono.CSharp.Evaluator.Compile(field.ExpressionScript);
-		}
-		
-		ExpressionField field = null;
-		Mono.CSharp.CompiledMethod cm = null;
-		
-		#region IFieldValueProvider implementation
-		public object GetValue (object current)
+		public static void Main (string[] args)
 		{
-			object retVal = new object();	
-			if(cm != null)
-				cm(ref retVal);
-			else
-				retVal = field.DefaultValue;
+			Report r = new Report();
+			string json = null;
 			
-			return retVal;			
+			using(StreamReader fs = new StreamReader("data.json")){
+				json = fs.ReadToEnd();
+			}
+		 
+			string pdf = "example.pdf";
+			r.Load("example.mrp");
+			r.ExportToPdf(pdf, new Dictionary<string,object>(){  {"json" , json} });
 		}
-		#endregion		
- 
 	}
 }
-

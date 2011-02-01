@@ -72,20 +72,10 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	public MonoreportsDesignerControl ()  
 	{
 		Build ();
-  		if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
-				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
-				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
-				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
-				Mono.CSharp.Evaluator.Run("using System;");
-				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
-				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
-		}
+  		MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
 		
 		Report startReport = newReportTemplate();
-		
-		
  
-		
 		double resolutionX = ((double)  Gdk.Screen.Default.Width) / ((double) Gdk.Screen.Default.WidthMm) * 25.4;
 		
 		compilerService = new CompilerService(ReportExtensions.ScriptTemplateForDataSourceEvaluation);

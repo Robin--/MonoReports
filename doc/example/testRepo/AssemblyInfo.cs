@@ -1,5 +1,5 @@
 // 
-// ExpressionFieldValueProvider.cs
+// AssemblyInfo.cs
 //  
 // Author:
 //       Tomasz Kubacki <tomasz (dot) kubacki (at) gmail (dot ) com>
@@ -23,46 +23,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
+// Information about this assembly is defined by the following attributes. 
+// Change them to the values specific to your project.
 
-namespace MonoReports.Model.Data
-{
-	public class ExpressionFieldValueProvider : IFieldValueProvider
-	{
-		static ExpressionFieldValueProvider(){
-			MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
-		}
-		
-		public ExpressionFieldValueProvider(ExpressionField field) { 
-			this.field =  field;
-			Refresh();
-		}
-		
-		public void Refresh(){
-			
-			if(!string.IsNullOrEmpty( field.ExpressionScript ))
-				cm = Mono.CSharp.Evaluator.Compile(field.ExpressionScript);
-		}
-		
-		ExpressionField field = null;
-		Mono.CSharp.CompiledMethod cm = null;
-		
-		#region IFieldValueProvider implementation
-		public object GetValue (object current)
-		{
-			object retVal = new object();	
-			if(cm != null)
-				cm(ref retVal);
-			else
-				retVal = field.DefaultValue;
-			
-			return retVal;			
-		}
-		#endregion		
- 
-	}
-}
+[assembly: AssemblyTitle("testRepo")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Tomasz Kubacki")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
+
+[assembly: AssemblyVersion("1.0.*")]
+
+// The following attributes are used to specify the signing key for the assembly, 
+// if desired. See the Mono documentation for more information about signing.
+
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]
 

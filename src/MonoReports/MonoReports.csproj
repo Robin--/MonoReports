@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoReports</RootNamespace>
     <AssemblyName>MonoReports</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -172,17 +171,17 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
+    <ProjectReference Include="..\Propertygrid\Propertygrid.csproj">
+      <Project>{4A065C05-84D3-4DF0-B49B-412786C30513}</Project>
+      <Name>Propertygrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Propertygrid\Propertygrid.csproj">
+      <Project>{4A065C05-84D3-4DF0-B49B-412786C30513}</Project>
+      <Name>Propertygrid</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoReports.Model\MonoReports.Model.csproj">
       <Project>{3BFD3AD5-BF68-407F-B1C7-CCC3ED0F7F4C}</Project>
       <Name>MonoReports.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Propertygrid\Propertygrid.csproj">
-      <Project>{4A065C05-84D3-4DF0-B49B-412786C30513}</Project>
-      <Name>Propertygrid</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Propertygrid\Propertygrid.csproj">
-      <Project>{4A065C05-84D3-4DF0-B49B-412786C30513}</Project>
-      <Name>Propertygrid</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

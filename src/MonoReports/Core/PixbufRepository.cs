@@ -32,8 +32,15 @@ namespace MonoReports.Core
 {
 	public class PixbufRepository
 	{
+		
+		static PixbufRepository(){
+			string[] args = new string[0];
+			Gdk.Global.InitCheck(ref args);
+		}
+		
 		public PixbufRepository ()
 		{
+			
 			pixbufDictionary = new Dictionary<string, Pixbuf> ();
 		}
 
@@ -53,23 +60,27 @@ namespace MonoReports.Core
 					
 				report = value; 
 				if (report != null) {
-					foreach (KeyValuePair<string, byte[]> kvp in  report.ResourceRepository) {
-						pixbufDictionary.Add (kvp.Key, new Gdk.Pixbuf (kvp.Value));
+					foreach (string key in  report.ResourceRepository.Keys) {						 
+						createPixbufByKey(key);
 					}
 				}
 				
 			}
+		}
+		
+		void createPixbufByKey(string key){
+			if (!pixbufDictionary.ContainsKey (key)) {
+					byte[] bytes = Report.ResourceRepository [key];
+					Gdk.Pixbuf pixbuf =  new Gdk.Pixbuf (bytes);
+					pixbufDictionary.Add (key, pixbuf);
+				}
 		}
 
 		public Dictionary<string,Pixbuf> pixbufDictionary {get; set;}
 
 		public Pixbuf this [string key] {
 			get {
-				
-				if (!pixbufDictionary.ContainsKey (key)) {
-					pixbufDictionary.Add (key, new Gdk.Pixbuf (Report.ResourceRepository [key]));
-				}
-
+				createPixbufByKey(key);
 				return pixbufDictionary [key];
 			}
 		}
