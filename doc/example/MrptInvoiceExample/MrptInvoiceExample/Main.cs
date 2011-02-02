@@ -223,8 +223,14 @@ namespace MrptInvoiceExample
 			//Total gross ...
 			invoice.TotalGross = invoice.Positions.Sum (p => p.PricePerUnitGross * p.Quantity);
 			#endregion
+			ObjectDataSource<InvoicePosition> objectDataSource = new ObjectDataSource<InvoicePosition>(invoice.Positions);
+			objectDataSource.AddField ("Index",x=>x.Index);
+			objectDataSource.AddField ("Description",x=>x.Description);
+			objectDataSource.AddField ("Quantity",x=>x.Quantity);
+			objectDataSource.AddField ("PricePerUnitGross",x=>x.PricePerUnitGross);
 	
-			r.DataSource = invoice.Positions;	
+				
+			r.DataSource = objectDataSource;	
 			
 			//we can get cairo context before and after rendering each page
 			//to draw custom shapes, texts (e.g watermarks etc)
@@ -259,11 +265,14 @@ namespace MrptInvoiceExample
 				}
 							
 			};
+			var parameters = new Dictionary<string,object>{ 
+				{"invoice.Number",invoice.Number},
+				{"invoice.CreationDate",invoice.CreationDate},				
+				{"invoice.TotalGross",invoice.TotalGross},
+			};
 			
-			r.ExportToPdf ("invoice.pdf", new Dictionary<string,object>{ {"invoice",invoice}});
-			r.Save ("report.mrp");
-			
-				
+			r.ExportToPdf ("invoice.pdf", parameters);
+			r.Save ("report.mrp");	
 		}
 
 		public class Invoice
