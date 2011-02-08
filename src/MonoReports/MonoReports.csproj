@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoReports</RootNamespace>
     <AssemblyName>MonoReports</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

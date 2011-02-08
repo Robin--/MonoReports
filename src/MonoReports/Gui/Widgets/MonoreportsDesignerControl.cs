@@ -187,7 +187,7 @@ parameters.Add(""Price"",242342.545);
 	}
 		
 	public void SaveAs () {
-		lastFileName = String.Empty;
+		lastFileName = String.Empty;		
 		Save();
 	}
 
@@ -199,9 +199,10 @@ parameters.Add(""Price"",242342.545);
 		fc.AddFilter (fileFilter);
 		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? "untiteled.mrp" : designService.Report.Title + ".mrp";				
 		if(string.IsNullOrEmpty(lastFileName)) {
-			if (fc.Run () == (int)ResponseType.Accept) {				
+			if (fc.Run () == (int)ResponseType.Accept) {	
+				designService.Report.Title = String.Empty;
 				designService.Save(fc.Filename);
-				lastFileName = fc.Filename;
+				lastFileName = fc.Filename;				 
 			}				
 			fc.Destroy ();		
 		}else {
