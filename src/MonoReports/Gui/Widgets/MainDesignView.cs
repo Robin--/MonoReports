@@ -155,7 +155,8 @@ namespace MonoReports.Gui.Widgets
 			gui_output = new StreamWriter (stdout_stream);
 			gui_output.AutoFlush = true;
 			Console.SetOut (gui_output);
-		 
+		 	
+			drawingarea.DoubleBuffered = false;
 		}
 	
 					
@@ -188,16 +189,32 @@ namespace MonoReports.Gui.Widgets
 		
 		public void ShowDesign () {
 			mainNotebook.Page = 0;
+			
 		}
-		
-
+		Cairo.Color c1 = new Cairo.Color(1,0,1);
+		bool isDirty = true;
+		ImageSurface ims;
+			
 		protected virtual void OnDrawingareaExposeEvent (object o, Gtk.ExposeEventArgs args)
 		{
+			
+			 
 			if (designService != null) {
 				DrawingArea area = (DrawingArea)o;
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
-				cr.Antialias = Cairo.Antialias.Default;
-				designService.RedrawReport (cr);
+				var rct =  args.Event.Region.Clipbox.ToCairoRectangle();
+				cr.ClipRectangle(rct);
+				if(isDirty) {
+					
+					ims = new ImageSurface(Format.RGB24,(int)rct.Width,(int)rct.Height);
+					isDirty = false;
+					Cairo.Context ctx = new Cairo.Context(ims);
+					designService.RedrawReport (ctx);
+					(ctx as IDisposable).Dispose();
+				}
+				
+				cr.SetSource(ims);
+				cr.Paint();
 				area.SetSizeRequest ((int)(designService.Width* ReportRenderer.UnitMultipilier+3), (int)(designService.Height* ReportRenderer.UnitMultipilier+3));
 				(cr as IDisposable).Dispose ();
 			}
@@ -244,7 +261,7 @@ namespace MonoReports.Gui.Widgets
 					click = 2;
 				
 				designService.ButtonPress (args.Event.X, args.Event.Y, click);
-				 
+				isDirty = true;
 			}
 			
 		}
@@ -254,8 +271,11 @@ namespace MonoReports.Gui.Widgets
 			
 			if (designService.IsDesign) {
 				designService.MouseMove (args.Event.X, args.Event.Y);
-				workSpaceService.Status (String.Format ("move x:{0} y:{1}",
+				if(designService.IsPressed) {
+					isDirty = true;
+					workSpaceService.Status (String.Format ("move x:{0} y:{1}",
 					((args.Event.X / designService.Renderer.UnitMultipilier) / designService.Zoom).ToUnitString(), ((args.Event.Y  / designService.Renderer.UnitMultipilier) / designService.Zoom).ToUnitString()));
+				}
 			}
 			
 		}
