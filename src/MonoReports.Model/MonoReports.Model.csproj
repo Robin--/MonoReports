@@ -89,6 +89,7 @@
     <Compile Include="Data\Total.cs" />
     <Compile Include="Data\ExpressionField.cs" />
     <Compile Include="Data\LambdaFieldValueProvider.cs" />
+    <Compile Include="DataSourceType.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

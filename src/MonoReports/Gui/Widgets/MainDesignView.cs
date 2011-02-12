@@ -61,18 +61,22 @@ namespace MonoReports.Gui.Widgets
 			}
 		}				
 		
-		bool flag = false;
+		bool initMode = false;
 
 		void HandleDesignServiceOnReportChanged (object sender, EventArgs e)
 		{		
-			flag = true;
-			codeTextview.Buffer.Text = designService.Report.DataScript;				
-			flag = false;
+			initMode = true;
+			codeTextview.Buffer.Text = designService.Report.DataScript;		
+			if ( this.designService.Report.DataSourceType == DataSourceType.CSharpDataScript)
+				csharpRadiobutton.Active = true;
+			else
+				jsonRadiobutton.Active = true;
+			initMode = false;
 		}
 		
 		void HandleCodeTextviewBufferChanged (object sender, EventArgs e)
 		{
-			if(!flag) {
+			if(!initMode) {
 				designService.Report.DataScript = codeTextview.Buffer.Text;
 				designService.IsDirty = true;
 			}
@@ -289,15 +293,25 @@ namespace MonoReports.Gui.Widgets
 		protected virtual void OnDrawingareaKeyReleaseEvent (object o, Gtk.KeyReleaseEventArgs args)
 		{
 		}
-		
-	 
+ 
 		
 		protected virtual void OnDrawingareaLeaveNotifyEvent (object o, Gtk.LeaveNotifyEventArgs args)
 		{
 		 	workSpaceService.SetCursor (Gdk.CursorType.LeftPtr);
 		}
+	
+		protected virtual void OnJsonRadiobuttonClicked (object sender, System.EventArgs e)
+		{
+			if(!initMode)
+			 	designService.Report.DataSourceType = DataSourceType.Json;
+		}
 		
-		
+		protected virtual void OnCsharpRadiobuttonClicked (object sender, System.EventArgs e)
+		{
+			if(!initMode)
+			 	designService.Report.DataSourceType = DataSourceType.CSharpDataScript;
+		}
+ 
 	}
 	
 	/// <summary>

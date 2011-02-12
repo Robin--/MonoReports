@@ -136,7 +136,36 @@ IDictionary<string,object> parameters = new Dictionary<string,object>();
 		r.ParameterValues = parameters;
     }}
 }}";
+		public static void EvalDataSource(this Report report) {
+			switch (report.DataSourceType) {
+				case DataSourceType.CSharpDataScript:
+					EvalDataSourceScript(report);
+					break;
+			case DataSourceType.Json:
+					EvalDataSourceFromJson(report);
+					break;
+			default:				
+			break;
+			}
+		}
 		
+		public static void EvalDataSourceFromJson(this Report report) {
+			Newtonsoft.Json.Linq.JObject jo = Newtonsoft.Json.Linq.JObject.Parse(report.DataScript);					
+					Newtonsoft.Json.Linq.JArray dataElements = null;
+				    foreach(var pv in jo.Children()) {
+						if(pv.Type == Newtonsoft.Json.Linq.JTokenType.Property && dataElements == null) {
+							Newtonsoft.Json.Linq.JProperty property = pv as Newtonsoft.Json.Linq.JProperty;
+							if(property.Value.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+								dataElements = property.Value as Newtonsoft.Json.Linq.JArray;
+						} 
+						
+						JsonDatasource.FillFields(String.Empty,pv,report.Parameters,FieldKind.Parameter);
+					}
+					if(dataElements != null) {			 
+						report.DataSource = new JsonDatasource(dataElements);
+						report.FillFieldsFromDataSource();
+					}
+		}
 	  
 		public static bool EvalDataSourceScript(this Report report) {
  
@@ -242,7 +271,7 @@ IDictionary<string,object> parameters = new Dictionary<string,object>();
 
 		
 		public static void ExportToPdf(this Report report ,string path) {
-			report.EvalDataSourceScript();						
+			report.EvalDataSource();					
 			double unitMultiplier = CairoExtensions.UnitMultiplier;
 			double realFontMultiplier = CairoExtensions.RealFontMultiplier;
 			ReportRenderer renderer = new ReportRenderer ();

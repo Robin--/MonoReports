@@ -16,6 +16,11 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.Label previewTitleLabel;
 		private global::Gtk.VBox vbox2;
 		private global::Gtk.VPaned vpaned1;
+		private global::Gtk.VBox vbox1;
+		private global::Gtk.HBox datasourceManageHbox;
+		private global::Gtk.Label datasourceTypeLabel;
+		private global::Gtk.RadioButton jsonRadiobutton;
+		private global::Gtk.RadioButton csharpRadiobutton;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		private global::Gtk.TextView codeTextview;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
@@ -108,8 +113,52 @@ namespace MonoReports.Gui.Widgets
 			this.vpaned1 = new global::Gtk.VPaned ();
 			this.vpaned1.CanFocus = true;
 			this.vpaned1.Name = "vpaned1";
-			this.vpaned1.Position = 335;
+			this.vpaned1.Position = 338;
 			// Container child vpaned1.Gtk.Paned+PanedChild
+			this.vbox1 = new global::Gtk.VBox ();
+			this.vbox1.Name = "vbox1";
+			this.vbox1.Spacing = 6;
+			// Container child vbox1.Gtk.Box+BoxChild
+			this.datasourceManageHbox = new global::Gtk.HBox ();
+			this.datasourceManageHbox.Name = "datasourceManageHbox";
+			this.datasourceManageHbox.Spacing = 6;
+			// Container child datasourceManageHbox.Gtk.Box+BoxChild
+			this.datasourceTypeLabel = new global::Gtk.Label ();
+			this.datasourceTypeLabel.Name = "datasourceTypeLabel";
+			this.datasourceTypeLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Datasource:");
+			this.datasourceManageHbox.Add (this.datasourceTypeLabel);
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.datasourceManageHbox [this.datasourceTypeLabel]));
+			w13.Position = 0;
+			w13.Expand = false;
+			w13.Fill = false;
+			// Container child datasourceManageHbox.Gtk.Box+BoxChild
+			this.jsonRadiobutton = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Json"));
+			this.jsonRadiobutton.CanFocus = true;
+			this.jsonRadiobutton.Name = "jsonRadiobutton";
+			this.jsonRadiobutton.DrawIndicator = true;
+			this.jsonRadiobutton.UseUnderline = true;
+			this.jsonRadiobutton.Group = new global::GLib.SList (global::System.IntPtr.Zero);
+			this.datasourceManageHbox.Add (this.jsonRadiobutton);
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.datasourceManageHbox [this.jsonRadiobutton]));
+			w14.Position = 1;
+			w14.Expand = false;
+			// Container child datasourceManageHbox.Gtk.Box+BoxChild
+			this.csharpRadiobutton = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("C# code"));
+			this.csharpRadiobutton.CanFocus = true;
+			this.csharpRadiobutton.Name = "csharpRadiobutton";
+			this.csharpRadiobutton.DrawIndicator = true;
+			this.csharpRadiobutton.UseUnderline = true;
+			this.csharpRadiobutton.Group = this.jsonRadiobutton.Group;
+			this.datasourceManageHbox.Add (this.csharpRadiobutton);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.datasourceManageHbox [this.csharpRadiobutton]));
+			w15.Position = 2;
+			w15.Expand = false;
+			this.vbox1.Add (this.datasourceManageHbox);
+			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.datasourceManageHbox]));
+			w16.Position = 0;
+			w16.Expand = false;
+			w16.Fill = false;
+			// Container child vbox1.Gtk.Box+BoxChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
@@ -118,9 +167,12 @@ namespace MonoReports.Gui.Widgets
 			this.codeTextview.CanFocus = true;
 			this.codeTextview.Name = "codeTextview";
 			this.GtkScrolledWindow.Add (this.codeTextview);
-			this.vpaned1.Add (this.GtkScrolledWindow);
-			global::Gtk.Paned.PanedChild w14 = ((global::Gtk.Paned.PanedChild)(this.vpaned1 [this.GtkScrolledWindow]));
-			w14.Resize = false;
+			this.vbox1.Add (this.GtkScrolledWindow);
+			global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
+			w18.Position = 1;
+			this.vpaned1.Add (this.vbox1);
+			global::Gtk.Paned.PanedChild w19 = ((global::Gtk.Paned.PanedChild)(this.vpaned1 [this.vbox1]));
+			w19.Resize = false;
 			// Container child vpaned1.Gtk.Paned+PanedChild
 			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
@@ -132,11 +184,11 @@ namespace MonoReports.Gui.Widgets
 			this.GtkScrolledWindow1.Add (this.outputTextview);
 			this.vpaned1.Add (this.GtkScrolledWindow1);
 			this.vbox2.Add (this.vpaned1);
-			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.vpaned1]));
-			w17.Position = 0;
+			global::Gtk.Box.BoxChild w22 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.vpaned1]));
+			w22.Position = 0;
 			this.mainNotebook.Add (this.vbox2);
-			global::Gtk.Notebook.NotebookChild w18 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.vbox2]));
-			w18.Position = 2;
+			global::Gtk.Notebook.NotebookChild w23 = ((global::Gtk.Notebook.NotebookChild)(this.mainNotebook [this.vbox2]));
+			w23.Position = 2;
 			// Notebook tab
 			this.datasourceLabel = new global::Gtk.Label ();
 			this.datasourceLabel.Name = "datasourceLabel";
@@ -161,6 +213,8 @@ namespace MonoReports.Gui.Widgets
 			this.previewDrawingArea.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.OnDrawingareaButtonPressEvent);
 			this.previewDrawingArea.ButtonReleaseEvent += new global::Gtk.ButtonReleaseEventHandler (this.OnDrawingareaButtonReleaseEvent);
 			this.previewDrawingArea.MotionNotifyEvent += new global::Gtk.MotionNotifyEventHandler (this.OnDrawingareaMotionNotifyEvent);
+			this.jsonRadiobutton.Clicked += new global::System.EventHandler (this.OnJsonRadiobuttonClicked);
+			this.csharpRadiobutton.Clicked += new global::System.EventHandler (this.OnCsharpRadiobuttonClicked);
 		}
 	}
 }

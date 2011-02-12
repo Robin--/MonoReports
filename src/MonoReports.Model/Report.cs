@@ -239,6 +239,8 @@ namespace MonoReports.Model
 		}
 
 		public  IDataSource DataSource {get; set;}
+		
+		public  DataSourceType DataSourceType {get; set;}
 
 		public void FillFieldsFromDataSource ()
 		{
@@ -281,7 +283,7 @@ namespace MonoReports.Model
 			r.References.AddRange(References);
 			r.Usings.AddRange(Usings);
 			r.AlternativeReferencedAssembliesPath = AlternativeReferencedAssembliesPath; 
-			 
+			r.DataSourceType = DataSourceType;
 			foreach (var ef in ExpressionFields) {
 				if(!ef.Name.StartsWith("#"))
 					r.ExpressionFields.Add (ef);
