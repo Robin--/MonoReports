@@ -159,6 +159,7 @@
     <Compile Include="gtk-gui\MonoReports.Gui.Widgets.ExpressionFieldEditor.cs" />
     <Compile Include="Gui\Widgets\PreferencesEditor.cs" />
     <Compile Include="gtk-gui\MonoReports.Gui.Widgets.PreferencesEditor.cs" />
+    <Compile Include="Model\Data\JsonDatasource.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -189,5 +190,6 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Model\" />
+    <Folder Include="Model\Data\" />
   </ItemGroup>
 </Project>

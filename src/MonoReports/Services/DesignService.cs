@@ -84,6 +84,11 @@ namespace MonoReports.Services
 			get;
 			private set;
 		}
+		
+		public DatasourceMode DatasourceMode {
+			get;
+			set;
+		}
  
 		public CompilerService Compiler {get;set;}
 
@@ -199,7 +204,8 @@ namespace MonoReports.Services
 			Report = report;
 			Zoom = 1;
 			Render = true;	
-			IsDirty = true;				
+			IsDirty = true;		
+			DatasourceMode = DatasourceMode.Json;
 		}
 
 		void initReport ()
@@ -566,7 +572,7 @@ namespace MonoReports.Services
 		
 		
 		public void ProcessReport() {			
-			Evaluate();
+			FillDatasource();
 			ImageSurface imagesSurface = new ImageSurface (Format.Argb32, (int)Report.Width, (int)Report.Height);
 			using (Cairo.Context cr = new Cairo.Context (imagesSurface)) {				
 				renderer.Context = cr;
@@ -578,10 +584,34 @@ namespace MonoReports.Services
 				OnReportDataFieldsRefreshed (this, new EventArgs ());		
 			IsDirty = false;
 		}
+				
 		
-		
-		public bool Evaluate() {	
-			return Report.EvalDataSourceScript(Compiler);
+		public bool FillDatasource() {	
+			if (DatasourceMode == DatasourceMode.CSharp) {
+				return Report.EvalDataSourceScript(Compiler);
+			} else {
+				
+				try {
+                	Newtonsoft.Json.Linq.JObject jo = Newtonsoft.Json.Linq.JObject.Parse(report.DataScript);					
+					Newtonsoft.Json.Linq.JArray dataElements = null;
+				    foreach(var pv in jo.Children()) {
+						if(pv.Type == Newtonsoft.Json.Linq.JTokenType.Property && dataElements == null) {
+							Newtonsoft.Json.Linq.JProperty property = pv as Newtonsoft.Json.Linq.JProperty;
+							if(property.Value.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+								dataElements = property.Value as Newtonsoft.Json.Linq.JArray;
+						} 
+						
+						JsonDatasource.FillFields(String.Empty,pv,report.Parameters,FieldKind.Parameter);
+					}
+					if(dataElements != null) {			 
+						report.DataSource = new JsonDatasource(dataElements);
+						report.FillFieldsFromDataSource();
+					}
+			    }catch (Exception exp) {
+					Console.WriteLine(exp.ToString());
+				}
+			}
+			return true;
 		}
  
 
@@ -612,6 +642,13 @@ namespace MonoReports.Services
 		}
  
 	}
+	
+ 
+		public enum DatasourceMode
+		{
+			CSharp,
+			Json			
+		}
 	
 	
 }
