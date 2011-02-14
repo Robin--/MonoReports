@@ -61,6 +61,40 @@ and one more complex:
 
 ***Subreport control*** (currently not supported)
 
+Datasource
+==============
+Datasource can be anything from text file to database data, In general it's any class which implements IDataSource interfece.
+Every datasource contains number of fields (table  is a good parallel of what datasource is and DataField could be considered as Column).
+
+Currently Monoreports has two build in datasource types:
+- C# code based datasource - where ObjectDataSource<> is used
+- JSON datasource - where JsonDatasource is used
+
+C# code based datasource
+-----------------
+ObjectDataSource takes as contructor parameter IEnumerable<T>. 
+Adding datafield to datasource is taking field name and lambda expression pointing to property of T
+
+example:
+                        [....]
+			ObjectDataSource<InvoicePosition> objectDataSource = new ObjectDataSource<InvoicePosition>(invoice.Positions);
+			objectDataSource.AddField ("Index",x=>x.Index);
+			objectDataSource.AddField ("Description",x=>x.Description);
+			objectDataSource.AddField ("Quantity",x=>x.Quantity);
+			objectDataSource.AddField ("PricePerUnitGross",x=>x.PricePerUnitGross);					
+			report.DataSource = objectDataSource;	
+                        [....]
+
+TODO - add some description
+
+JSON based datasource
+--------------------
+TODO - add some description
+
+Parameters
+=========
+
+TODO - add some description
 
 
 
