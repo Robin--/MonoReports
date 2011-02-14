@@ -89,7 +89,13 @@ TODO - add some description
 
 JSON based datasource
 --------------------
-TODO - add some description
+Consider following JSON
+
+              {"InvoiceNumber":"1/09/2010","CreationDate":"/Date(1283292000000+0200)/","SellDate":"/Date(1283292000000+0200)/","CompanyName1":"   service solutions","CompanyNIP":"PL773-212-38-22","CustomerName1":"customer name","CustomerNIP":"DE123423424234","Positions":[{"Index":1,"Description":"my service description","Unit":null,"Quantity":1,"PricePerUnitNet":2000,"ValueGross":2000,"TaxRate":0}],"BankName":"XYZ Bank","BankNumber":"IBAN PL952490000500004600461000","TotalTax":0,"TotalGross":2000}
+
+
+If JSON datasource is used every property is taken as report parameter and first array is taken as IEnumerable<T> for datafields
+
 
 Parameters
 =========
