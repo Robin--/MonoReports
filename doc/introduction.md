@@ -61,10 +61,21 @@ and one more complex:
 
 ***Subreport control*** (currently not supported)
 
-Datasource
+
+
+Datasource and parameters
 ==============
-Datasource can be anything from text file to database data, In general it's any class which implements IDataSource interfece.
-Every datasource contains number of fields (table  is a good parallel of what datasource is and DataField could be considered as Column).
+Every report have to be filled with data durning processing. There is field abstract to connnect visual controls on designed template with 
+data comming from outside of report.
+There are a three types of fields in Monoreports:
+  *** parameter fields - used as report parameter
+  *** data fields - used as field in datasource
+  *** expression fields - used to display combination of data and parameter fields
+
+                  e.g  To make your invoice number show in TextBox control, you have to define InvoiceNumber parameter field
+                  then in textblock FieldName property enter this field name
+
+Every datasource contains number of data fields (table  is a good parallel of what datasource is and DataField could be considered as Column).
 
 Currently Monoreports has two build in datasource types:
 - C# code based datasource - where ObjectDataSource<> is used
@@ -76,31 +87,61 @@ ObjectDataSource takes as contructor parameter IEnumerable<T>.
 Adding datafield to datasource is taking field name and lambda expression pointing to property of T
 
 example:
-                        [....]
+
 			ObjectDataSource<InvoicePosition> objectDataSource = new ObjectDataSource<InvoicePosition>(invoice.Positions);
 			objectDataSource.AddField ("Index",x=>x.Index);
 			objectDataSource.AddField ("Description",x=>x.Description);
 			objectDataSource.AddField ("Quantity",x=>x.Quantity);
 			objectDataSource.AddField ("PricePerUnitGross",x=>x.PricePerUnitGross);					
 			report.DataSource = objectDataSource;	
-                        [....]
 
-TODO - add some description
+TODO add description
 
 JSON based datasource
 --------------------
 Consider following JSON
 
-              {"InvoiceNumber":"1/09/2010","CreationDate":"/Date(1283292000000+0200)/","SellDate":"/Date(1283292000000+0200)/","CompanyName1":"   service solutions","CompanyNIP":"PL773-212-38-22","CustomerName1":"customer name","CustomerNIP":"DE123423424234","Positions":[{"Index":1,"Description":"my service description","Unit":null,"Quantity":1,"PricePerUnitNet":2000,"ValueGross":2000,"TaxRate":0}],"BankName":"XYZ Bank","BankNumber":"IBAN PL952490000500004600461000","TotalTax":0,"TotalGross":2000}
+              {
+              "InvoiceNumber":"1/09/2010",
+              "CreationDate":"/Date(1283292000000+0200)/",
+              "SellDate":"/Date(1283292000000+0200)/",
+              "CompanyName1":"   service solutions",
+              "CompanyNIP":"PL773-212-38-22",
+              "CustomerName1":"customer name",
+              "CustomerNIP":"DE123423424234",
+              "Positions":[
+               {
+               "Index":1,
+               "Description":"my service description",
+               "Unit":null,
+               "Quantity":1,
+               "PricePerUnitNet":2000,
+               "ValueGross":2000,
+               "TaxRate":0
+               },
+               {
+               "Index":2,
+               "Description":"my service description 2  my service description 2",
+               "Unit":null,
+               "Quantity":2,
+               "PricePerUnitNet":344,
+               "ValueGross":344,
+               "TaxRate":0
+               },
+               ],
+              "BankName":"XYZ Bank",
+              "BankNumber":"IBAN PL952490000500004600461000",
+              "TotalTax":0,
+              "TotalGross":2344
+               }
 
 
-If JSON datasource is used every property is taken as report parameter and first array is taken as IEnumerable<T> for datafields
+If JSON datasource is used every property is taken as report parameter and first array is taken as datasource, so in the above example
+InvoiceNumber, Creation Date etc will be parameters, whereas Positions is the datasource. 
+
+Main advantage of using JSON is that datas fields and parameter fields are autodicovered in designer.
 
 
-Parameters
-=========
-
-TODO - add some description
 
 
 
