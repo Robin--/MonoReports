@@ -65,17 +65,19 @@ and one more complex:
 
 Datasource and parameters
 ==============
-Every report have to be filled with data durning processing. There is field abstract to connnect visual controls on designed template with 
-data comming from outside of report.
+Every report have to be filled with data durning processing. There is a field abstract to connnect visual controls on designed template with the data comming from outside of report.
+
 There are a three types of fields in Monoreports:
-  *** parameter fields - used as report parameter
-  *** data fields - used as field in datasource
-  *** expression fields - used to display combination of data and parameter fields
 
-                  e.g  To make your invoice number show in TextBox control, you have to define InvoiceNumber parameter field
-                  then in textblock FieldName property enter this field name
+  **parameter fields** - used as report parameter
+  **data fields** - used as field in datasource (see below what is a datasource)
+  **expression** fields - used to display combination of data and parameter fields
 
-Every datasource contains number of data fields (table  is a good parallel of what datasource is and DataField could be considered as Column).
+
+e.g  To make your invoice number show in TextBox control, you have to define InvoiceNumber parameter field
+then in textblock FieldName property enter this field name
+
+Datasource is a list of ***data fields*** (like columns in realtional databases) and a rows enumerator. The main difference between data field and parameter field is that the data field has different value for every row in datasource (except when values are the same in two given rows)  whereas parameter field will have constant value.
 
 Currently Monoreports has two build in datasource types:
 - C# code based datasource - where ObjectDataSource<> is used
@@ -136,8 +138,7 @@ Consider following JSON
                }
 
 
-If JSON datasource is used every property is taken as report parameter and first array is taken as datasource, so in the above example
-InvoiceNumber, Creation Date etc will be parameters, whereas Positions is the datasource. 
+If JSON datasource is used every property is taken as report parameter and first array is taken as datasource, so in the above example ***InvoiceNumber***, ***CreationDate*** etc. will be interpreted as  parameters, whereas ***Positions*** is will be converted to datasource (list of datafields). 
 
 Main advantage of using JSON is that datas fields and parameter fields are autodicovered in designer.
 
