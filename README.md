@@ -11,20 +11,9 @@ Monoreports features
 - handy events allowing manipulate report while engine is processing 
 - allow get cairo context to make a custom "drawings" on processed report pages
 - csharp expressions fields
-
-Simple code generated report example:
-		
-		Report report = new Report;
-		report.Details.Controls.Add(new Textblock(){ FieldName = "InvoiceNumber" });
-		report.Datasource = myInvoicesCollection;
-		report.ExportToPdf(path);
-		
+- JSON as datasource
 - pdf export
 - reporting engine is not tightly coupled with gtk/cairo stuff, therefore it's reasonably easy to write new export backends (e.g. html, xls etc)
-
-Status
-----------
-Monoreports current version is 0.1.1
 
 Question - Help etc.
 ----------------------------
