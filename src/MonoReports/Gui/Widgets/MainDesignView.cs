@@ -194,7 +194,8 @@ namespace MonoReports.Gui.Widgets
 		Cairo.Color c1 = new Cairo.Color(1,0,1);
 		bool isDirty = true;
 		ImageSurface ims;
-			
+        bool firstDraw = true;
+
 		protected virtual void OnDrawingareaExposeEvent (object o, Gtk.ExposeEventArgs args)
 		{
 			
@@ -204,17 +205,21 @@ namespace MonoReports.Gui.Widgets
 				Cairo.Context cr = Gdk.CairoHelper.Create (area.GdkWindow);
 				var rct =  args.Event.Region.Clipbox.ToCairoRectangle();
 				cr.ClipRectangle(rct);
-				if(isDirty) {
-					
-					ims = new ImageSurface(Format.RGB24,(int)rct.Width,(int)rct.Height);
+
+				if(isDirty || designService.IsDirty) {
+                    if (firstDraw) {                 
+					    ims = new ImageSurface(Format.RGB24,(int)rct.Width,(int)rct.Height);
+                        firstDraw = false;
+                    }
+
 					isDirty = false;
 					Cairo.Context ctx = new Cairo.Context(ims);
 					designService.RedrawReport (ctx);
 					(ctx as IDisposable).Dispose();
+                    cr.SetSource(ims);
+                    cr.Paint();
 				}
-				
-				cr.SetSource(ims);
-				cr.Paint();
+
 				area.SetSizeRequest ((int)(designService.Width* ReportRenderer.UnitMultipilier+3), (int)(designService.Height* ReportRenderer.UnitMultipilier+3));
 				(cr as IDisposable).Dispose ();
 			}

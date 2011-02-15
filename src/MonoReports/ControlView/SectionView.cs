@@ -49,6 +49,8 @@ namespace MonoReports.ControlView
 
 		public bool IsCollapsed { get; set; }
 
+        public bool IsDirty { get; set; }
+
 		public Cairo.PointD SectionSpan { get; set; }				
 
 		public Cairo.PointD AbsoluteDrawingStartPoint { get; set; }
@@ -120,6 +122,7 @@ namespace MonoReports.ControlView
 
 		public SectionView (IControlViewFactory controlViewFactory, Section section,Cairo.PointD sectionSpan) : base(section)
 		{
+            IsDirty = true;
 			sectionRenderer = controlViewFactory.ReportRenderer.RenderersDictionary [section.GetType ()] as SectionRenderer;
 			SectionHederHeightInUnit = SectionheaderHeight / sectionRenderer.UnitMulitipier;
 			DesignCrossSectionControlsToAdd = new List<ControlViewBase> ();
@@ -202,7 +205,7 @@ namespace MonoReports.ControlView
 				var ctrl = Controls [j];
 				ctrl.Render (c);
 			}
-
+            IsDirty = false;
 			c.Restore ();
 				
 				

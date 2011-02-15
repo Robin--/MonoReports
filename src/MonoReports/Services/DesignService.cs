@@ -229,14 +229,17 @@ namespace MonoReports.Services
 			if (SelectedTool != null) {
 				SelectedTool.OnBeforeDraw (c);
 			}
-			for (int i = 0; i < SectionViews.Count; i++) {
-				var renderedSection = SectionViews [i];
-				renderedSection.Render (c);								
-			}
+ 
+            for (int i = 0; i < SectionViews.Count; i++)
+            {
+                var renderedSection = SectionViews[i];
+                if (IsDirty || renderedSection == MouseOverSection || renderedSection.IsDirty) 
+                    renderedSection.Render(c);  
+            }
 			if (SelectedTool != null) {
 				SelectedTool.OnAfterDraw (c);
 			}
-			
+            IsDirty = false;
 		}
 
 		public void CreateTextBlockAtXY (string text, string fieldName, FieldKind fieldKind, double x, double y)
@@ -544,7 +547,7 @@ namespace MonoReports.Services
 				
 				WorkspaceService.ShowInPropertyGrid (SelectedControl.ControlModel);
 			}
-			
+            IsDirty = true;
 			WorkspaceService.InvalidateDesignArea (); 			
 		}
 
@@ -576,7 +579,7 @@ namespace MonoReports.Services
 			}
 			if (OnReportDataFieldsRefreshed != null)
 				OnReportDataFieldsRefreshed (this, new EventArgs ());		
-			IsDirty = false;
+			//IsDirty = false;
 		}
 		
 		
