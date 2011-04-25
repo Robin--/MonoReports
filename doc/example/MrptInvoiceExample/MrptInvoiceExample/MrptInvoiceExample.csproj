@@ -39,18 +39,20 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Cairo" />
-    <Reference Include="MonoReports, Version=0.1.1.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\build\MonoReports.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoReports.Model, Version=0.1.1.0, Culture=neutral, PublicKeyToken=null">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\build\MonoReports.Model.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\MonoReports\MonoReports.csproj">
+      <Project>{FFEC9CAB-1AC0-4BC9-8656-D4A7A4D361C5}</Project>
+      <Name>MonoReports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\src\MonoReports.Model\MonoReports.Model.csproj">
+      <Project>{3BFD3AD5-BF68-407F-B1C7-CCC3ED0F7F4C}</Project>
+      <Name>MonoReports.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

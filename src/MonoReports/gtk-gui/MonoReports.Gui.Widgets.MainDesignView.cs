@@ -29,7 +29,8 @@ namespace MonoReports.Gui.Widgets
 
 		protected virtual void Build ()
 		{
-			global::Stetic.Gui.Initialize (this);
+            global::Stetic.
+			Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.MainDesignView
 			Stetic.BinContainer w1 = global::Stetic.BinContainer.Attach (this);
 			this.UIManager = new global::Gtk.UIManager ();

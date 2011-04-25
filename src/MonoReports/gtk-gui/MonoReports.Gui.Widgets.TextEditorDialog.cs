@@ -11,7 +11,8 @@ namespace MonoReports.Gui.Widgets
 
 		protected virtual void Build ()
 		{
-			global::Stetic.Gui.Initialize (this);
+            global::Stetic.
+			Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.TextEditorDialog
 			this.Name = "MonoReports.Gui.Widgets.TextEditorDialog";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Edit text");

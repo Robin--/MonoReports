@@ -9,9 +9,11 @@ namespace MonoReports.Gui.Widgets
 
 		protected virtual void Build ()
 		{
-			global::Stetic.Gui.Initialize (this);
+            global::Stetic.
+			Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.ReportExplorer
-			global::Stetic.BinContainer.Attach (this);
+            global::Stetic.
+			BinContainer.Attach (this);
 			this.Name = "MonoReports.Gui.Widgets.ReportExplorer";
 			// Container child MonoReports.Gui.Widgets.ReportExplorer.Gtk.Container+ContainerChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();

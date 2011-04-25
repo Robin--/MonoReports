@@ -16,7 +16,8 @@ namespace MonoReports.Gui.Widgets
 
 		protected virtual void Build ()
 		{
-			global::Stetic.Gui.Initialize (this);
+            global::Stetic.
+			Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.PropertyFieldEditor
 			this.Events = ((global::Gdk.EventMask)(1896448));
 			this.ExtensionEvents = ((global::Gdk.ExtensionMode)(1));

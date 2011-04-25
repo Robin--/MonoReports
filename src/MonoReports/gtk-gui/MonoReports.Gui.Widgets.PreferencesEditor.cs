@@ -41,7 +41,8 @@ namespace MonoReports.Gui.Widgets
 
 		protected virtual void Build ()
 		{
-			global::Stetic.Gui.Initialize (this);
+            global::Stetic.
+			Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.PreferencesEditor
 			this.Name = "MonoReports.Gui.Widgets.PreferencesEditor";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Settings");

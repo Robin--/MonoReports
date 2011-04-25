@@ -40,7 +40,8 @@ public partial class MainWindow
 
 	protected virtual void Build ()
 	{
-		global::Stetic.Gui.Initialize (this);
+        global::Stetic.
+		Gui.Initialize (this);
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
