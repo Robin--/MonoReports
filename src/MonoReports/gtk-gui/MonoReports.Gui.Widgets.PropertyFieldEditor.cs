@@ -13,11 +13,10 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.Entry nameEntry;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button buttonOk;
-
+		
 		protected virtual void Build ()
 		{
-            global::Stetic.
-			Gui.Initialize (this);
+			global::Stetic.Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.PropertyFieldEditor
 			this.Events = ((global::Gdk.EventMask)(1896448));
 			this.ExtensionEvents = ((global::Gdk.ExtensionMode)(1));

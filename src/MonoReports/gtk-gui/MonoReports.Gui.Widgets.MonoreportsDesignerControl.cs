@@ -15,11 +15,10 @@ namespace MonoReports.Gui.Widgets
 		private global::PropertyGrid.PropertyGrid mainPropertygrid;
 		private global::Gtk.Statusbar bottomStatusbar;
 		private global::Gtk.Label StatusBarLabel;
-
+		
 		protected virtual void Build ()
 		{
-            global::Stetic.
-			Gui.Initialize (this);
+			global::Stetic.Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.MonoreportsDesignerControl
 			Stetic.BinContainer w1 = global::Stetic.BinContainer.Attach (this);
 			this.UIManager = new global::Gtk.UIManager ();

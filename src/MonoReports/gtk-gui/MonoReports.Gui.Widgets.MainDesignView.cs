@@ -26,11 +26,10 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 		private global::Gtk.TextView outputTextview;
 		private global::Gtk.Label datasourceLabel;
-
+		
 		protected virtual void Build ()
 		{
-            global::Stetic.
-			Gui.Initialize (this);
+			global::Stetic.Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.MainDesignView
 			Stetic.BinContainer w1 = global::Stetic.BinContainer.Attach (this);
 			this.UIManager = new global::Gtk.UIManager ();

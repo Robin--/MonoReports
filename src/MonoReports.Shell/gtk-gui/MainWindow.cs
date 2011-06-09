@@ -37,11 +37,10 @@ public partial class MainWindow
 	private global::Gtk.VBox vbox2;
 	private global::Gtk.MenuBar menubar3;
 	private global::MonoReports.Gui.Widgets.MonoreportsDesignerControl monoreportsdesignercontrol1;
-
+	
 	protected virtual void Build ()
 	{
-        global::Stetic.
-		Gui.Initialize (this);
+		global::Stetic.Gui.Initialize (this);
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");

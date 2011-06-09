@@ -8,11 +8,10 @@ namespace MonoReports.Gui.Widgets
 		private global::Gtk.TextView textview;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button buttonOk;
-
+		
 		protected virtual void Build ()
 		{
-            global::Stetic.
-			Gui.Initialize (this);
+			global::Stetic.Gui.Initialize (this);
 			// Widget MonoReports.Gui.Widgets.TextEditorDialog
 			this.Name = "MonoReports.Gui.Widgets.TextEditorDialog";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Edit text");
