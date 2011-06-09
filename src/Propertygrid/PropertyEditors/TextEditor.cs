@@ -128,7 +128,7 @@ namespace PropertyGrid.PropertyEditors
 		
 		void TextChanged (object s, EventArgs a)
 		{
-			if (initialText == entry.Text)
+			if (!string.IsNullOrEmpty (initialText) && initialText == entry.Text)
 				return;
 			
 			bool valid = false;
