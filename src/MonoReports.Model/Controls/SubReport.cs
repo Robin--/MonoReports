@@ -109,7 +109,7 @@ namespace MonoReports.Model.Controls
 		public void ProcessUpToPage(IReportRenderer renderer, double height){
 			
 			engine.ReportRenderer = renderer;
-			engine.context.HeightLeftOnCurrentPage = height;
+			engine.reportContext.HeightLeftOnCurrentPage = height;
             Finished = engine.ProcessReportPage();					
 			 
 		}

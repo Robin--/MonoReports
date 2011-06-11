@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using MonoReports.Model.Controls;
+using System.Linq;
 
 namespace MonoReports.Model.Engine
 {
@@ -41,7 +42,16 @@ namespace MonoReports.Model.Engine
 			Spans = new List<SpanInfo>();			
 		}
 		
-		public Section Section {get;set;}
+		Section section;
+
+		public Section Section {
+			get {
+				return section;	
+			}
+			set {
+				section =  value;
+			}
+		}
 		
 		public ProcessingState State {get;set;}
 		
@@ -100,6 +110,21 @@ namespace MonoReports.Model.Engine
 		public bool AllControlsProcessed {get;set;}
 		
 		
+		
+		public void InitSection(double heightTreshold) {
+			if (TopOrderedControls.Count > 0) {
+					MaxControlBottom = TopOrderedControls.Max (ctrl => ctrl.Bottom);				
+			}
+				MarginBottom = section.Height - MaxControlBottom;
+				HeightTresholdIncludingBottomMargin = heightTreshold - MarginBottom;
+				State = ProcessingState.Processing;
+				var s = Section.CreateControl() as Section;				
+				s.Controls.Clear();
+				s.TemplateControl = section.TemplateControl;
+				ProcessedControlsBuffer.Add (s); 
+				CurrentPageBackgroundSectionControl = s;
+				NextControl ();
+		}
 		
 		
 		public void SetFirstNotFullyProcessedControl() {			

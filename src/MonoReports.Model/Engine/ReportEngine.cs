@@ -38,7 +38,7 @@ namespace MonoReports.Model.Engine
 		internal IReportRenderer ReportRenderer;
 		Report Report;
 		IDataSource source;
-		internal ReportContext context;
+		internal ReportContext reportContext;
 		internal Page currentPage = null;	
 		List<Control> pageFooterControls = null;
 		bool beforeFirstDetailSection = true;
@@ -81,10 +81,10 @@ namespace MonoReports.Model.Engine
 				int index = (efld != null ? report.ExpressionFields.IndexOf (efld) : -1);
 				groupInfos.Add (new GroupInfo () { ExpressionFieldIndex = index });
 			}
-			context = new ReportContext(report) { RendererContext = renderer.RendererContext, CurrentPageIndex = 0, DataSource = source, ReportMode = ReportMode.Preview };
+			reportContext = new ReportContext(report) { RendererContext = renderer.RendererContext, CurrentPageIndex = 0, DataSource = source, ReportMode = ReportMode.Preview };
 			Report.Pages = new List<Page> ();
 			nextPage ();
-			selectCurrentStateByTemplateSection (Report.PageFooterSection);
+			SelectCurrentStateByTemplateSection (Report.PageFooterSection);
 			
 			if (!ReportEngine.EvaluatorInitWasDone) {
 				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
@@ -104,7 +104,7 @@ namespace MonoReports.Model.Engine
 				
 			}
 			
-			MonoreportsInteractiveBase.ReportContext = context;
+			MonoreportsInteractiveBase.ReportContext = reportContext;
 		}
 
 		public void Process ()
@@ -118,15 +118,15 @@ namespace MonoReports.Model.Engine
 			 
 			foreach (var dc in controlsToEvalAfterReportProcessing) {
 				try {
-					if (context.ExpressionFieldsDict.ContainsKey (dc.FieldName)) 
-						dc.Text = context.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
-					} catch {}						
+					if (reportContext.ExpressionFieldsDict.ContainsKey (dc.FieldName)) 
+						dc.Text = reportContext.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
+				} catch {}						
 			}
 			 
 			if (source != null)
 				source.Reset ();
 
-			 Report.FireOnAfterReportProcessing(context);
+			 Report.FireOnAfterReportProcessing(reportContext);
 		}
 
 		void storeSectionContextForNextPage ()
@@ -136,7 +136,7 @@ namespace MonoReports.Model.Engine
 			}
 		}
 
-		T selectCurrentStateByTemplateSection<T> (T s) where T : Section
+		T SelectCurrentStateByTemplateSection<T> (T s) where T : Section
 		{
 			T newSection = null;
 			if (sectionContextDictionary.ContainsKey (s.Name)) {
@@ -187,16 +187,16 @@ namespace MonoReports.Model.Engine
 			stop = false;
 
 			do {
-				currentSection.TemplateControl.FireBeforeControlProcessing (context, currentSection);           			
-				result = ProcessSectionUpToHeightTreshold (context.HeightLeftOnCurrentPage);   
+				currentSection.TemplateControl.FireBeforeControlProcessing (reportContext, currentSection);
+				result = ProcessSectionUpToHeightTreshold (reportContext.HeightLeftOnCurrentPage);   
 
-				if (!(currentSection.KeepTogether & !result)){
-					addControlsToCurrentPage (context.HeightUsedOnCurrentPage);
+				if (!currentSection.KeepTogether || result){
+					addControlsToCurrentPage (reportContext.HeightUsedOnCurrentPage);
 					sectionContext.ProcessedControlsBuffer.Clear();
 				}
 				
-				context.HeightLeftOnCurrentPage -= currentSection.Height;
-				context.HeightUsedOnCurrentPage += currentSection.Height;
+				reportContext.HeightLeftOnCurrentPage -= currentSection.Height;
+				reportContext.HeightUsedOnCurrentPage += currentSection.Height;
 
 				if (result) {
 					nextSection ();
@@ -223,18 +223,7 @@ namespace MonoReports.Model.Engine
 			bool result = true;
 			
 			if (sectionContext.State == ProcessingState.Init) {
-				if (sectionContext.TopOrderedControls.Count > 0) {
-					sectionContext.MaxControlBottom = sectionContext.TopOrderedControls.Max (ctrl => ctrl.Bottom);				
-				}
-				sectionContext.MarginBottom = currentSection.Height - sectionContext.MaxControlBottom;
-				sectionContext.HeightTresholdIncludingBottomMargin = heightTreshold - sectionContext.MarginBottom;
-				sectionContext.State = ProcessingState.Processing;
-				var s = currentSection.CreateControl() as Section;				
-				s.Controls.Clear();
-				s.TemplateControl = currentSection.TemplateControl;
-				sectionContext.ProcessedControlsBuffer.Add (s); 
-				sectionContext.CurrentPageBackgroundSectionControl = s;
-				sectionContext.NextControl ();
+				sectionContext.InitSection(heightTreshold);
 			}
 			
 
@@ -257,8 +246,8 @@ namespace MonoReports.Model.Engine
 
 						switch (dataControl.FieldKind) {
 						case FieldKind.Parameter:
-							if (context.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
-								var parameter = context.ParameterFieldsDict [dataControl.FieldName];
+							if (reportContext.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
+								var parameter = reportContext.ParameterFieldsDict [dataControl.FieldName];
 								if(this.Report.ParameterValues.ContainsKey(dataControl.FieldName))
 									dataControl.Text = parameter.GetStringValue (this.Report.ParameterValues, dataControl.FieldTextFormat);
 								else
@@ -266,9 +255,9 @@ namespace MonoReports.Model.Engine
 							}
 							break;
 						case FieldKind.Expression:
-							if (context.ExpressionFieldsDict.ContainsKey (dataControl.FieldName)) {
+							if (reportContext.ExpressionFieldsDict.ContainsKey (dataControl.FieldName)) {
 							 
-								var expression = context.ExpressionFieldsDict [dataControl.FieldName] as ExpressionField;
+								var expression = reportContext.ExpressionFieldsDict [dataControl.FieldName] as ExpressionField;
 								
 								if(!expression.IsEvaluatedAfterProcessing)
 									dataControl.Text = expression.GetStringValue (dataControl.FieldName, dataControl.FieldTextFormat);
@@ -404,7 +393,7 @@ namespace MonoReports.Model.Engine
 		void nextRecord ()
 		{
 			dataSourceHasNextRow = source.MoveNext ();
-			context.RowIndex++;
+			reportContext.RowIndex++;
 			for (int i = 0; i < Report.Groups.Count; i++) {
 				var gi = groupInfos [i];
 				gi.PreviousVal = groupInfos [i].CurrentVal;
@@ -418,15 +407,15 @@ namespace MonoReports.Model.Engine
 
 			switch (currentSection.SectionType) {
 			case SectionType.PageHeader:
-				if (context.CurrentPageIndex > 1) {
-					selectCurrentStateByTemplateSection (Report.PageFooterSection);
+				if (reportContext.CurrentPageIndex > 1) {
+					SelectCurrentStateByTemplateSection (Report.PageFooterSection);
 				} else {
 					setDetailsOrGroup ();
 				}
 				break;
 			case SectionType.PageFooter:
 				if (!afterReportHeader) {
-					selectCurrentStateByTemplateSection (Report.ReportHeaderSection);
+					SelectCurrentStateByTemplateSection (Report.ReportHeaderSection);
 				} else {
 					setDetailsOrGroup ();
 				}
@@ -438,8 +427,8 @@ namespace MonoReports.Model.Engine
 					nextPage ();
 					stop = true;
 				} else {
-					if (context.CurrentPageIndex == 1) {
-						selectCurrentStateByTemplateSection (Report.PageHeaderSection);
+					if (reportContext.CurrentPageIndex == 1) {
+						SelectCurrentStateByTemplateSection (Report.PageHeaderSection);
 					} else {
 						setDetailsOrGroup ();
 					}
@@ -476,9 +465,9 @@ namespace MonoReports.Model.Engine
 			}
 
 			if (dataSourceHasNextRow || beforeFirstDetailSection) {
-				selectCurrentStateByTemplateSection (Report.DetailSection);
+				SelectCurrentStateByTemplateSection (Report.DetailSection);
 			} else {
-				selectCurrentStateByTemplateSection (Report.ReportFooterSection);
+				SelectCurrentStateByTemplateSection (Report.ReportFooterSection);
 			}
 			beforeFirstDetailSection = false;
 		}
@@ -505,25 +494,25 @@ namespace MonoReports.Model.Engine
 		{
 			addControlsToCurrentPage (Report.Height - Report.PageFooterSection.Height, pageFooterControls);
 			spanCorrection = 0;			
-			context.CurrentPageIndex++;
-			currentPage = new Page { PageNumber = context.CurrentPageIndex };
-			context.HeightLeftOnCurrentPage = Report.Height;
-			context.HeightUsedOnCurrentPage = 0;
+			reportContext.CurrentPageIndex++;
+			currentPage = new Page { PageNumber = reportContext.CurrentPageIndex };
+			reportContext.HeightLeftOnCurrentPage = Report.Height;
+			reportContext.HeightUsedOnCurrentPage = 0;
 			Report.Pages.Add (currentPage);						
-			selectCurrentStateByTemplateSection (Report.PageHeaderSection);
+			SelectCurrentStateByTemplateSection (Report.PageHeaderSection);
 		}	
 
 		public void RenderPages(IReportRenderer renderer, Report report){
-			context.RendererContext = renderer.RendererContext;
-			context.CurrentPageIndex = 1;
+			reportContext.RendererContext = renderer.RendererContext;
+			reportContext.CurrentPageIndex = 1;
 			for (int i = 0; i < report.Pages.Count; i++) {					
 				Page p = report.Pages [i];
-				report.FireOnBeforePageRender(context,p);
+				report.FireOnBeforePageRender(reportContext,p);
 				renderer.RenderPage (p);									
-				report.FireOnAfterPageRender(context,p);
-				if(context.CurrentPageIndex < report.Pages.Count) {
+				report.FireOnAfterPageRender(reportContext,p);
+				if(reportContext.CurrentPageIndex < report.Pages.Count) {
 					renderer.NewPage();
-					context.CurrentPageIndex++;
+					reportContext.CurrentPageIndex++;
 				}
 			}	
 		}
@@ -547,7 +536,7 @@ namespace MonoReports.Model.Engine
 
 			foreach (var c in section.Controls.Where (ctrl => ctrl is ICrossSectionControl)) {
 
-				ICrossSectionControl csc = c as ICrossSectionControl;
+				var csc = c as ICrossSectionControl;
 				csc.StartSection = section;
 				csc.EndSection = endSection;
 				yield return c;
