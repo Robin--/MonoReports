@@ -218,6 +218,7 @@
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Monoreports 0.1.4</property>
+    <property name="Icon">resource:MonoReports.Shell.monoreports_logo_inkscape.svg</property>
     <property name="WindowPosition">Center</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
