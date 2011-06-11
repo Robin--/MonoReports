@@ -109,8 +109,6 @@ namespace MonoReports.Model.Engine
 		
 		public bool AllControlsProcessed {get;set;}
 		
-		
-		
 		public void InitSection(double heightTreshold) {
 			if (TopOrderedControls.Count > 0) {
 					MaxControlBottom = TopOrderedControls.Max (ctrl => ctrl.Bottom);				
