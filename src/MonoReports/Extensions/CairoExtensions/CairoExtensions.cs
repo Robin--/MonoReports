@@ -864,12 +864,11 @@ namespace MonoReports.Extensions.CairoExtensions
 			Pango.Layout layout = createLayoutFromTextBlock(g,tb);
 			g.Color = tb.FontColor.ToCairoColor();
 			
-			Pango.Rectangle inkRect;
+			Pango.Rectangle inkRect1;
 			Pango.Rectangle logicalRect;			
-			layout.GetExtents (out inkRect, out logicalRect);
-			double measuredHeight = (inkRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
-			double measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
-			//double measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
+			layout.GetExtents (out inkRect1, out logicalRect);
+			double measuredHeight = (logicalRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredY = logicalRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);			
 			
 			if(tb.VerticalAlignment != VerticalAlignment.Top)
 				vertAlgSpan = measureVerticlaSpan(tb,measuredHeight);
@@ -880,11 +879,10 @@ namespace MonoReports.Extensions.CairoExtensions
 				Pango.CairoHelper.ShowLayout(g, layout);						
 			}
 			
-			layout.GetExtents (out inkRect, out logicalRect);
-			measuredHeight = (inkRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
-			double measuredWidth = inkRect.Width / (Pango.Scale.PangoScale * UnitMultiplier);
-			//measuredX = inkRect.X / (Pango.Scale.PangoScale * UnitMultiplier);
-			measuredY = inkRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
+			layout.GetExtents (out inkRect1, out logicalRect);
+			measuredHeight = (logicalRect.Height) / (Pango.Scale.PangoScale * UnitMultiplier);
+			double measuredWidth = logicalRect.Width / (Pango.Scale.PangoScale * UnitMultiplier);			
+			measuredY = logicalRect.Y / (Pango.Scale.PangoScale * UnitMultiplier);
 			
 			if ( DebugTextBlock && render ) {
 				
@@ -892,19 +890,20 @@ namespace MonoReports.Extensions.CairoExtensions
 				Pango.Rectangle logLineRect = new Pango.Rectangle();
 				
 				{ 
-					double span = 0;
+					double span = measuredY;
 					for(int d = 0 ; d < layout.LinesReadOnly.Length;d++){
 						var item = layout.LinesReadOnly[d];
 					
 					item.GetExtents(ref inklineRect,ref logLineRect);
+					//seems like when measuring line logLineRect.Y is not needed but i don't know why
 					double h = ((logLineRect.Height / Pango.Scale.PangoScale));
-					double y = ((logLineRect.Y / Pango.Scale.PangoScale));
+					double x = ((tb.Left + tb.Padding.Left) * UnitMultiplier + (logLineRect.X / Pango.Scale.PangoScale));
+					double y = (tb.Top + tb.Padding.Top) * UnitMultiplier  + span;
 					DrawDebugRect(g,
 						new Cairo.Rectangle(
-						((tb.Left + tb.Padding.Left) * UnitMultiplier + (logLineRect.X / Pango.Scale.PangoScale)) ,
-						((tb.Top + tb.Padding.Top) * UnitMultiplier - y) + span,
+						 x, y,
 						((logLineRect.Width / Pango.Scale.PangoScale)) ,
-						-h 							
+						h 							
 						));
 						
 						span += h;
@@ -953,7 +952,10 @@ namespace MonoReports.Extensions.CairoExtensions
 		/// Max height.
 		/// </param>
 
-		public static int GetBreakLineCharacterIndexbyMaxHeight (this Context g,TextBlock tb, double maxHeight) {
+		public static int GetBreakLineCharacterIndexbyMaxHeight (
+			this Context g,
+			TextBlock tb,
+			double maxHeight) {
 			
 			int result = 0;			
 			Pango.Rectangle inkRect;

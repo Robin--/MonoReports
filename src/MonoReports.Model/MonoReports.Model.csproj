@@ -90,6 +90,7 @@
     <Compile Include="Data\ExpressionField.cs" />
     <Compile Include="Data\LambdaFieldValueProvider.cs" />
     <Compile Include="DataSourceType.cs" />
+    <Compile Include="Engine\ReportEngine2.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
