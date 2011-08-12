@@ -32,21 +32,27 @@ using MonoReports.Model.Controls;
 
 namespace MonoReports.Tests
 {
-	[TestFixture()]
+	[TestFixture]
 	public class ReportEngineTest
 	{
-		[Test()]
-		public void ProcessSectionUpToHeightTreshold_WithNoDatasource_HasAtLeastOnePage ()
+
+		public IReportEngine CreateEngine (Report report,IReportRenderer renderer) {
+			return new ReportEngine2(report,renderer);
+		}
+		
+		[Test]
+		public void ProcessSection_WithNoDatasource_HasAtLeastOnePage ()
 		{
 			Report r = new Report();
 			RendererMock m = new RendererMock();
-			ReportEngine re = new ReportEngine(r,m);			
+			IReportEngine re = CreateEngine(r,m);	
 			re.Process();	
 			Assert.IsNotEmpty(r.Pages);
 		}
 
+
 		[Test]
-		public void ProcessSectionUpToHeightTreshold_BeforeDeailsProcess_HeightLeftIsReportHeightMinusHeadersAndFooters()
+		public void ProcessSection_BeforeDetailsProcess_HeightLeftIsReportHeightMinusHeadersAndFooters()
 		{
 			
 			Report r = new Report();	
@@ -66,12 +72,14 @@ namespace MonoReports.Tests
 			};
 			
 			RendererMock m = new RendererMock();
-			ReportEngine re = new ReportEngine(r,m);			
+			IReportEngine re = CreateEngine(r,m);			
 			re.Process();	
 			double pageHeaderAndPageFooterHeight =  r.Height - ( r.ReportHeaderSection.Height + r.PageHeaderSection.Height + r.PageFooterSection.Height);
 			
 			Assert.AreEqual(pageHeaderAndPageFooterHeight,heightBeforeDetails);
 		}
+		
+		
 		
 		public class RendererMock : IReportRenderer {
 	
@@ -87,8 +95,7 @@ namespace MonoReports.Tests
 
 			public Control[] BreakOffControlAtMostAtHeight (Control control, double height)
 			{
-				return new Control[]{ control.CreateControl(), control.CreateControl() };
-				
+				return new Control[]{ control.CreateControl(), control.CreateControl() };				
 			}
 
 			public void RenderPage (Page p)

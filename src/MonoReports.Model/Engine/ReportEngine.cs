@@ -32,7 +32,7 @@ using MonoReports.Model.Data;
 
 namespace MonoReports.Model.Engine
 {
-	public class ReportEngine
+	public class ReportEngine : IReportEngine
 	{
 
 		internal IReportRenderer ReportRenderer;
@@ -222,7 +222,7 @@ namespace MonoReports.Model.Engine
 		{
 			bool result = true;
 			
-			if (sectionContext.State == ProcessingState.Init) {
+			if (sectionContext.State == ProcessingState.BeforeProcessing) {
 				sectionContext.InitSection(heightTreshold);
 			}
 			

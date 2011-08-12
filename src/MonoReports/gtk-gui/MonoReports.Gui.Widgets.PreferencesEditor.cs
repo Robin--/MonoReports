@@ -209,7 +209,7 @@ namespace MonoReports.Gui.Widgets
 			w14.Expand = false;
 			w14.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.addReferenceFilechooserbutton = new global::Gtk.FileChooserButton (global::Mono.Unix.Catalog.GetString ("Select File"), ((global::Gtk.FileChooserAction)(0)));
+			this.addReferenceFilechooserbutton = new global::Gtk.FileChooserButton (global::Mono.Unix.Catalog.GetString ("Select A File"), ((global::Gtk.FileChooserAction)(0)));
 			this.addReferenceFilechooserbutton.Name = "addReferenceFilechooserbutton";
 			this.addReferenceFilechooserbutton.ShowHidden = true;
 			this.hbox1.Add (this.addReferenceFilechooserbutton);

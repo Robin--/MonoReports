@@ -33,7 +33,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.CSharp">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Mono.CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -91,6 +90,7 @@
     <Compile Include="Data\LambdaFieldValueProvider.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="Engine\ReportEngine2.cs" />
+    <Compile Include="Engine\IReportEngine.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

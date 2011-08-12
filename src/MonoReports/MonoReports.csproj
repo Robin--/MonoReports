@@ -60,7 +60,6 @@
     </Reference>
     <Reference Include="Mono.Cairo" />
     <Reference Include="Mono.CSharp">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Mono.CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>

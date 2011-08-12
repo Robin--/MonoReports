@@ -26,59 +26,141 @@
 using System;
 using MonoReports.Model.Controls;
 using System.Collections.Generic;
+using MonoReports.Model.Data;
 
 namespace MonoReports.Model.Engine
 {
-	public class ReportEngine2
+	public class ReportEngine2 : IReportEngine
 	{
-		IReportRenderer renderer;
-		Report report;
-		ProcessingContext procContext;
+		public ProcessingState ProcessingState {get;set;}
 		
+		IReportRenderer renderer;
+		Report report;	
+		IDataSource dataSource;
+		Section currentSection;
+		ProcessedControl currentControl;
+		List<ProcessedControl> controls;
+		bool reportHeaderProcessed;
+		bool reportDetailsProcessed;
+		bool dataSourceHasNextRecord;
+		double height;
+		internal ReportContext reportContext;
 		
 		public ReportEngine2 (Report report, IReportRenderer renderer)
 		{
 			this.renderer = renderer;
 			this.report = report;
+			dataSource = report.DataSource;
+			controls = new List<ProcessedControl> ();	
+			ProcessingState = ProcessingState.BeforeProcessing;
+			reportContext = new ReportContext(report) 
+			{ 
+				RendererContext = renderer.RendererContext,
+				CurrentPageIndex = 0,
+				DataSource = report.DataSource,
+				ReportMode = ReportMode.Preview 
+			};
 		}
 		
-	 	public bool ProcessPageUpToTreshold (double breakTreshold) {
-			bool result = false;
-			double height = breakTreshold;
+		void initProcessing() {			
+			nextRecord ();			
+			ProcessingState = ProcessingState.Processing;
+		}
+		
+		void finishProcessing () {
+			if (dataSource != null)
+				dataSource.Reset ();
+						 
+//			foreach (var dc in controlsToEvalAfterReportProcessing) {
+//				try {
+//					if (reportContext.ExpressionFieldsDict.ContainsKey (dc.FieldName)) 
+//						dc.Text = reportContext.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
+//				} catch {}						
+//			}
 
-			while (height < breakTreshold )
-			{
-				
+			 report.FireOnAfterReportProcessing(reportContext);
+			
+		}
+		
+		public void Process ()
+		{
+			initProcessing();
+			
+			//while (ProcessingState != ProcessingState.Finished) {				
+				ProcessPage();				
+			//}
+			 
+			finishProcessing();
+		}
+		
+		
+		public void ProcessPage () {
+			height = report.Height;						 
+			
+			if (report.PageHeaderSection.IsVisible) {
+				selectSection(report.PageHeaderSection);
+				processSection();
 			}
 			
-			return result;
+			if(!reportHeaderProcessed) {
+				if (report.ReportHeaderSection.IsVisible) {
+					selectSection(report.ReportHeaderSection);					
+				}
+			} else if (!reportDetailsProcessed) {
+				
+			} else {				
+				selectSection(report.ReportFooterSection);									
+			}
+			
+			processSection();
+			
+			
+			if (report.PageFooterSection.IsVisible) {
+				currentSection = report.PageFooterSection;
+				processSection ();
+			}			
 		}
 
-		bool processCurrentControl (double heightLeft) {
+		bool processSection () {
 			
-			renderer.MeasureControl (procContext.Control);
+			for (int i = 0; i < controls.Count; i++) {
+				ProcessedControl processedControl = controls[i];
+				Control control = processedControl.Control;
+				
+				Size size = renderer.MeasureControl(control);
+			}
+			//Size size = renderer.MeasureControl ();
+			//double bottom = size.Height + proce	
 			
 			return false;
 		}
-	
-		void selectNextSetion () {
 			
+		void selectSection (Section sect) {
+			currentSection = sect;
+			foreach(var c in sect.Controls) {
+				controls.Add (new ProcessedControl () { Control = c });
+			}
 		}
 		
-	}
-
-	public class ProcessingContext {				
-
-		public Section Section {get;set;}
-
-		public Control Control {get;set;}
-
-		public List<ProcessedControl> ProcessedControls {get;set;}
+		Section getBackgroundSectionControl () {
+			var c = currentSection.CreateControl () as Section;
+			c.Controls.Clear ();
+			c.TemplateControl = currentSection.TemplateControl;
+			return c;
+		}
 		
-		public bool WasInitialized { get; set; }
-	}
+		void nextRecord() {
+			if(dataSource == null)
+				dataSourceHasNextRecord = false;
+			else
+				dataSourceHasNextRecord = dataSource.MoveNext();
+		}		
+		
+	}	 
 	
-	
+ 
+	public enum ProcessingState {BeforeProcessing, Processing, Suspended, Finished}
+
 	public class ProcessedControl {		
 
 		public Control Control {get;set;}
@@ -86,6 +168,23 @@ namespace MonoReports.Model.Engine
 		public double Span {get;set;}
 
 		public bool WasProcessed {get;set;}
+		
+		public virtual void Process () {
+			WasProcessed = true;
+		}
 	}
+	
+	
+	public class SubreportControl : ProcessedControl {
+		
+		public ReportEngine2 Engine {get;set;}
+		
+		public override void Process ()
+		{
+			Engine.ProcessPage();
+		}
+		
+	}
+	
 }
 

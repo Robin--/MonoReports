@@ -148,8 +148,6 @@ namespace MonoReports.Model.Engine
 		
 		
 	}
-	
-	
-	public enum ProcessingState {Init, Processing, Suspended}
+
 }
 
