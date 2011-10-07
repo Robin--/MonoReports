@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoReports.Shell", "MonoRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrptInvoiceExample", "..\doc\example\MrptInvoiceExample\MrptInvoiceExample\MrptInvoiceExample.csproj", "{261069EA-6721-4974-AB94-6B2577ADE620}"
 EndProject
+Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "po", "..\po\po.mdproj", "{15B79357-A75A-4E63-BB69-3F6CE235D7CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

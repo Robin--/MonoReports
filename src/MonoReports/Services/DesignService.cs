@@ -37,7 +37,7 @@ using MonoReports.Renderers;
 using Gtk;
 using System.Linq;
 using MonoReports.Model.Engine;
-
+using Mono.Unix;
 
 namespace MonoReports.Services
 {
@@ -598,12 +598,12 @@ namespace MonoReports.Services
 		public void ExportToPdf ()
 		{
 			
-			Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose the pdf file to save", null, Gtk.FileChooserAction.Save, "Cancel", Gtk.ResponseType.Cancel, "Export", Gtk.ResponseType.Accept);
-			var fileFilter = new Gtk.FileFilter { Name = "pdf file" };
+			Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog (Catalog.GetString("Choose the pdf file to save"), null, Gtk.FileChooserAction.Save, Catalog.GetString("Cancel"), Gtk.ResponseType.Cancel, Catalog.GetString("Export"), Gtk.ResponseType.Accept);
+			var fileFilter = new Gtk.FileFilter { Name = Catalog.GetString("pdf file") };
 			fileFilter.AddPattern ("*.pdf");
 			
 			fc.AddFilter (fileFilter);
-			fc.CurrentName = string.IsNullOrEmpty( Report.Title) ? "untitled_report.pdf" : Report.Title + ".pdf";
+			fc.CurrentName = string.IsNullOrEmpty( Report.Title) ? Catalog.GetString("untitled_report.pdf") : Report.Title + ".pdf";
 				
 			 
 			if (fc.Run () == (int)Gtk.ResponseType.Accept) {

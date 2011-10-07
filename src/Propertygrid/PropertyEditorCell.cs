@@ -33,6 +33,7 @@ using System.ComponentModel;
 //using MonoDevelop.Components.PropertyGrid.PropertyEditors;
 using Gtk;
 using Gdk;
+using Mono.Posix;
 
 namespace PropertyGrid
 {
@@ -157,7 +158,7 @@ namespace PropertyGrid
 				
 				IPropertyEditor editor = Activator.CreateInstance (editorType) as IPropertyEditor;
 				if (editor == null)
-					throw new Exception ("The property editor '" + editorType + "' must implement the interface IPropertyEditor");
+					throw new Exception (String.Format(Catalog.GetString("The property editor {0} must implement the interface IPropertyEditor",  editorType)));
 				return editor;
 			}
 		}

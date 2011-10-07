@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Unix;
 namespace MonoReports.Model
 {
 	public  struct Point 
@@ -43,7 +44,7 @@ namespace MonoReports.Model
 		
 		public override string ToString ()
 		{
-			return string.Format ("[Point: X={0}, Y={1}]", _x, _y);
+			return string.Format (Catalog.GetString("[Point: X={0}, Y={1}]"), _x, _y);
 		}
 	}
 }

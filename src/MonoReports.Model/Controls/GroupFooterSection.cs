@@ -24,13 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Unix;
+
 namespace MonoReports.Model.Controls
 {
 	public class GroupFooterSection: Section
 	{
 		public GroupFooterSection ():base()
 		{
-		 	this.Name = "Group Footer";
+		 	this.Name = Catalog.GetString("Group Footer");
 			sectionType = SectionType.GroupFooter;
 		}
 		

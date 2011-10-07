@@ -45,6 +45,7 @@ using MonoReports.Core;
 using MonoReports.Model;
 using MonoReports.Extensions.JsonNetExtenssions;
 using MonoReports.Extensions.PropertyGridEditors;
+using Mono.Unix;
 
 namespace MonoReports.Gui.Widgets {
 
@@ -193,11 +194,11 @@ parameters.Add(""Price"",242342.545);
 
 	public void Save ()
 	{
-		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose Monoreports file to save", ((Gtk.Window)this.Toplevel), FileChooserAction.Save, "Cancel", ResponseType.Cancel, "Save", ResponseType.Accept);
-		var fileFilter = new FileFilter { Name = "Monoreports project" };
+		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog (Catalog.GetString("Choose Monoreports file to save"), ((Gtk.Window)this.Toplevel), FileChooserAction.Save, Catalog.GetString("Cancel"), ResponseType.Cancel, Catalog.GetString("Save"), ResponseType.Accept);
+		var fileFilter = new FileFilter { Name = Catalog.GetString("Monoreports project") };
 		fileFilter.AddPattern ("*.mrp");
 		fc.AddFilter (fileFilter);
-		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? "untiteled.mrp" : designService.Report.Title + ".mrp";				
+		fc.CurrentName =  string.IsNullOrEmpty(designService.Report.Title) ? Catalog.GetString("untiteled.mrp") : designService.Report.Title + ".mrp";				
 		if(string.IsNullOrEmpty(lastFileName)) {
 			if (fc.Run () == (int)ResponseType.Accept) {	
 				designService.Report.Title = String.Empty;
@@ -239,8 +240,8 @@ parameters.Add(""Price"",242342.545);
 
 	public void Open ()
 	{
-		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose the Monoreports file to open", ((Gtk.Window)this.Toplevel), FileChooserAction.Open, "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
-		var fileFilter = new FileFilter { Name = "Monoreports project" };
+		Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog (Catalog.GetString("Choose the Monoreports file to open"), ((Gtk.Window)this.Toplevel), FileChooserAction.Open, Catalog.GetString("Cancel"), ResponseType.Cancel, Catalog.GetString("Open"), ResponseType.Accept);
+		var fileFilter = new FileFilter { Name = Catalog.GetString("Monoreports project") };
 		fileFilter.AddPattern ("*.mrp");
 		fc.AddFilter (fileFilter);
 		fc.CurrentName =  string.Empty;
@@ -260,7 +261,7 @@ parameters.Add(""Price"",242342.545);
 	{
 		AboutDialog about = new AboutDialog();
 	
-		about.ProgramName = "Monoreports - report designer tool";
+		about.ProgramName = Catalog.GetString("Monoreports - report designer tool");
 		about.Authors = new string[]{"Tomasz Kubacki"};
 		about.WrapLicense = true;
 		about.License = @"

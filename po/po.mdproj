@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ItemType>TranslationProject</ItemType>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{15B79357-A75A-4E63-BB69-3F6CE235D7CF}</ProjectGuid>
+    <outputType>RelativeToOutput</outputType>
+    <relPath>locale</relPath>
+    <translations>
+      <translations>
+        <Translation isoCode="es" />
+        <Translation isoCode="en" />
+        <Translation isoCode="pl" />
+      </translations>
+    </translations>
+    <packageName>monorepots</packageName>
+  </PropertyGroup>
+</Project>

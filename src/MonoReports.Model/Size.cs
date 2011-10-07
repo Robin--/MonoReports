@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Unix;
 namespace MonoReports.Model
 {
 	public struct Size 
@@ -54,7 +55,7 @@ namespace MonoReports.Model
 		
 		public override string ToString ()
 		{
-			return string.Format ("[Size: Width={0}, Height={1}]", w, h); 
+			return string.Format (Catalog.GetString("[Size: Width={0}, Height={1}]"), w, h); 
 		}
 	}
 }

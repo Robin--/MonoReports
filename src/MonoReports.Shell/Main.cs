@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using Gtk;
+using Mono.Unix;
 
 namespace MonoReports.Shell
 {
@@ -32,6 +33,7 @@ namespace MonoReports.Shell
 	{
 		public static void Main (string[] args)
 		{
+			Catalog.Init  ("monoreports", "./locale");
 			Application.Init ();
 			MainWindow win = new MainWindow ();
 			win.Show ();

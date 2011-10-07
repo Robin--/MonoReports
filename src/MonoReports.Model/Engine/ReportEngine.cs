@@ -54,11 +54,13 @@ namespace MonoReports.Model.Engine
 		public static bool EvaluatorInitWasDone {get;set;}
 		List<IDataControl> controlsToEvalAfterReportProcessing = null;
 		
-		public static void EvaluatorInit(){
+		public static void EvaluatorInit ()
+		{
 			if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
-				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});				
-				Mono.CSharp.Evaluator.LoadAssembly(System.Reflection.Assembly.GetExecutingAssembly().Location);
-				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
+				Mono.CSharp.Evaluator.InitAndGetStartupFiles (new string[] {  });
+				Mono.CSharp.Evaluator.LoadAssembly (System.Reflection.Assembly.GetExecutingAssembly ().Location);
+				//Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
+				Mono.CSharp.Evaluator.InteractiveBaseClass = (typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
 				Mono.CSharp.Evaluator.Run("using System;");
 				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
 				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
@@ -89,7 +91,8 @@ namespace MonoReports.Model.Engine
 			if (!ReportEngine.EvaluatorInitWasDone) {
 				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
 				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
-				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoreportsInteractiveBase));
+				//Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoreportsInteractiveBase));
+				Mono.CSharp.Evaluator.InteractiveBaseClass = (typeof(MonoreportsInteractiveBase));
 				Mono.CSharp.Evaluator.Run("using System;");
 				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
 				EvaluatorInitWasDone = true;

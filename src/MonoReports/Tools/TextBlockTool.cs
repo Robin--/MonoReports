@@ -30,6 +30,7 @@ using MonoReports.Model.Controls;
 using MonoReports.ControlView;
 using Gtk;
 using MonoReports.Model;
+using Mono.Unix;
 
 namespace MonoReports.Tools
 {
@@ -78,7 +79,7 @@ namespace MonoReports.Tools
 		public override ControlViewBase CreateNewControl (SectionView sectionView)
 		{				
 			var startPoint = sectionView.PointInSectionByAbsolutePoint (designService.StartPressPoint.X, designService.StartPressPoint.Y);			
-			var tb = new TextBlock { Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Text="text" };
+			var tb = new TextBlock { Location = new MonoReports.Model.Point (startPoint.X, startPoint.Y), Text=Catalog.GetString("text") };
             return AddControl(sectionView, tb); 
 		}
 
