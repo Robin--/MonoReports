@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Unix;
 
 namespace MonoReports.Model
 {
@@ -74,7 +75,7 @@ namespace MonoReports.Model
 		
 		public override string ToString ()
 		{
-			return string.Format ("[Thickness: Left={0}, Top={1},Right={2}, Bottom={3}]", l, t, r, b); 
+			return string.Format (Catalog.GetString("[Thickness: Left={0}, Top={1},Right={2}, Bottom={3}]"), l, t, r, b); 
 		}
 	}
 }

@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Unix;
 
 namespace MonoReports.Model.Controls
 {
@@ -31,7 +32,7 @@ namespace MonoReports.Model.Controls
 	{
 		public GroupHeaderSection():base()
 		{
-			this.Name = "Group Header";
+			this.Name = Catalog.GetString("Group Header");
 			sectionType = SectionType.GroupHeader;
 		}
 		

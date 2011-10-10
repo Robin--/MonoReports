@@ -24,13 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.Unix;
+
 namespace MonoReports.Model.Controls
 {
 	public class ReportHeaderSection : Section
 	{
 		public ReportHeaderSection ():base()
 		{
-			this.Name = "Report Header";
+			this.Name = Catalog.GetString("Report Header");
 			sectionType = SectionType.ReportHeader;
 		}
 

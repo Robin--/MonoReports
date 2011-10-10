@@ -40,6 +40,7 @@ using Gdk;
 using Gtk;
 using MonoReports.Model.Data;
 using System.Linq;
+using Mono.Unix;
 
 namespace MonoReports.Gui.Widgets
 {
@@ -100,24 +101,24 @@ namespace MonoReports.Gui.Widgets
 		{
 			this.Build ();
 		   	var reportCellRenderer = new Gtk.CellRendererText ();
-			var reportColumn = exporerTreeview.AppendColumn ("Report", reportCellRenderer);
+			var reportColumn = exporerTreeview.AppendColumn (Catalog.GetString("Report"), reportCellRenderer);
 			reportColumn.SetCellDataFunc(reportCellRenderer,new Gtk.TreeCellDataFunc (renderReportCell));
 			theModel = new Gtk.TreeStore (typeof(TreeItemWrapper));	
 			exporerTreeview.Model = theModel;
 
-			reportNode =  theModel.AppendValues(new TreeItemWrapper("Report"));
-			parametersNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Parameters"));
-			dataFieldsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Data"));
-			expressionsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Expressions"));
+			reportNode =  theModel.AppendValues(new TreeItemWrapper(Catalog.GetString("Report")));
+			parametersNode = theModel.AppendValues (reportNode,new TreeItemWrapper(Catalog.GetString("Parameters")));
+			dataFieldsNode = theModel.AppendValues (reportNode,new TreeItemWrapper(Catalog.GetString("Data")));
+			expressionsNode = theModel.AppendValues (reportNode,new TreeItemWrapper(Catalog.GetString("Expressions")));
 			
  		
-			groupsNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Groups"));
-			imagesNode = theModel.AppendValues (reportNode,new TreeItemWrapper("Images"));
+			groupsNode = theModel.AppendValues (reportNode,new TreeItemWrapper(Catalog.GetString("Groups")));
+			imagesNode = theModel.AppendValues (reportNode,new TreeItemWrapper(Catalog.GetString("Images")));
 			exporerTreeview.Selection.Changed += HandleExporerTreeviewSelectionChanged;
 
 			Gtk.Drag.SourceSet (exporerTreeview, 
 				ModifierType.Button1Mask, 
-				new TargetEntry[]{new TargetEntry ("Field", TargetFlags.OtherWidget,2)}, 
+				new TargetEntry[]{new TargetEntry (Catalog.GetString("Field"), TargetFlags.OtherWidget,2)}, 
 			DragAction.Copy);
 			
 			exporerTreeview.RowActivated += HandleExporerTreeviewRowActivated;
@@ -202,10 +203,10 @@ namespace MonoReports.Gui.Widgets
 					if ((index == 0 || index == 1) && path.Depth == 2) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						if (index == 1) {
-							addNewMenuItem = new MenuItem ("Add data field");
+							addNewMenuItem = new MenuItem (Catalog.GetString("Add data field"));
 								
 						} else if (index == 0){
-							addNewMenuItem = new MenuItem ("Add parameter field");								
+							addNewMenuItem = new MenuItem (Catalog.GetString("Add parameter field"));
 						}
 						
 						jBox.Add (addNewMenuItem);		
@@ -255,7 +256,7 @@ namespace MonoReports.Gui.Widgets
 						
 					}else if (index == 2 && path.Depth == 2) {
 						Gtk.Menu jBox = new Gtk.Menu ();
-						addNewMenuItem = new MenuItem ("Add expression field");								
+						addNewMenuItem = new MenuItem (Catalog.GetString("Add expression field"));								
 						jBox.Add (addNewMenuItem);		
 								
 						addNewMenuItem.Activated += delegate(object sender, EventArgs e) {					
@@ -297,11 +298,11 @@ namespace MonoReports.Gui.Widgets
 						
 						string menuText = String.Empty;
 						if (index == 0)
-							menuText = "Delete parameter field";
+							menuText = Catalog.GetString("Delete parameter field");
 						else if (index == 1)
-							menuText = "Delete data field";
+							menuText = Catalog.GetString("Delete data field");
 						else if (index == 2)
-							menuText = "Delete expression field";
+							menuText = Catalog.GetString("Delete expression field");
 							
 						Gtk.MenuItem deleteFieldItem = new MenuItem (menuText);
 						 
@@ -331,13 +332,13 @@ namespace MonoReports.Gui.Widgets
 					} else if (index == 4 && path.Depth == 2) {
 						 Gtk.Menu jBox = new Gtk.Menu ();
 						 
-							addNewMenuItem = new MenuItem ("add image");
+							addNewMenuItem = new MenuItem (Catalog.GetString("add image"));
 							jBox.Add (addNewMenuItem);
 							addNewMenuItem.Activated += delegate(object sender, EventArgs e) {
 								
 								
-								Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog ("Choose monoreports file to open",null, FileChooserAction.Open , "Cancel", ResponseType.Cancel, "Open", ResponseType.Accept);
-								var fileFilter = new FileFilter { Name = "Images" };
+								Gtk.FileChooserDialog fc = new Gtk.FileChooserDialog (Catalog.GetString("Choose monoreports file to open"),null, FileChooserAction.Open , Catalog.GetString("Cancel"), ResponseType.Cancel, Catalog.GetString("Open"), ResponseType.Accept);
+								var fileFilter = new FileFilter { Name = Catalog.GetString("Images") };
 								fileFilter.AddPattern ("*.jpg");
 								fileFilter.AddPattern ("*.png");
 								fileFilter.AddPattern ("*.gif");
@@ -365,7 +366,7 @@ namespace MonoReports.Gui.Widgets
 					}else if (index == 4 && path.Depth == 3) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						 
-						Gtk.MenuItem deleteImageItem = new MenuItem ("delete image");
+						Gtk.MenuItem deleteImageItem = new MenuItem (Catalog.GetString("delete image"));
 						 
 						jBox.Add (deleteImageItem);		
 								

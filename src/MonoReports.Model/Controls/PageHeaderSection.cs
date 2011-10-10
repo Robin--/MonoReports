@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using MonoReports.Model;
+using Mono.Unix;
 
 namespace MonoReports.Model.Controls
 {
@@ -33,7 +34,7 @@ namespace MonoReports.Model.Controls
 	
 		public PageHeaderSection ():base()
 		{
-			this.Name = "Page Header";
+			this.Name = Catalog.GetString("Page Header");
 			sectionType = MonoReports.Model.SectionType.PageHeader;
 		}
 		

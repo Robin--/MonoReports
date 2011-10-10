@@ -28,6 +28,7 @@ using MonoReports.Model.Controls;
 using System.Linq;
 using System.Collections;
 using MonoReports.Model.Data;
+using Mono.Unix;
 
 namespace MonoReports.Model
 {
@@ -57,19 +58,19 @@ namespace MonoReports.Model
 			PageFooterSection = new Controls.PageFooterSection { Location = new Point (0, 13), Size = new Model.Size (Width, 10.mm()) };
 			ReportFooterSection = new Controls.ReportFooterSection { Location = new Point (0, 16), Size = new Model.Size (Width, 10.mm()) };
 			
-			var ef = new MonoReports.Model.Data.ExpressionField() { Name = "#RowNumber"};
+			var ef = new MonoReports.Model.Data.ExpressionField() { Name = Catalog.GetString("#RowNumber")};
 			ef.ExpressionScript = "RowIndex;";
 			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
 			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
 			ExpressionFields.Add(ef);
 			
-			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#PageNumber"};
+			ef = new MonoReports.Model.Data.ExpressionField() { Name = Catalog.GetString("#PageNumber")};
 			ef.ExpressionScript = "CurrentPageIndex;";
 			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
 			ef.DataProvider = new MonoReports.Model.Data.ExpressionFieldValueProvider(ef);
 			ExpressionFields.Add(ef);
 			
-			ef = new MonoReports.Model.Data.ExpressionField() { Name = "#NumberOfPages"};
+			ef = new MonoReports.Model.Data.ExpressionField() { Name = Catalog.GetString("#NumberOfPages")};
 			ef.ExpressionScript = "CurrentPageIndex;";
 			ef.FieldKind = MonoReports.Model.Data.FieldKind.Expression;
 			ef.IsEvaluatedAfterProcessing = true;
@@ -201,9 +202,9 @@ namespace MonoReports.Model
 		{
 			
 			Groups.Add (gr);
-			GroupHeaderSection gh = new GroupHeaderSection { Name = "Group header " + gr.ExpressionFieledName, Size = new Model.Size (Width, 20), Location = new Point (0, 150) };
+			GroupHeaderSection gh = new GroupHeaderSection { Name = Catalog.GetString("Group header ") + gr.ExpressionFieledName, Size = new Model.Size (Width, 20), Location = new Point (0, 150) };
 			GroupHeaderSections.Add (gh);
-			GroupFooterSection gf = new GroupFooterSection { Name = "Group footer " + gr.ExpressionFieledName, Size = new Model.Size(Width, 20), Location = new Point(0, 250) };
+			GroupFooterSection gf = new GroupFooterSection { Name = Catalog.GetString("Group footer ") + gr.ExpressionFieledName, Size = new Model.Size(Width, 20), Location = new Point(0, 250) };
 			GroupFooterSections.Add (gf);
 		}
 
@@ -258,7 +259,7 @@ namespace MonoReports.Model
 						DataFields.Add (field);				 					
 				}
 			} else 
-				throw new InvalidOperationException ("Datasource can't be null while discovering data fields");
+				throw new InvalidOperationException (Catalog.GetString("Datasource can't be null while discovering data fields"));
 				
 		}
 

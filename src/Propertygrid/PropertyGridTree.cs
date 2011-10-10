@@ -32,6 +32,7 @@ using System.ComponentModel;
 
 using Gtk;
 using Gdk;
+using Mono.Unix;
 
 //using MonoDevelop.Components.PropertyGrid.PropertyEditors;
 
@@ -68,7 +69,7 @@ namespace PropertyGrid
 			TreeViewColumn col;
 
 			col = new TreeViewColumn ();
-			col.Title = "Property";
+			col.Title = Catalog.GetString("Property");
 			crt = new CellRendererPropertyGroup (tree);
 			crt.Xpad = 0;
 			col.PackStart (crt, true);
@@ -80,7 +81,7 @@ namespace PropertyGrid
 			tree.AppendColumn (col);
 			
 			editorColumn = new TreeViewColumn ();
-			editorColumn.Title = "Value";
+			editorColumn.Title = Catalog.GetString("Value");
 			
 			CellRendererProperty crp = new CellRendererProperty (tree);
 			

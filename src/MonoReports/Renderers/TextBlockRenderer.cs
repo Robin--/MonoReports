@@ -29,6 +29,7 @@ using MonoReports.Model.Controls;
 using MonoReports.Extensions.CairoExtensions;
 using Cairo;
 using MonoReports.Model;
+using Mono.Unix;
 
 namespace MonoReports.Renderers
 {
@@ -64,7 +65,7 @@ namespace MonoReports.Renderers
 			c.DrawInsideBorderInUnit  (borderRect, textBlock.Border,true);						
 			c.Restore();		
 			if(MonoreportsSettings.debugMode)
-				c.DrawDebug( string.Format("bottom: {0}",textBlock.Bottom.ToUnitString()),borderRect.X,textBlock.Bottom);
+				c.DrawDebug( string.Format(Catalog.GetString("bottom: {0}"),textBlock.Bottom.ToUnitString()),borderRect.X,textBlock.Bottom);
 		}
 
         public Size Measure(Cairo.Context c, Control control)

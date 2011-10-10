@@ -40,6 +40,8 @@ using System.ComponentModel;
 
 using Gtk;
 using Gdk;
+using Mono.Unix;
+
 //using MonoDevelop.Components.PropertyGrid.PropertyEditors;
 using System.Collections.Generic;
 
@@ -166,7 +168,7 @@ namespace PropertyGrid
 		{
 			PropertyGridToolbar t = toolbar as PropertyGridToolbar;
 			if (t == null)
-				throw new InvalidOperationException ("Custom toolbar provider already set");
+				throw new InvalidOperationException (Catalog.GetString("Custom toolbar provider already set"));
 			Remove (t);
 			foreach (Widget w in t.Children) {
 				t.Remove (w);

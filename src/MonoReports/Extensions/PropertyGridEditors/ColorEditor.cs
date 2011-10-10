@@ -32,6 +32,7 @@ using System.ComponentModel;
 using MonoReports.Model.Controls;
 using PropertyGrid;
 using MonoReports.Model;
+using Mono.Unix;
 
 namespace MonoReports.Extensions.PropertyGridEditors
 {
@@ -83,7 +84,7 @@ namespace MonoReports.Extensions.PropertyGridEditors
 		public void Initialize (EditSession session)
 		{
 			if (session.Property.PropertyType != typeof(Color))
-				throw new ApplicationException ("Color editor does not support editing values of type " + session.Property.PropertyType);
+				throw new ApplicationException (Catalog.GetString("Color editor does not support editing values of type ") + session.Property.PropertyType);
 		}
 		
 		 

@@ -25,7 +25,7 @@
 // THE SOFTWARE.
 using System;
 using MonoReports.Model.Controls;
-
+using Mono.Unix;
 
 namespace MonoReports.Model
 {
@@ -95,7 +95,7 @@ namespace MonoReports.Model
 		
 		public override string ToString ()
 		{
-			return string.Format ("[Border: Left={0}, Top={1}, Right={2}, Bottom={3}, Color={4}]", LeftWidth, TopWidth, RightWidth, BottomWidth, Color);
+			return string.Format (Catalog.GetString("[Border: Left={0}, Top={1}, Right={2}, Bottom={3}, Color={4}]"), LeftWidth, TopWidth, RightWidth, BottomWidth, Color);
 		}
 		 
 	}

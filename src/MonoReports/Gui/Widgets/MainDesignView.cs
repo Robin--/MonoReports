@@ -39,7 +39,7 @@ using MonoReports.Model.Data;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Text;
-
+using Mono.Unix;
 
 namespace MonoReports.Gui.Widgets
 {
@@ -179,7 +179,7 @@ namespace MonoReports.Gui.Widgets
 				previewDrawingArea.QueueDraw ();
 			};
 			
-			ToolBarLabel pagelabel = new ToolBarLabel ("Page: ");
+			ToolBarLabel pagelabel = new ToolBarLabel (Catalog.GetString("Page: "));
 			previewToolbar.Insert (pagelabel, 0);
 			previewToolbar.Insert (pageSpinButton, 1);
 			
@@ -241,7 +241,7 @@ namespace MonoReports.Gui.Widgets
 			
 			if (designService.IsDesign) {
 				DesignDrawingArea.GrabFocus();
-				workSpaceService.Status (String.Format ("press x:{0} y:{1} | xroot:{2} yroot:{3}", args.Event.X, args.Event.Y, args.Event.XRoot, args.Event.YRoot));
+				workSpaceService.Status (String.Format (Catalog.GetString("press x:{0} y:{1} | xroot:{2} yroot:{3}"), args.Event.X, args.Event.Y, args.Event.XRoot, args.Event.YRoot));
 				
 				int click = 1;
 				if (args.Event.Type == EventType.TwoButtonPress)
@@ -258,7 +258,7 @@ namespace MonoReports.Gui.Widgets
 			
 			if (designService.IsDesign) {
 				designService.MouseMove (args.Event.X, args.Event.Y);
-				workSpaceService.Status (String.Format ("move x:{0} y:{1}",
+				workSpaceService.Status (String.Format (Catalog.GetString("move x:{0} y:{1}"),
 					((args.Event.X / designService.Renderer.UnitMultipilier) / designService.Zoom).ToUnitString(), ((args.Event.Y  / designService.Renderer.UnitMultipilier) / designService.Zoom).ToUnitString()));
 			}
 			

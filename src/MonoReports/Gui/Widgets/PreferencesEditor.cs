@@ -28,6 +28,7 @@ using MonoReports.Model;
 using MonoReports.Extensions.PropertyGridEditors;
 using MonoReports.Core;
 using Gtk;
+using Mono.Unix;
 
 namespace MonoReports.Gui.Widgets
 {
@@ -36,8 +37,8 @@ namespace MonoReports.Gui.Widgets
 		public PreferencesEditor ()
 		{
 			this.Build ();
-			referencesNodeView.AppendColumn ("Reference name", new Gtk.CellRendererText (), "text", 0);
-			usingsNodeview.AppendColumn ("Using Name", new Gtk.CellRendererText (), "text", 0);
+			referencesNodeView.AppendColumn (Catalog.GetString("Reference name"), new Gtk.CellRendererText (), "text", 0);
+			usingsNodeview.AppendColumn (Catalog.GetString("Using Name"), new Gtk.CellRendererText (), "text", 0);
 			AppSettings = new MonoreportsSettings();									
 			IsInEditMode = true; 	
 			addUsingButton.Sensitive = false;

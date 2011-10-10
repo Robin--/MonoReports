@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Globalization;
 using MonoReports.Model;
+using Mono.Unix;
 
 namespace MonoReports.Extensions.PropertyGridEditors
 {
@@ -91,8 +92,7 @@ namespace MonoReports.Extensions.PropertyGridEditors
 					return ConvertFromString (text, numberFormatInfo);
 				} catch (Exception e) {
 					// LAMESPEC MS wraps the actual exception in an Exception
-					throw new Exception (value.ToString() + " is not a valid "
-						+ "value for " + InnerType.Name + ".", e);
+					throw new Exception (value.ToString() + Catalog.GetString(" is not a valid value for ") + InnerType.Name + ".", e);
 				}
 			}
 
@@ -103,7 +103,7 @@ namespace MonoReports.Extensions.PropertyGridEditors
 						 object value, Type destinationType)
 		{
 			if (value == null)
-				throw new ArgumentNullException ("value");
+				throw new ArgumentNullException (Catalog.GetString("value"));
 
 			if (culture == null)
 				culture = CultureInfo.CurrentCulture;

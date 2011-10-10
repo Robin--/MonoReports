@@ -24,7 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
- 
+using Mono.Unix;
 
 namespace MonoReports.Model.Controls
 {
@@ -32,7 +32,7 @@ namespace MonoReports.Model.Controls
 	{
 		public PageFooterSection ():base()
 		{
-			this.Name = "Page Footer";
+			this.Name = Catalog.GetString("Page Footer");
 			sectionType = SectionType.PageFooter;
 		}
 		

@@ -27,6 +27,7 @@ using System;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace MonoReports.Model.Data
 {
@@ -64,7 +65,7 @@ namespace MonoReports.Model.Data
 				try{
 					returnVal =  String.Format(format != null ? format : "{0}",DataProvider.GetValue(current) );
 				}catch(Exception exp){
-					Console.WriteLine( String.Format("Field {0} exp: {1}",this.Name, exp));
+					Console.WriteLine( String.Format(Catalog.GetString("Field {0} exp: {1}"),this.Name, exp));
 				}
 			} else {
 				returnVal = String.Format(format != null ? format : "{0}", DefaultValue);

@@ -29,6 +29,7 @@ using Microsoft.CSharp;
 using System.Text;
 using System.CodeDom;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace MonoReports.Services
 {
@@ -161,7 +162,7 @@ namespace MonoReports.Services
 							return true;
 						} 
 					} catch (Exception exception) {
-						this.runErrors.Append ("error while running code " + className + System.Environment.NewLine + exception.ToString ());
+						this.runErrors.Append (Catalog.GetString("error while running code ") + className + System.Environment.NewLine + exception.ToString ());
 					}
 					
 				}else {					

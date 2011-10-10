@@ -25,13 +25,14 @@
 // THE SOFTWARE.
 using System;
 using MonoReports.Model.Controls;
+using Mono.Unix;
 namespace MonoReports.Model.Controls
 {
 	public class DetailSection : Section
 	{
 		public DetailSection ():base()
 		{
-			this.Name = "Detail";
+			this.Name = Catalog.GetString ("Detail");
 			KeepTogether = true;
 			sectionType = SectionType.Details;
 		}
