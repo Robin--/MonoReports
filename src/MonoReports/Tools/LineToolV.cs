@@ -46,7 +46,10 @@ namespace MonoReports.Tools
 				return "LineToolV";
 			}
 		}
-		
+
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Vertical Line"); }
+		}
 		public override string ToolbarImageName {
 			get {
 				return "ToolLineV.png";

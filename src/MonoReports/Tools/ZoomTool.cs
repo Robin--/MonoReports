@@ -37,6 +37,10 @@ namespace MonoReports.Tools
 		}
 		
 		public override string Name {get {return "ZoomTool"; }}
+
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Zoom"); }
+		}
 		
 		public override bool IsToolbarTool {
 			get {

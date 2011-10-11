@@ -40,6 +40,9 @@ namespace MonoReports.Tools
 			get { return "ImageTool"; }
 		}
 				
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Image"); }
+		}
 		
 		public override string ToolbarImageName {
 			get {

@@ -107,7 +107,8 @@ namespace PropertyGrid
 				catButton.Image = new Gtk.Image (pixbuf);
 				catButton.Image.Show ();
 			}
-			catButton.TooltipText = "Sort in categories";
+			catButton.TooltipText = Catalog.GetString("Sort in categories");
+			catButton.Image = new Gtk.Image (Stock.Indent, IconSize.Menu);
 			catButton.Toggled += new EventHandler (toolbarClick);
 			toolbar.Insert (catButton, 0);
 			
@@ -116,7 +117,7 @@ namespace PropertyGrid
 			alphButton.Relief = ReliefStyle.None;
 			alphButton.Image = new Gtk.Image (Stock.SortAscending, IconSize.Menu);
 			alphButton.Image.Show ();
-			alphButton.TooltipText = "Sort alphabetically";
+			alphButton.TooltipText = Catalog.GetString("Sort alphabetically");
 			alphButton.Clicked += new EventHandler (toolbarClick);
 			toolbar.Insert (alphButton, 1);
 			
@@ -126,7 +127,7 @@ namespace PropertyGrid
 			helpButton = new ToggleButton ();
 			helpButton.Relief = ReliefStyle.None;
 			helpButton.Image = new Gtk.Image (Gtk.Stock.Help, IconSize.Menu);
-			helpButton.TooltipText = "Show help panel";
+			helpButton.TooltipText = Catalog.GetString("Show help panel");
 			helpButton.Clicked += delegate {
 				ShowHelp = helpButton.Active;
 				//MonoDevelop.Core.PropertyService.Set (PROP_HELP_KEY, helpButton.Active);

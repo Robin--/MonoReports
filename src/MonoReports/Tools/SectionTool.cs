@@ -83,7 +83,11 @@ namespace MonoReports.Tools
 		
 		public override string Name {get {return "SectionTool"; }}
 		
-			public override bool IsToolbarTool {
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Section"); }
+		}
+		
+		public override bool IsToolbarTool {
 			get {
 				return false;
 			}

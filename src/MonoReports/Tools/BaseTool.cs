@@ -44,6 +44,8 @@ namespace MonoReports.Tools
  
 	    public abstract string Name {get;}
 		
+		public abstract string ToolBarToolTip {get;}
+		
 		public virtual string ToolbarImageName {get { return  String.Empty; }}
 		
 		public abstract bool IsToolbarTool {get;}
@@ -55,7 +57,7 @@ namespace MonoReports.Tools
 		
 		public virtual void BuildToolbar(Gtk.Toolbar toolBar){
 			if(IsToolbarTool){
-			ToolBarButton toolButton = new ToolBarButton (ToolbarImageName,Name,Name);
+			ToolBarButton toolButton = new ToolBarButton (ToolbarImageName,Name, ToolBarToolTip);
 			toolButton.Clicked += delegate(object sender, EventArgs e) {
 				designService.SelectedControl = null;
 				designService.SelectedTool = this;

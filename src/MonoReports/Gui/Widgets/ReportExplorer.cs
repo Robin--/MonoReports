@@ -332,7 +332,7 @@ namespace MonoReports.Gui.Widgets
 					} else if (index == 4 && path.Depth == 2) {
 						 Gtk.Menu jBox = new Gtk.Menu ();
 						 
-							addNewMenuItem = new MenuItem (Catalog.GetString("add image"));
+							addNewMenuItem = new MenuItem (Catalog.GetString("Add image"));
 							jBox.Add (addNewMenuItem);
 							addNewMenuItem.Activated += delegate(object sender, EventArgs e) {
 								
@@ -366,7 +366,7 @@ namespace MonoReports.Gui.Widgets
 					}else if (index == 4 && path.Depth == 3) {
 						Gtk.Menu jBox = new Gtk.Menu ();
 						 
-						Gtk.MenuItem deleteImageItem = new MenuItem (Catalog.GetString("delete image"));
+						Gtk.MenuItem deleteImageItem = new MenuItem (Catalog.GetString("Delete image"));
 						 
 						jBox.Add (deleteImageItem);		
 								

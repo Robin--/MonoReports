@@ -164,6 +164,10 @@ namespace MonoReports.Tools
 		public override string Name {
 			get { return "LineTool"; }
 		}
+						
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Line"); }
+		}
 		
 		public override bool IsToolbarTool {
 			get {

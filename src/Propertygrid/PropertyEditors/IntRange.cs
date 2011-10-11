@@ -28,6 +28,7 @@
 
 using System;
 using System.ComponentModel;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors
 {
@@ -89,7 +90,7 @@ namespace PropertyGrid.PropertyEditors
 					max = (double) SByte.MaxValue;
 					break;
 				default:
-					throw new ApplicationException ("IntRange editor does not support editing values of type " + session.Property.PropertyType);
+					throw new ApplicationException (Catalog.GetString("IntRange editor does not support editing values of type ") + session.Property.PropertyType);
 			}
 			
 			SetRange (min, max);

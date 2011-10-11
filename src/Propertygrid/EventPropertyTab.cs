@@ -34,7 +34,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-
+using Mono.Unix;
  
 namespace PropertyGrid
 {
@@ -45,7 +45,7 @@ namespace PropertyGrid
 		}
 		
 		public override string TabName {
-			get {return "Events"; }
+			get {return Catalog.GetString("Events"); }
 		}
 		
 		public override bool CanExtend (object extendee)
@@ -76,10 +76,10 @@ namespace PropertyGrid
 		{
 			IComponent comp = component as IComponent;
 			if (comp == null || comp.Site == null)
-				throw new Exception ("Check whether a tab can display a component before displaying it");
+				throw new Exception (Catalog.GetString("Check whether a tab can display a component before displaying it"));
 			IEventBindingService evtBind = (IEventBindingService) comp.Site.GetService (typeof (IEventBindingService));
 			if (evtBind == null)
-				throw new Exception ("Check whether a tab can display a component before displaying it");
+				throw new Exception (Catalog.GetString("Check whether a tab can display a component before displaying it"));
 			return evtBind;
 		}
 	}

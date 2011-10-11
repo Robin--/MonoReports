@@ -46,7 +46,10 @@ namespace MonoReports.Tools
 				return "LineToolH";
 			}
 		}
-		
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Horizonal Line"); }
+		}
+	
 		public override string ToolbarImageName {
 			get {
 				return "ToolLineH.png";

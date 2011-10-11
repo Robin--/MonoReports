@@ -28,6 +28,7 @@
 
 using System;
 using System.ComponentModel;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors
 {
@@ -44,7 +45,7 @@ namespace PropertyGrid.PropertyEditors
 		public void Initialize (EditSession session)
 		{
 			if (session.Property.PropertyType != typeof(char))
-				throw new ApplicationException ("Char editor does not support editing values of type " + session.Property.PropertyType);
+				throw new ApplicationException (Catalog.GetString("Char editor does not support editing values of type ") + session.Property.PropertyType);
 		}
 		
 		char last;

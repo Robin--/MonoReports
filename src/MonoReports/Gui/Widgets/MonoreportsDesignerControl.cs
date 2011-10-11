@@ -118,7 +118,7 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 		toolBoxService.BuildToolBar (mainToolbar);
  		
 		
-		ToolBarButton exportPdfToolButton = new ToolBarButton ("pdf.png","exportPdf","export to pdf");
+		ToolBarButton exportPdfToolButton = new ToolBarButton ("pdf.png","exportPdf",Catalog.GetString("Export to pdf"));
 		exportPdfToolButton.Clicked += delegate(object sender, EventArgs e) {
 			designService.ExportToPdf();
 		};
@@ -263,6 +263,7 @@ parameters.Add(""Price"",242342.545);
 	
 		about.ProgramName = Catalog.GetString("Monoreports - report designer tool");
 		about.Authors = new string[]{"Tomasz Kubacki"};
+		about.TranslatorCredits = "Claudio Rodrigo Pereyra Diaz";
 		about.WrapLicense = true;
 		about.License = @"
 Copyright (c) 2010 Tomasz Kubacki

@@ -30,6 +30,7 @@ using Gtk;
 using System;
 using System.Collections;
 using System.ComponentModel;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors 
 {
@@ -76,7 +77,7 @@ namespace PropertyGrid.PropertyEditors
 			PropertyDescriptor prop = session.Property;
 			
 			if (!prop.PropertyType.IsEnum)
-				throw new ApplicationException ("Flags editor does not support editing values of type " + prop.PropertyType);
+				throw new ApplicationException (Catalog.GetString("Flags editor does not support editing values of type ") + prop.PropertyType);
 			
 			Spacing = 3;
 			propType = prop.PropertyType;

@@ -40,7 +40,10 @@ namespace MonoReports.Tools
 		public override string Name {
 			get { return "TextBlockTool"; }
 		}
-				
+		
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Text Block"); }
+		}				
 		
 		public override string ToolbarImageName {
 			get {
