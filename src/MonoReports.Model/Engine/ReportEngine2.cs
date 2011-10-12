@@ -4,7 +4,7 @@
 // Author:
 // Tomasz Kubacki <tomasz.kubacki@gmail.com>
 // 
-// Copyright (c) 2011 tomek
+// Copyright (c) 2011 tomasz kubacki
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,14 @@ namespace MonoReports.Model.Engine
 		public ProcessingState ProcessingState {get;set;}
 		
 		IReportRenderer renderer;
-		Report report;	
+		Report report;
 		IDataSource dataSource;
-		Section currentSection;
-		ProcessedControl currentControl;
+		int pageNumber = 0;
+		double currentPageSpan;
+		Page currentPage;
+		Section currentSection;		
+		ProcessedControl currentControl;		
 		List<ProcessedControl> controls;
-		bool reportHeaderProcessed;
-		bool reportDetailsProcessed;
 		bool dataSourceHasNextRecord;
 		double height;
 		internal ReportContext reportContext;
@@ -77,57 +78,64 @@ namespace MonoReports.Model.Engine
 //						dc.Text = reportContext.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
 //				} catch {}						
 //			}
-
-			 report.FireOnAfterReportProcessing(reportContext);
+			ProcessingState = ProcessingState.Finished;
+			report.FireOnAfterReportProcessing(reportContext);
 			
 		}
 		
 		public void Process ()
 		{
-			initProcessing();
-			
-			//while (ProcessingState != ProcessingState.Finished) {				
+			initProcessing();			
+			while (ProcessingState != ProcessingState.Finished) {				
 				ProcessPage();				
-			//}
-			 
+			}			 
 			finishProcessing();
 		}
 		
-		
 		public void ProcessPage () {
-			height = report.Height;						 
-			
+			currentPage = new Page(){ PageNumber = ++pageNumber };
+			height = report.Height;			
 			if (report.PageHeaderSection.IsVisible) {
 				selectSection(report.PageHeaderSection);
 				processSection();
 			}
 			
-			if(!reportHeaderProcessed) {
-				if (report.ReportHeaderSection.IsVisible) {
-					selectSection(report.ReportHeaderSection);					
-				}
-			} else if (!reportDetailsProcessed) {
-				
-			} else {				
-				selectSection(report.ReportFooterSection);									
+			if (report.ReportHeaderSection.IsVisible) {
+				selectSection(report.ReportHeaderSection);					
 			}
-			
-			processSection();
 			
 			
 			if (report.PageFooterSection.IsVisible) {
 				currentSection = report.PageFooterSection;
 				processSection ();
-			}			
+			}
+			
+			
+			if (dataSourceHasNextRecord) {
+				
+				selectSection(report.DetailSection);
+				while (processSection())
+				{
+					selectSection(report.DetailSection);
+					nextRecord();
+				}
+			
+			}
+			
+			if(!dataSourceHasNextRecord) {
+				selectSection(report.ReportFooterSection);												
+				processSection();
+			}
+
 		}
 
 		bool processSection () {
 			
 			for (int i = 0; i < controls.Count; i++) {
-				ProcessedControl processedControl = controls[i];
-				Control control = processedControl.Control;
-				
-				Size size = renderer.MeasureControl(control);
+				ProcessedControl pc = controls[i];
+				Control c = pc.Control;				
+				Size size = renderer.MeasureControl(c);
+				pc.GrowHeight = size.Height - c.Height;
 			}
 			//Size size = renderer.MeasureControl ();
 			//double bottom = size.Height + proce	
@@ -149,6 +157,13 @@ namespace MonoReports.Model.Engine
 			return c;
 		}
 		
+		void addControlsToCurrentPage (List<Control> controls)
+		{
+			foreach (var control in controls) {				
+				currentPage.Controls.Add (control);
+			}
+		}
+		
 		void nextRecord() {
 			if(dataSource == null)
 				dataSourceHasNextRecord = false;
@@ -159,21 +174,27 @@ namespace MonoReports.Model.Engine
 	}	 
 	
  
-	public enum ProcessingState {BeforeProcessing, Processing, Suspended, Finished}
+	public enum ProcessingState {
+		BeforeProcessing, 
+		Processing,
+		Suspended,
+		Finished
+	}
 
 	public class ProcessedControl {		
 
 		public Control Control {get;set;}
 		
 		public double Span {get;set;}
+		
+		public double GrowHeight {get;set;}
 
 		public bool WasProcessed {get;set;}
 		
 		public virtual void Process () {
 			WasProcessed = true;
 		}
-	}
-	
+	}	
 	
 	public class SubreportControl : ProcessedControl {
 		
