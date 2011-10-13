@@ -28,6 +28,7 @@
 
 using System;
 using System.ComponentModel;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors
 {
@@ -54,7 +55,7 @@ namespace PropertyGrid.PropertyEditors
 				min = float.MinValue;
 				max = float.MaxValue;
 			} else
-				throw new ApplicationException ("FloatRange editor does not support editing values of type " + propType);
+				throw new ApplicationException (Catalog.GetString("FloatRange editor does not support editing values of type ") + propType);
 			
 			SetRange (min, max);
 			

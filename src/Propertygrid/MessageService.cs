@@ -29,6 +29,7 @@
 using System;
 using Gtk;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace PropertyGrid
 {
@@ -42,20 +43,20 @@ namespace PropertyGrid
 		public static AlertButton Delete  = new AlertButton (Gtk.Stock.Delete, true);
 		public static AlertButton Remove  = new AlertButton (Gtk.Stock.Remove, true);
 		public static AlertButton Clear   = new AlertButton (Gtk.Stock.Clear, true);
-		public static AlertButton Reload  = new AlertButton ("_Reload", Gtk.Stock.Refresh);
+		public static AlertButton Reload  = new AlertButton (Catalog.GetString("_Reload"), Gtk.Stock.Refresh);
 		public static AlertButton Revert  = new AlertButton (Gtk.Stock.RevertToSaved, true );
 		public static AlertButton Copy    = new AlertButton (Gtk.Stock.Copy, true);
-		public static AlertButton Move    = new AlertButton ("_Move");
+		public static AlertButton Move    = new AlertButton (Catalog.GetString("_Move"));
 		public static AlertButton Save    = new AlertButton (Gtk.Stock.Save, true);
 		public static AlertButton SaveAs  = new AlertButton (Gtk.Stock.SaveAs, true);
-		public static AlertButton CloseWithoutSave = new AlertButton ("Close _without Saving");
-		public static AlertButton BuildWithoutSave = new AlertButton ("Build _without Saving");
-		public static AlertButton Discard = new AlertButton ("D_iscard");
+		public static AlertButton CloseWithoutSave = new AlertButton (Catalog.GetString("Close _without Saving"));
+		public static AlertButton BuildWithoutSave = new AlertButton (Catalog.GetString("Build _without Saving"));
+		public static AlertButton Discard = new AlertButton (Catalog.GetString("D_iscard"));
 		public static AlertButton Stop    = new AlertButton (Gtk.Stock.Stop, true);
-		public static AlertButton Proceed = new AlertButton ("_Proceed");
-		public static AlertButton Replace = new AlertButton ("_Replace");
+		public static AlertButton Proceed = new AlertButton (Catalog.GetString("_Proceed"));
+		public static AlertButton Replace = new AlertButton (Catalog.GetString("_Replace"));
 		
-		public static AlertButton OverwriteFile = new AlertButton ("_Overwrite file");
+		public static AlertButton OverwriteFile = new AlertButton (Catalog.GetString("_Overwrite file"));
 		
 		string label;
 		string icon;
@@ -474,7 +475,7 @@ namespace PropertyGrid
 			foreach (var op in Options)
 				if (op.Id == id)
 					return op.Value;
-			throw new ArgumentException ("Invalid option id");
+			throw new ArgumentException (Catalog.GetString("Invalid option id"));
 		}
 		
 		public void SetOptionValue (string id, bool value)
@@ -485,7 +486,7 @@ namespace PropertyGrid
 					return;
 				}
 			}
-			throw new ArgumentException ("Invalid option id");
+			throw new ArgumentException (Catalog.GetString("Invalid option id"));
 		}
 	}
 	

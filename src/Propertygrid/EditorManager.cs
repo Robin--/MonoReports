@@ -40,6 +40,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using PropertyGrid.PropertyEditors;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace PropertyGrid
 {
@@ -104,7 +105,7 @@ namespace PropertyGrid
 			
 			if (typeof(IPropertyEditor).IsAssignableFrom (editorType)) {
 				if (!typeof(Gtk.Widget).IsAssignableFrom (editorType))
-					throw new Exception ("The property editor '" + editorType + "' must be a Gtk Widget");
+					throw new Exception (String.Format(Catalog.GetString("The property editor {0} must be a Gtk Widget"), editorType));
 				return Default;
 			}
 
@@ -113,7 +114,7 @@ namespace PropertyGrid
 				return cell;
 
 			if (!typeof(PropertyEditorCell).IsAssignableFrom (editorType))
-				throw new Exception ("The property editor '" + editorType + "' must be a subclass of Stetic.PropertyEditorCell or implement Stetic.IPropertyEditor");
+				throw new Exception (String.Format(Catalog.GetString("The property editor {0} must be a subclass of Stetic.PropertyEditorCell or implement Stetic.IPropertyEditor"), editorType ));
 
 			cell = (PropertyEditorCell) Activator.CreateInstance (editorType);
 			cellCache [editorType] = cell;

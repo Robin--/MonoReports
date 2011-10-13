@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-07 12:23:33-0300\n"
-"PO-Revision-Date: 2011-10-07 15:40-0300\n"
+"POT-Creation-Date: 2011-10-11 11:39:15-0300\n"
+"PO-Revision-Date: 2011-10-11 11:40:10-0300\n"
 "Last-Translator: Claudio Rodrigo Pereyra Diaz <claudiorodrigo@pereyradiaz.com.ar>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -11,6 +11,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: MonoDevelop Gettext addin\n"
+
+#: ../src/MonoReports/Tools/SectionTool.cs:86
+msgid "Section"
+msgstr "Section"
+
+#: ../src/MonoReports/Tools/LineTool.cs:168
+msgid "Line"
+msgstr "Line"
+
+#: ../src/MonoReports/Tools/RectTool.cs:131
+msgid "Rectangle"
+msgstr "Rectangle"
+
+#: ../src/MonoReports/Tools/ZoomTool.cs:41
+msgid "Zoom"
+msgstr "Zoom"
 
 #: ../src/MonoReports/Services/DesignService.cs:600
 msgid "Choose the pdf file to save"
@@ -126,8 +142,8 @@ msgid "Delete expression field"
 msgstr "Delete expression field"
 
 #: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:334
-msgid "add image"
-msgstr "add image"
+msgid "Add image"
+msgstr "Add image"
 
 #: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:339
 msgid "Choose monoreports file to open"
@@ -139,8 +155,8 @@ msgid "Open"
 msgstr "Open"
 
 #: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:368
-msgid "delete image"
-msgstr "delete image"
+msgid "Delete image"
+msgstr "Delete image"
 
 #: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:31
 msgid "Edit Property"
@@ -158,13 +174,21 @@ msgstr "Name"
 msgid "Type"
 msgstr "Type"
 
-#: ../src/MonoReports/Tools/TextBlockTool.cs:81
+#: ../src/MonoReports/Tools/TextBlockTool.cs:44
+msgid "Text Block"
+msgstr "Text Block"
+
+#: ../src/MonoReports/Tools/TextBlockTool.cs:84
 msgid "text"
 msgstr "text"
 
 #: ../src/MonoReports/Renderers/TextBlockRenderer.cs:67
 msgid "bottom: {0}"
 msgstr "bottom: {0}"
+
+#: ../src/MonoReports/Tools/SubreportTool.cs:49
+msgid "Sub Report"
+msgstr "Sub Report"
 
 #: ../src/MonoReports/Services/CompilerService.cs:164
 msgid "error while running code "
@@ -174,9 +198,26 @@ msgstr "error while running code "
 msgid "Edit text"
 msgstr "Edit text"
 
+#: ../src/MonoReports/Tools/ImageTool.cs:43
+msgid "Image"
+msgstr "Image"
+
 #: ../src/MonoReports/Extensions/PropertyGridEditors/ColorEditor.cs:86
+#: ../src/Propertygrid/PropertyEditors/ColorEditorCell.cs:90
 msgid "Color editor does not support editing values of type "
 msgstr "Color editor does not support editing values of type "
+
+#: ../src/MonoReports/Tools/LineToolV.cs:50
+msgid "Vertical Line"
+msgstr "Vertical Line"
+
+#: ../src/MonoReports/Tools/LineToolH.cs:49
+msgid "Horizonal Line"
+msgstr "Horizonal Line"
+
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:120
+msgid "Export to pdf"
+msgstr "Export to pdf"
 
 #: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:196
 msgid "Choose Monoreports file to save"
@@ -355,7 +396,48 @@ msgstr "[Thickness: Left={0}, Top={1},Right={2}, Bottom={3}]"
 msgid "Field {0} exp: {1}"
 msgstr "Field {0} exp: {1}"
 
-#: ../src/Propertygrid/PropertyGrid.cs:170
+#: ../src/Propertygrid/DefaultPropertyTab.cs:48
+msgid "Properties"
+msgstr "Properties"
+
+#: ../src/Propertygrid/EditorManager.cs:107
+msgid "The property editor {0} must be a Gtk Widget"
+msgstr "The property editor {0} must be a Gtk Widget"
+
+#: ../src/Propertygrid/EditorManager.cs:116
+msgid ""
+"The property editor {0} must be a subclass of Stetic.PropertyEditorCell or "
+"implement Stetic.IPropertyEditor"
+msgstr ""
+"The property editor {0} must be a subclass of Stetic.PropertyEditorCell or "
+"implement Stetic.IPropertyEditor"
+
+#: ../src/Propertygrid/EventPropertyTab.cs:47
+msgid "Events"
+msgstr "Events"
+
+#: ../src/Propertygrid/EventPropertyTab.cs:78
+#: ../src/Propertygrid/EventPropertyTab.cs:81
+msgid "Check whether a tab can display a component before displaying it"
+msgstr "Check whether a tab can display a component before displaying it"
+
+#: ../src/Propertygrid/PropertyEditorCell.cs:160
+msgid "The property editor {0} must implement the interface IPropertyEditor"
+msgstr "The property editor {0} must implement the interface IPropertyEditor"
+
+#: ../src/Propertygrid/PropertyGrid.cs:109
+msgid "Sort in categories"
+msgstr "Sort in categories"
+
+#: ../src/Propertygrid/PropertyGrid.cs:119
+msgid "Sort alphabetically"
+msgstr "Sort alphabetically"
+
+#: ../src/Propertygrid/PropertyGrid.cs:129
+msgid "Show help panel"
+msgstr "Show help panel"
+
+#: ../src/Propertygrid/PropertyGrid.cs:171
 msgid "Custom toolbar provider already set"
 msgstr "Custom toolbar provider already set"
 
@@ -366,6 +448,87 @@ msgstr "Property"
 #: ../src/Propertygrid/PropertyGridTree.cs:83
 msgid "Value"
 msgstr "Value"
+
+#: ../src/Propertygrid/PropertyEditors/BooleanEditorCell.cs:75
+msgid "Boolean editor does not support editing values of type "
+msgstr "Boolean editor does not support editing values of type "
+
+#: ../src/Propertygrid/PropertyEditors/CharPropertyEditor.cs:47
+msgid "Char editor does not support editing values of type "
+msgstr "Char editor does not support editing values of type "
+
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:69
+msgid "(Collection)"
+msgstr "(Collection)"
+
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:91
+msgid "Editor"
+msgstr "Editor"
+
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:147
+msgid "Index"
+msgstr "Index"
+
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:149
+msgid "Object"
+msgstr "Object"
+
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:345
+msgid "(Empty)"
+msgstr "(Empty)"
+
+#: ../src/Propertygrid/PropertyEditors/EnumerationEditorCell.cs:80
+msgid "Enumeration editor does not support editing values of type "
+msgstr "Enumeration editor does not support editing values of type "
+
+#: ../src/Propertygrid/PropertyEditors/FlagsEditorCell.cs:79
+msgid "Flags editor does not support editing values of type "
+msgstr "Flags editor does not support editing values of type "
+
+#: ../src/Propertygrid/PropertyEditors/FloatRange.cs:57
+msgid "FloatRange editor does not support editing values of type "
+msgstr "FloatRange editor does not support editing values of type "
+
+#: ../src/Propertygrid/PropertyEditors/IntRange.cs:92
+msgid "IntRange editor does not support editing values of type "
+msgstr "IntRange editor does not support editing values of type "
+
+#: ../src/Propertygrid/MessageService.cs:45
+msgid "_Reload"
+msgstr "_Reload"
+
+#: ../src/Propertygrid/MessageService.cs:48
+msgid "_Move"
+msgstr "_Move"
+
+#: ../src/Propertygrid/MessageService.cs:51
+msgid "Close _without Saving"
+msgstr "Close _without Saving"
+
+#: ../src/Propertygrid/MessageService.cs:52
+msgid "Build _without Saving"
+msgstr "Build _without Saving"
+
+#: ../src/Propertygrid/MessageService.cs:53
+msgid "D_iscard"
+msgstr "D_iscard"
+
+#: ../src/Propertygrid/MessageService.cs:55
+msgid "_Proceed"
+msgstr "_Proceed"
+
+#: ../src/Propertygrid/MessageService.cs:56
+msgid "_Replace"
+msgstr "_Replace"
+
+#: ../src/Propertygrid/MessageService.cs:58
+msgid "_Overwrite file"
+msgstr "_Overwrite file"
+
+#: ../src/Propertygrid/MessageService.cs:477
+#: ../src/Propertygrid/MessageService.cs:488
+msgid "Invalid option id"
+msgstr "Invalid option id"
 
 #: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:79
 #: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:80
@@ -502,3 +665,4 @@ msgstr "Monoreports 0.1.4"
 
 #~ msgid "Select File"
 #~ msgstr "Select File"
+

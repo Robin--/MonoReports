@@ -36,6 +36,7 @@ using Gtk;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Collections;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors
 {
@@ -66,7 +67,7 @@ namespace PropertyGrid.PropertyEditors
 		
 		protected override string GetValueText ()
 		{
-			return "(Collection)";
+			return Catalog.GetString("(Collection)");
 		}
 
 		public override void LaunchDialogue ()
@@ -88,7 +89,7 @@ namespace PropertyGrid.PropertyEditors
 
 			//dialogue and buttons
 			Dialog dialog = new Dialog () {
-				Title = displayName + " Editor",
+				Title = displayName + Catalog.GetString("Editor"),
 				Modal = true,
 				AllowGrow = true,
 				AllowShrink = true,
@@ -144,9 +145,9 @@ namespace PropertyGrid.PropertyEditors
 
 			//renderers and attribs for TreeView
 			CellRenderer rdr = new CellRendererText ();
-			itemTree.AppendColumn (new TreeViewColumn ("Index", rdr, "text", 1));
+			itemTree.AppendColumn (new TreeViewColumn (Catalog.GetString("Index"), rdr, "text", 1));
 			rdr = new CellRendererText ();
-			itemTree.AppendColumn (new TreeViewColumn ("Object", rdr, "text", 2));
+			itemTree.AppendColumn (new TreeViewColumn (Catalog.GetString("Object"), rdr, "text", 2));
 
 			#endregion
 
@@ -342,7 +343,7 @@ namespace PropertyGrid.PropertyEditors
 			object item = itemStore.GetValue (iter, 0);
 			string name = item.ToString ();
 			if (string.IsNullOrEmpty (name))
-				name = "(Empty)";
+				name = Catalog.GetString("(Empty)");
 
 			itemStore.SetValue(iter, 2, name);
 		}

@@ -29,6 +29,7 @@
 
 using System;
 using System.ComponentModel;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors
 {
@@ -87,7 +88,7 @@ namespace PropertyGrid.PropertyEditors
 		public void Initialize (EditSession session)
 		{
 			if (session.Property.PropertyType != typeof(System.Drawing.Color))
-				throw new ApplicationException ("Color editor does not support editing values of type " + session.Property.PropertyType);
+				throw new ApplicationException (Catalog.GetString("Color editor does not support editing values of type ") + session.Property.PropertyType);
 		}
 		
 		public object Value { 

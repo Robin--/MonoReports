@@ -128,6 +128,9 @@ namespace MonoReports.Tools
 		
 		public override string Name {get {return "RectTool"; }}
 		
+		public override string ToolBarToolTip {
+			get { return Mono.Unix.Catalog.GetString ("Rectangle"); }
+		}
 		public override bool IsToolbarTool {
 			get {
 				return false;

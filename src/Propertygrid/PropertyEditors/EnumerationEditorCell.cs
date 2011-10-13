@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
+using Mono.Unix;
 
 namespace PropertyGrid.PropertyEditors
 {
@@ -77,7 +78,7 @@ namespace PropertyGrid.PropertyEditors
 			PropertyDescriptor prop = session.Property;
 			
 			if (!prop.PropertyType.IsEnum)
-				throw new ApplicationException ("Enumeration editor does not support editing values of type " + prop.PropertyType);
+				throw new ApplicationException (Catalog.GetString("Enumeration editor does not support editing values of type ") + prop.PropertyType);
 			
 			values = System.Enum.GetValues (prop.PropertyType);
 			Hashtable names = new Hashtable ();

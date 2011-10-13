@@ -34,7 +34,7 @@
 using Gtk;
 using System;
 using System.ComponentModel;
-
+using Mono.Unix;
  
 namespace PropertyGrid
 {
@@ -46,7 +46,7 @@ namespace PropertyGrid
 		}
 		
 		public override string TabName {
-			get {return "Properties"; }
+			get {return Catalog.GetString("Properties"); }
 		}
 		
 		public override bool CanExtend (object extendee)
