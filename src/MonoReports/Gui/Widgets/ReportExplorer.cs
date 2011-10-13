@@ -118,7 +118,7 @@ namespace MonoReports.Gui.Widgets
 
 			Gtk.Drag.SourceSet (exporerTreeview, 
 				ModifierType.Button1Mask, 
-				new TargetEntry[]{new TargetEntry (Catalog.GetString("Field"), TargetFlags.OtherWidget,2)}, 
+				new TargetEntry[]{new TargetEntry ("Field", TargetFlags.OtherWidget,2)}, 
 			DragAction.Copy);
 			
 			exporerTreeview.RowActivated += HandleExporerTreeviewRowActivated;
