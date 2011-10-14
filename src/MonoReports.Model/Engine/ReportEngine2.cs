@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using MonoReports.Model.Controls;
 using System.Collections.Generic;
 using MonoReports.Model.Data;
@@ -38,21 +39,23 @@ namespace MonoReports.Model.Engine
 		Report report;
 		IDataSource dataSource;
 		int pageNumber = 0;
-		double currentPageSpan;
+		
 		Page currentPage;
-		Section currentSection;		
-		ProcessedControl currentControl;		
-		List<ProcessedControl> controls;
+		ProcessedSection currentSection;		
+		
+		Dictionary<string, ProcessedSection> dalayedSections;		
 		bool dataSourceHasNextRecord;
-		double height;
-		internal ReportContext reportContext;
+		double pageHeight;
+		double pageHeightLeft;		
+		internal ReportContext reportContext;		
+
 		
 		public ReportEngine2 (Report report, IReportRenderer renderer)
 		{
 			this.renderer = renderer;
 			this.report = report;
-			dataSource = report.DataSource;
-			controls = new List<ProcessedControl> ();	
+			dataSource = report.DataSource;			
+			dalayedSections = new Dictionary<string, ProcessedSection>();			
 			ProcessingState = ProcessingState.BeforeProcessing;
 			reportContext = new ReportContext(report) 
 			{ 
@@ -61,6 +64,7 @@ namespace MonoReports.Model.Engine
 				DataSource = report.DataSource,
 				ReportMode = ReportMode.Preview 
 			};
+			
 		}
 		
 		void initProcessing() {			
@@ -70,17 +74,9 @@ namespace MonoReports.Model.Engine
 		
 		void finishProcessing () {
 			if (dataSource != null)
-				dataSource.Reset ();
-						 
-//			foreach (var dc in controlsToEvalAfterReportProcessing) {
-//				try {
-//					if (reportContext.ExpressionFieldsDict.ContainsKey (dc.FieldName)) 
-//						dc.Text = reportContext.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
-//				} catch {}						
-//			}
+				dataSource.Reset ();	
 			ProcessingState = ProcessingState.Finished;
-			report.FireOnAfterReportProcessing(reportContext);
-			
+			report.FireOnAfterReportProcessing(reportContext);			
 		}
 		
 		public void Process ()
@@ -94,19 +90,22 @@ namespace MonoReports.Model.Engine
 		
 		public void ProcessPage () {
 			currentPage = new Page(){ PageNumber = ++pageNumber };
-			height = report.Height;			
+			pageHeight= report.Height;
+			pageHeightLeft = pageHeight;
+			
 			if (report.PageHeaderSection.IsVisible) {
 				selectSection(report.PageHeaderSection);
-				processSection();
+				processSection();			
 			}
 			
 			if (report.ReportHeaderSection.IsVisible) {
-				selectSection(report.ReportHeaderSection);					
+				selectSection(report.ReportHeaderSection);
+				processSection();
 			}
 			
 			
 			if (report.PageFooterSection.IsVisible) {
-				currentSection = report.PageFooterSection;
+				selectSection(report.PageFooterSection);
 				processSection ();
 			}
 			
@@ -129,32 +128,55 @@ namespace MonoReports.Model.Engine
 
 		}
 
-		bool processSection () {
+		bool processSection () {			
 			
-			for (int i = 0; i < controls.Count; i++) {
-				ProcessedControl pc = controls[i];
-				Control c = pc.Control;				
-				Size size = renderer.MeasureControl(c);
-				pc.GrowHeight = size.Height - c.Height;
-			}
-			//Size size = renderer.MeasureControl ();
-			//double bottom = size.Height + proce	
+			double processingBar = 0;
+			double span = 0;
+			bool returnVal = true;
+			double maxHeight = currentSection.Height;			
 			
-			return false;
+			
+			for (int i = 0; i < currentSection.Controls.Count; i++) {
+				ProcessedControl pc = currentSection.Controls[i];
+				returnVal = pc.Process(renderer,maxHeight);				
+			}			
+			pageHeightLeft -= currentSection.Height;
+			
+			return returnVal;
 		}
 			
 		void selectSection (Section sect) {
-			currentSection = sect;
-			foreach(var c in sect.Controls) {
-				controls.Add (new ProcessedControl () { Control = c });
+			if(dalayedSections.ContainsKey(sect.Name))
+				currentSection = dalayedSections[sect.Name];
+			else {
+				var section = sect.CreateControl() as Section;
+				currentSection = new ProcessedSection() {
+					Controls = new List<ProcessedControl>(),
+					Section = section,
+					MarginBottom = section.Height,
+					MarginTop = 0
+				};
+				
+				var topOrderedControls = section.Controls.OrderBy(c=>c.Top).ToList();
+				if(topOrderedControls.Count > 0)
+				{
+					currentSection.MarginTop = topOrderedControls[0].Top;
+					foreach(var c in topOrderedControls) {
+						ProcessedControl pc = null;
+						if(c  is SubReport)
+							pc = new SubreportControl() {Control = c, Section = currentSection };
+						else
+							pc = new ProcessedControl () {Control = c, Section = currentSection };
+						currentSection.Controls.Add (pc);
+						double marginBottom = section.Height - c.Bottom;
+						if(currentSection.MarginBottom < marginBottom)
+							currentSection.MarginBottom = marginBottom;
+					}
+				}
 			}
-		}
-		
-		Section getBackgroundSectionControl () {
-			var c = currentSection.CreateControl () as Section;
-			c.Controls.Clear ();
-			c.TemplateControl = currentSection.TemplateControl;
-			return c;
+			 
+
+			
 		}
 		
 		void addControlsToCurrentPage (List<Control> controls)
@@ -180,29 +202,78 @@ namespace MonoReports.Model.Engine
 		Suspended,
 		Finished
 	}
+	
+	
+	public class ProcessedSection {
+		
+		public double Top {get;set;}
+		
+		public double Height {
+			get { return Section.Height; }
+			set { Section.Height = value; }
+		}		
+		
+		public double MarginTop {get;set;}
+		
+		public double MarginBottom {get;set;}		
+		
+		public Section Section {get;set;}	
+		
+		public List<ProcessedControl> Controls {get;set;}
+		
+		public List<Control> Buffer {get;set;}
+		
+		public void AddControlToBuffer(Control c) {
+			Buffer.Add(c);
+		}
+	}
 
-	public class ProcessedControl {		
+	public class ProcessedControl {	
+		
+		public ProcessedSection Section {get;set;}
 
-		public Control Control {get;set;}
+		public Control Control {get;set;}				
 		
 		public double Span {get;set;}
 		
-		public double GrowHeight {get;set;}
-
-		public bool WasProcessed {get;set;}
+		public double BottomAfterGrow {get;set;}	
 		
-		public virtual void Process () {
-			WasProcessed = true;
+		void setNewSizeAndLocation() {
+			
+		}
+		
+		public virtual bool Process(IReportRenderer renderer, double maxHeight) {			
+			Size s = renderer.MeasureControl(Control);
+			BottomAfterGrow = Control.Bottom + (Control.Height - Control.Height) + Span;
+			bool retVal = false;
+			
+			if(BottomAfterGrow <= maxHeight) {
+				Control.Size = new Size(Control.Width,s.Height);
+				Control.Location = new Point(Control.Location.X,Control.Location.Y + Span);
+				Section.AddControlToBuffer(Control);
+				retVal = true;
+			}else{
+				if(!Section.Section.KeepTogether){
+					if(Control.Top + Span < maxHeight){
+						Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight(Control, maxHeight);
+						if(brokenControlParts[0] != null)
+							Section.AddControlToBuffer(Control);
+						Control = brokenControlParts[1];							
+					}
+				}					
+			}
+				
+			return retVal;	
 		}
 	}	
 	
 	public class SubreportControl : ProcessedControl {
 		
-		public ReportEngine2 Engine {get;set;}
+		public ReportEngine2 Engine {get;set;}	
 		
-		public override void Process ()
+		public override bool Process (IReportRenderer renderer, double maxHeight)
 		{
-			Engine.ProcessPage();
+			return true;
 		}
 		
 	}
