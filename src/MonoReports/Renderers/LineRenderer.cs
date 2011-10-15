@@ -52,7 +52,7 @@ namespace MonoReports.Renderers
 			Cairo.PointD p1 = new Cairo.PointD (line.Location.X ,line.Location.Y);
 			Cairo.PointD p2 = new Cairo.PointD (line.End.X, line.End.Y);
 			var r = c.DrawLine (p1, p2, line.BackgroundColor.ToCairoColor (), line.LineWidth, line.LineType, false);
-			return new Size (r.Width, r.Height);
+			return new Size (r.Width - r.X, r.Height - r.Y);
 		}
 
 		public Control[] BreakOffControlAtMostAtHeight (Cairo.Context c, Control control, double height)

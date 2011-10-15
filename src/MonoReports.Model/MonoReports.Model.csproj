@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoReports.Model</RootNamespace>
     <AssemblyName>MonoReports.Model</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,7 +40,6 @@
     <Compile Include="Report.cs" />
     <Compile Include="Border.cs" />
     <Compile Include="UnitType.cs" />
-    <Compile Include="Engine\ReportEngine.cs" />
     <Compile Include="IReportRenderer.cs" />
     <Compile Include="ReportContext.cs" />
     <Compile Include="FontSlant.cs" />
@@ -91,6 +89,7 @@
     <Compile Include="DataSourceType.cs" />
     <Compile Include="Engine\ReportEngine2.cs" />
     <Compile Include="Engine\IReportEngine.cs" />
+    <Compile Include="Engine\ReportEngineOld.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

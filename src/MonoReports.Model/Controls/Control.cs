@@ -111,13 +111,6 @@ namespace MonoReports.Model.Controls
 
 		public bool IsVisible { get; set; }
 
-		internal double measureBottomMarginFromSection (Section s)
-		{
-			
-			return  s.Height - (Location.Y + Size.Height);
-			
-		}
-
 		public abstract Control CreateControl ();
 
 		internal void CopyBasicProperties (Control c)

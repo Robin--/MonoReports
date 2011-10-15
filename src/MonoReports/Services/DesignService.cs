@@ -122,7 +122,7 @@ namespace MonoReports.Services
 			}
 		}
 		
-		ReportEngine reportEngine;
+		ReportEngine2 reportEngine;
 
 		public IWorkspaceService WorkspaceService { get; set; }
 
@@ -570,7 +570,7 @@ namespace MonoReports.Services
 			ImageSurface imagesSurface = new ImageSurface (Format.Argb32, (int)Report.Width, (int)Report.Height);
 			using (Cairo.Context cr = new Cairo.Context (imagesSurface)) {				
 				renderer.Context = cr;
-				reportEngine = new ReportEngine (Report, renderer);
+				reportEngine = new ReportEngine2 (Report, renderer);
 				reportEngine.Process ();
 				(cr as IDisposable).Dispose ();
 			}

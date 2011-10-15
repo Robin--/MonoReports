@@ -53,7 +53,9 @@ namespace MonoReports.Model
 		
 		public static void Load (this Report r,string path) {
 			
-			MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
+			
+			///3tk ENGINE has to be fixed
+			MonoReports.Model.Engine.ReportEngineOld.EvaluatorInit();
 			
 			using(System.IO.FileStream file = System.IO.File.OpenRead (path)) {				 
 				byte[] bytes = new byte[file.Length];
@@ -297,8 +299,8 @@ IDictionary<string,object> parameters = new Dictionary<string,object>();
 				renderer.RegisterRenderer(typeof(PageHeaderSection), sr);
 				renderer.RegisterRenderer(typeof(PageFooterSection), sr);
 				
-				
-				MonoReports.Model.Engine.ReportEngine engine = new MonoReports.Model.Engine.ReportEngine (report,renderer);
+				///3tk ENGINE@ has to be fixed
+				MonoReports.Model.Engine.ReportEngineOld engine = new MonoReports.Model.Engine.ReportEngineOld (report,renderer);
 				engine.Process ();		
 				
 				Cairo.Context cr1 = new Cairo.Context (pdfSurface);

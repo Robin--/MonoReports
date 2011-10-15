@@ -32,7 +32,7 @@ using MonoReports.Model.Data;
 
 namespace MonoReports.Model.Engine
 {
-	public class ReportEngine : IReportEngine
+	public class ReportEngineOld : IReportEngine
 	{
 
 		internal IReportRenderer ReportRenderer;
@@ -55,17 +55,17 @@ namespace MonoReports.Model.Engine
 		List<IDataControl> controlsToEvalAfterReportProcessing = null;
 		
 		public static void EvaluatorInit(){
-			if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
+			if (!MonoReports.Model.Engine.ReportEngineOld.EvaluatorInitWasDone) {
 				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});				
 				Mono.CSharp.Evaluator.LoadAssembly(System.Reflection.Assembly.GetExecutingAssembly().Location);
 				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
 				Mono.CSharp.Evaluator.Run("using System;");
 				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
-				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
+				MonoReports.Model.Engine.ReportEngineOld.EvaluatorInitWasDone = true;
 			}
 		}
 
-		public ReportEngine (Report report,IReportRenderer renderer)
+		public ReportEngineOld (Report report,IReportRenderer renderer)
 		{
 			Report = report;
 			source = Report.DataSource;
@@ -86,7 +86,7 @@ namespace MonoReports.Model.Engine
 			nextPage ();
 			SelectCurrentStateByTemplateSection (Report.PageFooterSection);
 			
-			if (!ReportEngine.EvaluatorInitWasDone) {
+			if (!ReportEngineOld.EvaluatorInitWasDone) {
 				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
 				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
 				Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoreportsInteractiveBase));

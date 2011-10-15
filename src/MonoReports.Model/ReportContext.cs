@@ -67,7 +67,8 @@ namespace MonoReports.Model
 			get { 
 				return heightLeftOnCurrentPage;
 			}
-			internal set { heightLeftOnCurrentPage = value; }}
+			internal set { heightLeftOnCurrentPage = value; }
+		}
 
 
 		Report report;

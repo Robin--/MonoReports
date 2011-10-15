@@ -33,31 +33,31 @@ namespace MonoReports.Model.Engine
 {
 	public class ReportEngine2 : IReportEngine
 	{
-		public ProcessingState ProcessingState {get;set;}
+		public ProcessingState ProcessingState { get; set; }
 		
 		IReportRenderer renderer;
 		Report report;
 		IDataSource dataSource;
 		int pageNumber = 0;
-		
 		Page currentPage;
-		ProcessedSection currentSection;		
-		
+		ProcessedSection currentSection;
 		Dictionary<string, ProcessedSection> dalayedSections;		
 		bool dataSourceHasNextRecord;
+		bool pageBreak;
 		double pageHeight;
-		double pageHeightLeft;		
-		internal ReportContext reportContext;		
-
+		double pageHeightLeft;
+		List<Tuple<double,double>> spanTable;
+		internal ReportContext reportContext;
 		
 		public ReportEngine2 (Report report, IReportRenderer renderer)
 		{
 			this.renderer = renderer;
 			this.report = report;
 			dataSource = report.DataSource;			
-			dalayedSections = new Dictionary<string, ProcessedSection>();			
+			dalayedSections = new Dictionary<string, ProcessedSection> ();
+			spanTable = new List<Tuple<double, double>>();
 			ProcessingState = ProcessingState.BeforeProcessing;
-			reportContext = new ReportContext(report) 
+			reportContext = new ReportContext (report) 
 			{ 
 				RendererContext = renderer.RendererContext,
 				CurrentPageIndex = 0,
@@ -67,211 +67,286 @@ namespace MonoReports.Model.Engine
 			
 		}
 		
-		void initProcessing() {			
+		void initProcessing ()
+		{	
+			report.Pages.Clear();
 			nextRecord ();			
 			ProcessingState = ProcessingState.Processing;
 		}
 		
-		void finishProcessing () {
+		void finishProcessing ()
+		{
 			if (dataSource != null)
-				dataSource.Reset ();	
-			ProcessingState = ProcessingState.Finished;
-			report.FireOnAfterReportProcessing(reportContext);			
+				dataSource.Reset ();
+			report.FireOnAfterReportProcessing (reportContext);			
 		}
 		
 		public void Process ()
 		{
-			initProcessing();			
+			try {
+			initProcessing ();			
 			while (ProcessingState != ProcessingState.Finished) {				
-				ProcessPage();				
+				ProcessPage ();				
 			}			 
-			finishProcessing();
+			finishProcessing ();
+			}catch (Exception exp) {
+				Console.WriteLine(exp);
+			}
 		}
 		
-		public void ProcessPage () {
-			currentPage = new Page(){ PageNumber = ++pageNumber };
-			pageHeight= report.Height;
+		public void ProcessPage ()
+		{
+			spanTable.Clear();
+			currentPage = new Page (){ PageNumber = ++pageNumber };
+			pageHeight = report.Height;
 			pageHeightLeft = pageHeight;
+			pageBreak = false;
 			
 			if (report.PageHeaderSection.IsVisible) {
-				selectSection(report.PageHeaderSection);
-				processSection();			
-			}
-			
-			if (report.ReportHeaderSection.IsVisible) {
-				selectSection(report.ReportHeaderSection);
-				processSection();
-			}
-			
-			
-			if (report.PageFooterSection.IsVisible) {
-				selectSection(report.PageFooterSection);
+				selectSection (report.PageHeaderSection);
 				processSection ();
 			}
 			
-			
-			if (dataSourceHasNextRecord) {
-				
-				selectSection(report.DetailSection);
-				while (processSection())
-				{
-					selectSection(report.DetailSection);
-					nextRecord();
-				}
-			
-			}
-			
-			if(!dataSourceHasNextRecord) {
-				selectSection(report.ReportFooterSection);												
-				processSection();
-			}
-
-		}
-
-		bool processSection () {			
-			
-			double processingBar = 0;
-			double span = 0;
-			bool returnVal = true;
-			double maxHeight = currentSection.Height;			
-			
-			
-			for (int i = 0; i < currentSection.Controls.Count; i++) {
-				ProcessedControl pc = currentSection.Controls[i];
-				returnVal = pc.Process(renderer,maxHeight);				
+			if (report.ReportHeaderSection.IsVisible && !pageBreak) {
+				selectSection (report.ReportHeaderSection);
+				processSection ();
 			}			
-			pageHeightLeft -= currentSection.Height;
 			
-			return returnVal;
+			if (report.PageFooterSection.IsVisible) {
+				selectSection (report.PageFooterSection);
+				processSection ();
+			}			
+			 
+			while (dataSourceHasNextRecord && !pageBreak) {
+				selectSection (report.DetailSection);
+				processSection();
+				nextRecord ();
+			}
+									
+			if (!dataSourceHasNextRecord && !pageBreak) {
+				selectSection (report.ReportFooterSection);												
+				processSection ();
+			}
+			
+			if (!dataSourceHasNextRecord && dalayedSections.Count == 0)
+				ProcessingState = ProcessingState.Finished;
+			
+			report.Pages.Add(currentPage);
+		}
+
+		void processSection ()
+		{						
+			 
+			double heightLeft = currentSection.Section.CanGrow ? pageHeightLeft : currentSection.Section.Height;			
+			bool allControlsFitInSection = true; 
+				
+			for (int i = 0; i < currentSection.Controls.Count; i++) {
+				ProcessedControl pc = currentSection.Controls [i];
+				currentSection.Section.TemplateControl.FireBeforeControlProcessing(reportContext,pc.Control);
+				double span = 0;
+				//get span for control
+				for (int j = 0; j < spanTable.Count; j++) {
+					if(pc.Control.Top >= spanTable[j].Item1)
+						span = span > spanTable[j].Item2 ? span : spanTable[j].Item2;
+					else
+						break;
+				}
+				bool controllFullyProcessed = pc.Process (renderer,span, heightLeft);
+				
+				if (controllFullyProcessed) {
+				//update span for control
+					if (pc.Grow > 0) {
+											
+						Tuple<double, double> spanToUpdate = null;
+						int k;
+						//a little tricky - maybe should be simplified
+						for(k = 0; k < spanTable.Count; k++){
+							if(spanTable[k].Item1 == pc.BottomBeforeSpanAndGrow)
+								spanToUpdate = spanTable[k];
+							else if(spanTable[k].Item1 > pc.BottomBeforeSpanAndGrow)
+								break;
+						}
+						
+						if(spanToUpdate == null) {
+							spanToUpdate = new Tuple<double, double>(pc.BottomBeforeSpanAndGrow,pc.Grow + pc.Span);	
+						}
+						
+						spanTable.Insert(k,spanToUpdate);
+					}
+					
+				} else {
+					allControlsFitInSection = false;
+					dalayedSections [currentSection.Name] = currentSection;
+				}
+			}
+			
+			if (allControlsFitInSection || !currentSection.Section.KeepTogether) {
+				currentPage.Controls.AddRange (currentSection.PageBuffer);
+			}
+			
+			
 		}
 			
-		void selectSection (Section sect) {
-			if(dalayedSections.ContainsKey(sect.Name))
-				currentSection = dalayedSections[sect.Name];
-			else {
-				var section = sect.CreateControl() as Section;
-				currentSection = new ProcessedSection() {
-					Controls = new List<ProcessedControl>(),
+		void selectSection (Section sect)
+		{
+			if (dalayedSections.ContainsKey (sect.Name)) {
+				currentSection = dalayedSections [sect.Name];
+				dalayedSections.Remove(sect.Name);
+			}
+			else {			
+				var section = sect.CreateControl () as Section;
+				currentSection = new ProcessedSection () {
+					Controls = new List<ProcessedControl> (),
 					Section = section,
 					MarginBottom = section.Height,
 					MarginTop = 0
 				};
 				
-				var topOrderedControls = section.Controls.OrderBy(c=>c.Top).ToList();
-				if(topOrderedControls.Count > 0)
-				{
-					currentSection.MarginTop = topOrderedControls[0].Top;
-					foreach(var c in topOrderedControls) {
+				var topOrderedControls = section.Controls.OrderBy (c => c.Top).ToList ();
+				if (topOrderedControls.Count > 0) {
+					currentSection.MarginTop = topOrderedControls [0].Top;
+					foreach (var c in topOrderedControls) {
 						ProcessedControl pc = null;
-						if(c  is SubReport)
-							pc = new SubreportControl() {Control = c, Section = currentSection };
+						if (c  is SubReport)
+							pc = new SubreportControl () {Control = c, Section = currentSection };
 						else
 							pc = new ProcessedControl () {Control = c, Section = currentSection };
-						currentSection.Controls.Add (pc);
+						
 						double marginBottom = section.Height - c.Bottom;
-						if(currentSection.MarginBottom < marginBottom)
+						if (currentSection.MarginBottom < marginBottom)
 							currentSection.MarginBottom = marginBottom;
+						currentSection.AddProcessingControl(pc);
 					}
 				}
 			}
-			 
-
-			
+		
 		}
 		
-		void addControlsToCurrentPage (List<Control> controls)
+		
+		void nextRecord ()
 		{
-			foreach (var control in controls) {				
-				currentPage.Controls.Add (control);
-			}
-		}
-		
-		void nextRecord() {
-			if(dataSource == null)
+			if (dataSource == null)
 				dataSourceHasNextRecord = false;
 			else
-				dataSourceHasNextRecord = dataSource.MoveNext();
+				dataSourceHasNextRecord = dataSource.MoveNext ();
 		}		
 		
-	}	 
-	
+	}
  
-	public enum ProcessingState {
+	public enum ProcessingState
+	{
 		BeforeProcessing, 
 		Processing,
 		Suspended,
 		Finished
 	}
 	
-	
-	public class ProcessedSection {
+	public class MonoReportsEngineException : Exception
+	{
 		
-		public double Top {get;set;}
+		public MonoReportsEngineException (): base()
+		{
+		}
+		
+		public MonoReportsEngineException (string message): base(message)
+		{
+		}
+		
+		public MonoReportsEngineException (string message, Exception innerException): base(message,innerException)
+		{
+		}
+		
+	}
+	
+	public class ProcessedSection
+	{
+		public ProcessedSection () {
+			PageBuffer = new List<Control>();			
+			Controls = new List<ProcessedControl>();
+		}
+
+		public double Top { get; set; }
+
+		public string Name {
+			get { return Section.Name; }			
+		}
 		
 		public double Height {
 			get { return Section.Height; }
 			set { Section.Height = value; }
-		}		
+		}
 		
-		public double MarginTop {get;set;}
+		public double MarginTop { get; set; }
 		
-		public double MarginBottom {get;set;}		
+		public double MarginBottom { get; set; }
 		
-		public Section Section {get;set;}	
+		public Section Section { get; set; }
 		
-		public List<ProcessedControl> Controls {get;set;}
+		public List<ProcessedControl> Controls { get; set; }
 		
-		public List<Control> Buffer {get;set;}
+		public List<Control> PageBuffer { get; set; }
 		
-		public void AddControlToBuffer(Control c) {
-			Buffer.Add(c);
+		public void AddProcessingControl (ProcessedControl pc)
+		{
+			 Controls.Add(pc);
+		}
+		
+		public void AddControlToPageBuffer (Control c)
+		{
+			PageBuffer.Add (c);
 		}
 	}
 
-	public class ProcessedControl {	
+	public class ProcessedControl
+	{	
 		
-		public ProcessedSection Section {get;set;}
+		public ProcessedSection Section { get; set; }
 
-		public Control Control {get;set;}				
+		public Control Control { get; set; }
 		
-		public double Span {get;set;}
+		public double Span { get; set; }
 		
-		public double BottomAfterGrow {get;set;}	
+		public double Grow { get; set; }
 		
-		void setNewSizeAndLocation() {
-			
-		}
+		public double BottomBeforeSpanAndGrow { get; set; }
 		
-		public virtual bool Process(IReportRenderer renderer, double maxHeight) {			
-			Size s = renderer.MeasureControl(Control);
-			BottomAfterGrow = Control.Bottom + (Control.Height - Control.Height) + Span;
+		public double BottomAfterSpanAndGrow { get; set; }
+
+		public virtual bool Process (IReportRenderer renderer, double span, double maxHeight)
+		{
+			Span = span;
+			BottomBeforeSpanAndGrow = Control.Bottom;
+			Size s = renderer.MeasureControl (Control);
+			Grow = s.Height - Control.Height;
+			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;
 			bool retVal = false;
 			
-			if(BottomAfterGrow <= maxHeight) {
-				Control.Size = new Size(Control.Width,s.Height);
-				Control.Location = new Point(Control.Location.X,Control.Location.Y + Span);
-				Section.AddControlToBuffer(Control);
+			if (BottomAfterSpanAndGrow <= maxHeight) {
+				Control.Size = new Size (Control.Width, s.Height);				
+				Control.Top += span;
+				Section.AddControlToPageBuffer (Control);
 				retVal = true;
-			}else{
-				if(!Section.Section.KeepTogether){
-					if(Control.Top + Span < maxHeight){
-						Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight(Control, maxHeight);
-						if(brokenControlParts[0] != null)
-							Section.AddControlToBuffer(Control);
-						Control = brokenControlParts[1];							
+			} else {
+				if (!Section.Section.KeepTogether) {
+					if (Control.Top + Span < maxHeight) {
+						Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight (Control, maxHeight);
+						if (brokenControlParts [0] != null)
+							Section.AddControlToPageBuffer (Control);
+						Control = brokenControlParts [1];							
 					}
 				}					
 			}
 				
 			return retVal;	
 		}
-	}	
+	}
 	
-	public class SubreportControl : ProcessedControl {
+	public class SubreportControl : ProcessedControl
+	{
 		
-		public ReportEngine2 Engine {get;set;}	
+		public ReportEngine2 Engine { get; set; }
 		
-		public override bool Process (IReportRenderer renderer, double maxHeight)
+		public override bool Process (IReportRenderer renderer, double span, double maxHeight)
 		{
 			return true;
 		}

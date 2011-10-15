@@ -66,7 +66,7 @@ namespace MonoReports.Model.Controls
 		
 		public override double Height {
 			get {
-				return Bottom - Top + LineWidth;
+				return Bottom - Top;// + LineWidth;
 			}
 			 
 		}
@@ -101,9 +101,22 @@ namespace MonoReports.Model.Controls
         {
             get
             {
-                return Math.Max(Location.Y,End.Y) + LineWidth / 2;
+                return Math.Max(Location.Y,End.Y); // + LineWidth / 2;
             }
 			set {
+				
+				if(Location.Y == End.Y){
+					Location  = new Point(Location.X,value);
+                    End = new Point(End.X,  value);
+				} else if (Location.Y < End.Y) {
+					Location  = new Point(Location.X, Location.Y +  value - End.Y);
+					End  = new Point(End.X, value);		
+				} else {
+				  	 End  = new Point(End.X, End.Y + value - (Location.Y));	
+					 Location  = new Point(Location.X,value);
+				}
+				
+				/*
 				 double halfLineWidth = LineWidth / 2;
 				
 				if(Location.Y == End.Y){
@@ -116,6 +129,7 @@ namespace MonoReports.Model.Controls
 				  	 End  = new Point(End.X, End.Y + value - (Location.Y + halfLineWidth));	
 					 Location  = new Point(Location.X,value - halfLineWidth);
 				}
+				*/
 			}
         }
 		

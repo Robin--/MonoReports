@@ -32,8 +32,12 @@ namespace MonoReports.Model.Data
 {
 	public class ExpressionFieldValueProvider : IFieldValueProvider
 	{
+		
+		/// <summary>
+		/// 3tk ENGINE2 should be fixed
+		/// </summary>
 		static ExpressionFieldValueProvider(){
-			MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
+			MonoReports.Model.Engine.ReportEngineOld.EvaluatorInit();
 		}
 		
 		public ExpressionFieldValueProvider(ExpressionField field) { 

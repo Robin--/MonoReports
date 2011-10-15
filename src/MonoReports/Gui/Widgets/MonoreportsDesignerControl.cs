@@ -72,7 +72,9 @@ public partial class MonoreportsDesignerControl : Gtk.Bin
 	public MonoreportsDesignerControl ()  
 	{
 		Build ();
-  		MonoReports.Model.Engine.ReportEngine.EvaluatorInit();
+			
+		///3tk ENGINE2 - should be fixed later
+  		MonoReports.Model.Engine.ReportEngineOld.EvaluatorInit();
 		
 		Report startReport = newReportTemplate();
  
