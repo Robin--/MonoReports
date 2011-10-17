@@ -359,19 +359,21 @@ namespace MonoReports.Model.Engine
 			Grow = s.Height - Control.Height;
 			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;
 			bool retVal = false;
+			Control.Size = new Size (Control.Width, s.Height);				
+			Control.Top += span;
 			
-			if (BottomAfterSpanAndGrow <= maxHeight) {
-				Control.Size = new Size (Control.Width, s.Height);				
-				Control.Top += span;
+			if (BottomAfterSpanAndGrow <= maxHeight) {				
 				Section.AddControlToPageBuffer (Control);
 				retVal = true;
 			} else {
 				if (!Section.Section.KeepTogether ) {
-					if (Control.Top + Span < maxHeight) {
-						Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight (Control, maxHeight);
+					if (Control.Top < maxHeight) {
+						Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight (Control, maxHeight-Control.Top);
 						if (brokenControlParts [0] != null)
-							Section.AddControlToPageBuffer (Control);
-						Control = brokenControlParts [1];						
+							Section.AddControlToPageBuffer (brokenControlParts [0]);
+						Control = brokenControlParts [1];
+						Control.Top = 0;
+						
 					}
 				}					
 			}
