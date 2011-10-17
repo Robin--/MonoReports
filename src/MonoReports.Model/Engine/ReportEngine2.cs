@@ -108,7 +108,7 @@ namespace MonoReports.Model.Engine
 			
 			if (report.PageHeaderSection.IsVisible) {
 				selectSection (report.PageHeaderSection);
-				processSection ();
+				processSection ();				
 			}
 			
 			if (report.ReportHeaderSection.IsVisible && !pageBreak) {
@@ -139,13 +139,13 @@ namespace MonoReports.Model.Engine
 		}
 
 		void processSection ()
-		{						
-			ProcessedControl bottomMostControl = null;
-			double heightLeft = currentSection.Section.CanGrow ? pageHeightLeft : currentSection.Section.Height;			
+		{	
+			ProcessedControl bottomMostAfterProcessing = null;
+			double maxHeight = currentSection.Section.CanGrow ? pageHeightLeft : currentSection.Section.Height;			
 			bool allControlsFitInSection = true; 
 				
 			for (int i = 0; i < currentSection.Controls.Count; i++) {
-				ProcessedControl pc = currentSection.Controls [i];
+				ProcessedControl pc = currentSection.Controls [i];				
 				currentSection.Section.TemplateControl.FireBeforeControlProcessing(reportContext,pc.Control);
 				double span = 0;
 				//get span for control
@@ -155,7 +155,7 @@ namespace MonoReports.Model.Engine
 					else
 						break;
 				}
-				bool controllFullyProcessed = pc.Process (renderer,span, heightLeft);
+				bool controllFullyProcessed = pc.Process (renderer,span, maxHeight);
 				
 				if (controllFullyProcessed) {
 					
@@ -185,18 +185,41 @@ namespace MonoReports.Model.Engine
 					dalayedSections [currentSection.Name] = currentSection;
 				}
 				
-				
-				if(bottomMostControl == null || bottomMostControl.BottomAfterSpanAndGrow < pc.BottomAfterSpanAndGrow) {
-					bottomMostControl = pc;
+				if(bottomMostAfterProcessing == null || bottomMostAfterProcessing.BottomAfterSpanAndGrow < pc.BottomAfterSpanAndGrow) {
+					bottomMostAfterProcessing = pc;
 				}
 				
 			}
-			
-			if (allControlsFitInSection || !currentSection.Section.KeepTogether) {
-
-				currentPage.Controls.AddRange (currentSection.PageBuffer);
  
+			/* compute section height */
+			if (allControlsFitInSection) {
+				if(bottomMostAfterProcessing != null) {
+					double newHeight = bottomMostAfterProcessing.Control.Bottom + currentSection.MarginBottom;
+					
+					if(newHeight > currentSection.Height && currentSection.Section.CanGrow)
+						currentSection.Height = newHeight;
+					else if(newHeight < currentSection.Height && currentSection.Section.CanShrink) {
+						currentSection.Height = newHeight;
+					}					
+				} else if(currentSection.Section.CanShrink)
+					currentSection.Height = 0;
+				
+			}else {
+				if(!currentSection.Section.KeepTogether)
+					currentSection.Height = maxHeight;
 			}
+								
+			if (allControlsFitInSection || !currentSection.Section.KeepTogether) {
+				
+				pageHeightUsed += currentSection.Height;
+				pageHeightLeft -= currentSection.Height;
+				 
+				foreach(var c in currentSection.PageBuffer)
+					c.Top += currentSection.SectionSpan;
+				
+				currentPage.Controls.AddRange (currentSection.PageBuffer); 
+			}
+
  
 		}
 			
@@ -226,12 +249,13 @@ namespace MonoReports.Model.Engine
 							pc = new ProcessedControl () {Control = c, Section = currentSection };
 						
 						double marginBottom = section.Height - c.Bottom;
-						if (currentSection.MarginBottom < marginBottom)
+						if (marginBottom < currentSection.MarginBottom)
 							currentSection.MarginBottom = marginBottom;
 						currentSection.AddProcessingControl(pc);
 					}
 				}
 			}
+			currentSection.SectionSpan = pageHeightUsed;
 		
 		}
 		
@@ -294,6 +318,8 @@ namespace MonoReports.Model.Engine
 		public double MarginBottom { get; set; }
 		
 		public Section Section { get; set; }
+		
+		public double SectionSpan { get; set; }
 		
 		public List<ProcessedControl> Controls { get; set; }
 		
