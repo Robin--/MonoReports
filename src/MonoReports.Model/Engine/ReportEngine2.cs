@@ -168,7 +168,7 @@ namespace MonoReports.Model.Engine
 					}
 					
 					
-					if (pc.Grow > 0) {
+					if (pc.Grow > 0 ) {
 											
 						Tuple<double, double> spanToUpdate = null;
 						int k;
@@ -374,12 +374,12 @@ namespace MonoReports.Model.Engine
 			Span = span;
 			BottomBeforeSpanAndGrow = Control.Bottom;
 			Size s = renderer.MeasureControl (Control);
-			Grow = s.Height - Control.Height;
+			
 			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;			
 			bool retVal = false;
 			Control.Top += span;
 			if (Control.Top < maxHeight) {
-				
+				Grow = s.Height - Control.Height;
 				Control.Size = new Size (Control.Width, s.Height);			
 				if (BottomAfterSpanAndGrow <= maxHeight) {				
 					Section.AddControlToPageBuffer (Control);
