@@ -47,7 +47,6 @@ namespace MonoReports.Model.Engine
 		double pageHeight;
 		double pageHeightLeft;
 		double pageHeightUsed;
-		double pageHeightReservation;
 		List<Tuple<double,double>> spanTable;
 		internal ReportContext reportContext;
 		bool reportHeaderFished = false;
@@ -102,15 +101,14 @@ namespace MonoReports.Model.Engine
 			spanTable.Clear();
 			currentPage = new Page (){ PageNumber = ++pageNumber };			
 			report.FireOnBeforePageProcessing (reportContext,currentPage);
-			pageHeight = report.Height;			
-			pageHeightReservation = 0;
-			
-			if(report.PageHeaderSection.IsVisible)
-				pageHeightReservation += report.PageHeaderSection.Height;
-			if(report.PageFooterSection.IsVisible)
-				pageHeightReservation += report.PageFooterSection.Height;
+			pageHeight = report.Height;						
+			pageHeightLeft = pageHeight;
 				
-			pageHeightLeft = pageHeight - pageHeightReservation;
+			if(report.PageHeaderSection.IsVisible)
+				pageHeightLeft -= report.PageHeaderSection.Height;
+			if(report.PageFooterSection.IsVisible)
+				pageHeightLeft -= report.PageFooterSection.Height;
+			
 			pageHeightUsed = 0;
 			pageBreak = false;
 			
@@ -120,22 +118,24 @@ namespace MonoReports.Model.Engine
 			}	
 			
 			if (report.PageHeaderSection.IsVisible) {
+				pageHeightLeft += report.PageHeaderSection.Height;
 				selectSection (report.PageHeaderSection);
 				processSection ();				
 			}
  
 			if (report.PageFooterSection.IsVisible) {
+				pageHeightLeft += report.PageFooterSection.Height;
 				selectSection (report.PageFooterSection);
 				processSection ();
 			}			
 			
-			if (!pageBreak && pageHeightLeft > 0) {
-				while (dataSourceHasNextRecord || dalayedSections.ContainsKey(report.DetailSection.Name)) {
+			
+			while (pageHeightLeft > 0 && !pageBreak && (dataSourceHasNextRecord || dalayedSections.ContainsKey(report.DetailSection.Name))) {
 					selectSection (report.DetailSection);
 					processSection();
 					nextRecord ();
-				}
 			}
+			
 									
 			if (!dataSourceHasNextRecord && !pageBreak) {
 				selectSection (report.ReportFooterSection);												

@@ -41,7 +41,7 @@ namespace MonoReports.Model.Controls
 			FontColor = new Color(0,0,0);
 			FontSize = 11;
 			FieldName = String.Empty;
-			Padding = new Thickness(2,2,0,0);
+			Padding = new Thickness(1,0,0,0);
 			CanGrow = true;		
 			Size = new Size(20.mm(),11.pt() + 4);
 		}	
