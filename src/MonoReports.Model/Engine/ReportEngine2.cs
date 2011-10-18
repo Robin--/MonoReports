@@ -142,24 +142,32 @@ namespace MonoReports.Model.Engine
 		{	
 			ProcessedControl bottomMostAfterProcessing = null;
 			double maxHeight = currentSection.Section.CanGrow ? pageHeightLeft : currentSection.Section.Height;			
-			bool allControlsFitInSection = true; 
+			bool allControlsFitInSection = true;
+			bool sectionSplitted = false;
 				
 			for (int i = 0; i < currentSection.Controls.Count; i++) {
-				ProcessedControl pc = currentSection.Controls [i];				
-				currentSection.Section.TemplateControl.FireBeforeControlProcessing(reportContext,pc.Control);
-				double span = 0;
-				//get span for control
-				for (int j = 0; j < spanTable.Count; j++) {
-					if(pc.Control.Top >= spanTable[j].Item1)
-						span = span > spanTable[j].Item2 ? span : spanTable[j].Item2;
-					else
-						break;
-				}
-				bool controllFullyProcessed = pc.Process (renderer,span, maxHeight);
-				
-				if (controllFullyProcessed) {
+				ProcessedControl pc = currentSection.Controls [i];	
+				if(!pc.WasProcessed) {
+					currentSection.Section.TemplateControl.FireBeforeControlProcessing(reportContext,pc.Control);
+					double span = 0;
 					
-					//update span for control
+					//get span for control
+					for (int j = 0; j < spanTable.Count; j++) {
+						if(pc.Control.Top >= spanTable[j].Item1)
+							span = span > spanTable[j].Item2 ? span : spanTable[j].Item2;
+						else
+							break;
+					}
+					bool controllFullyProcessed = pc.Process (renderer,span, maxHeight);
+					
+					if (!controllFullyProcessed) {
+						allControlsFitInSection = false;
+						dalayedSections [currentSection.Name] = currentSection;
+						if(!currentSection.Section.KeepTogether)
+							sectionSplitted = true;
+					}
+					
+					
 					if (pc.Grow > 0) {
 											
 						Tuple<double, double> spanToUpdate = null;
@@ -173,20 +181,18 @@ namespace MonoReports.Model.Engine
 						}
 						
 						if(spanToUpdate == null) {
-							spanToUpdate = new Tuple<double, double>(pc.BottomBeforeSpanAndGrow,pc.Grow + pc.Span);	
+							spanToUpdate = new Tuple<double, double>(pc.BottomBeforeSpanAndGrow,pc.Grow + pc.Span);
 						}
 						
 						spanTable.Insert(k,spanToUpdate);
 					}
-					
-				} else {
-					
-					allControlsFitInSection = false;
-					dalayedSections [currentSection.Name] = currentSection;
-				}
 				
-				if(bottomMostAfterProcessing == null || bottomMostAfterProcessing.BottomAfterSpanAndGrow < pc.BottomAfterSpanAndGrow) {
-					bottomMostAfterProcessing = pc;
+					
+					
+					
+					if(bottomMostAfterProcessing == null || bottomMostAfterProcessing.BottomAfterSpanAndGrow < pc.BottomAfterSpanAndGrow) {
+						bottomMostAfterProcessing = pc;
+					}
 				}
 				
 			}
@@ -217,7 +223,17 @@ namespace MonoReports.Model.Engine
 				foreach(var c in currentSection.PageBuffer)
 					c.Top += currentSection.SectionSpan;
 				
-				currentPage.Controls.AddRange (currentSection.PageBuffer); 
+				currentPage.Controls.AddRange (currentSection.PageBuffer);
+				
+				if(sectionSplitted) {
+					currentSection.PageBuffer.Clear();
+					foreach(var ctrl in currentSection.Controls) {
+						if(ctrl.Control.Top >= maxHeight) {
+							ctrl.Control.Top -= maxHeight;
+							ctrl.Span = 0;
+						}
+					}
+				}
 			}
 
  
@@ -345,7 +361,9 @@ namespace MonoReports.Model.Engine
 		
 		public double Span { get; set; }
 		
-		public double Grow { get; set; }
+		public bool WasProcessed { get; set; }
+		
+		public double Grow { get; set; }				
 		
 		public double BottomBeforeSpanAndGrow { get; set; }
 		
@@ -357,27 +375,32 @@ namespace MonoReports.Model.Engine
 			BottomBeforeSpanAndGrow = Control.Bottom;
 			Size s = renderer.MeasureControl (Control);
 			Grow = s.Height - Control.Height;
-			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;
+			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;			
 			bool retVal = false;
-			Control.Size = new Size (Control.Width, s.Height);				
 			Control.Top += span;
-			
-			if (BottomAfterSpanAndGrow <= maxHeight) {				
-				Section.AddControlToPageBuffer (Control);
-				retVal = true;
-			} else {
-				if (!Section.Section.KeepTogether ) {
-					if (Control.Top < maxHeight) {
-						Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight (Control, maxHeight-Control.Top);
-						if (brokenControlParts [0] != null)
-							Section.AddControlToPageBuffer (brokenControlParts [0]);
-						Control = brokenControlParts [1];
-						Control.Top = 0;
-						
-					}
-				}					
-			}
+			if (Control.Top < maxHeight) {
 				
+				Control.Size = new Size (Control.Width, s.Height);			
+				if (BottomAfterSpanAndGrow <= maxHeight) {				
+					Section.AddControlToPageBuffer (Control);
+					WasProcessed = true;
+					retVal = true;
+				} else {
+					if (!Section.Section.KeepTogether ) {
+						if (Control.Top < maxHeight) {
+							Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight (Control, maxHeight-Control.Top);
+							if (brokenControlParts [0] != null) {
+								Section.AddControlToPageBuffer (brokenControlParts [0]);
+								brokenControlParts [1].Top = maxHeight;
+								double g  = (maxHeight-Control.Top) -  brokenControlParts [0].Height;
+								Grow += g;
+							}
+							Control = brokenControlParts [1];
+						}
+					}					
+				}
+			}
+			
 			return retVal;	
 		}
 	}
