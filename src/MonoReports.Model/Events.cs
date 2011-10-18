@@ -32,7 +32,9 @@ namespace MonoReports.Model {
 	
     public delegate void AfterPageRender(ReportContext rc, Page p);
 	
-	public delegate void BeforePageRender(ReportContext rc, Page p);		
+	public delegate void BeforePageRender(ReportContext rc, Page p);
 	
+	public delegate void BeforePageProcessing(ReportContext rc, Page p);
+ 
     public delegate void AfterReportProcessing(ReportContext rc);
 }

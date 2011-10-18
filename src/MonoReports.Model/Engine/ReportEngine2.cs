@@ -50,6 +50,7 @@ namespace MonoReports.Model.Engine
 		double pageHeightReservation;
 		List<Tuple<double,double>> spanTable;
 		internal ReportContext reportContext;
+		bool reportHeaderFished = false;
 		
 		public ReportEngine2 (Report report, IReportRenderer renderer)
 		{
@@ -99,32 +100,41 @@ namespace MonoReports.Model.Engine
 		public void ProcessPage ()
 		{
 			spanTable.Clear();
-			currentPage = new Page (){ PageNumber = ++pageNumber };
-			pageHeight = report.Height;
-			pageHeightReservation = report.PageFooterSection.Height;
+			currentPage = new Page (){ PageNumber = ++pageNumber };			
+			report.FireOnBeforePageProcessing (reportContext,currentPage);
+			pageHeight = report.Height;			
+			pageHeightReservation = 0;
+			
+			if(report.PageHeaderSection.IsVisible)
+				pageHeightReservation += report.PageHeaderSection.Height;
+			if(report.PageFooterSection.IsVisible)
+				pageHeightReservation += report.PageFooterSection.Height;
+				
 			pageHeightLeft = pageHeight - pageHeightReservation;
 			pageHeightUsed = 0;
 			pageBreak = false;
+			
+			if (report.ReportHeaderSection.IsVisible && !pageBreak && !reportHeaderFished) {
+				selectSection (report.ReportHeaderSection);
+				reportHeaderFished = processSection ();				
+			}	
 			
 			if (report.PageHeaderSection.IsVisible) {
 				selectSection (report.PageHeaderSection);
 				processSection ();				
 			}
-			
-			if (report.ReportHeaderSection.IsVisible && !pageBreak) {
-				selectSection (report.ReportHeaderSection);
-				processSection ();
-			}			
-			
+ 
 			if (report.PageFooterSection.IsVisible) {
 				selectSection (report.PageFooterSection);
 				processSection ();
 			}			
-			 
-			while (dataSourceHasNextRecord && !pageBreak) {
-				selectSection (report.DetailSection);
-				processSection();
-				nextRecord ();
+			
+			if (!pageBreak && pageHeightLeft > 0) {
+				while (dataSourceHasNextRecord || dalayedSections.ContainsKey(report.DetailSection.Name)) {
+					selectSection (report.DetailSection);
+					processSection();
+					nextRecord ();
+				}
 			}
 									
 			if (!dataSourceHasNextRecord && !pageBreak) {
@@ -138,7 +148,7 @@ namespace MonoReports.Model.Engine
 			report.Pages.Add(currentPage);
 		}
 
-		void processSection ()
+		bool  processSection ()
 		{	
 			ProcessedControl bottomMostAfterProcessing = null;
 			double maxHeight = currentSection.Section.CanGrow ? pageHeightLeft : currentSection.Section.Height;			
@@ -173,7 +183,7 @@ namespace MonoReports.Model.Engine
 						Tuple<double, double> spanToUpdate = null;
 						int k;
 						//a little tricky - should be simplified
-						for(k = 0; k < spanTable.Count; k++){
+						for (k = 0; k < spanTable.Count; k++){
 							if(spanTable[k].Item1 == pc.BottomBeforeSpanAndGrow)
 								spanToUpdate = spanTable[k];
 							else if(spanTable[k].Item1 > pc.BottomBeforeSpanAndGrow)
@@ -233,16 +243,17 @@ namespace MonoReports.Model.Engine
 							ctrl.Span = 0;
 						}
 					}
+					currentSection.Height = 0;
 				}
 			}
-
+			return allControlsFitInSection;
  
 		}
 			
 		void selectSection (Section sect)
 		{
 			if (dalayedSections.ContainsKey (sect.Name)) {
-				currentSection = dalayedSections [sect.Name];
+				currentSection = dalayedSections [sect.Name];				
 				dalayedSections.Remove(sect.Name);
 			}
 			else {			
@@ -250,6 +261,7 @@ namespace MonoReports.Model.Engine
 				currentSection = new ProcessedSection () {
 					Controls = new List<ProcessedControl> (),
 					Section = section,
+					Height = section.Height,
 					MarginBottom = section.Height,
 					MarginTop = 0
 				};
@@ -325,8 +337,8 @@ namespace MonoReports.Model.Engine
 		}
 		
 		public double Height {
-			get { return Section.Height; }
-			set { Section.Height = value; }
+			get;
+			set;
 		}
 		
 		public double MarginTop { get; set; }

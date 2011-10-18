@@ -82,6 +82,8 @@ namespace MonoReports.Model
 		
 		public event BeforePageRender OnBeforePageRender;
 		
+		public event BeforePageProcessing OnBeforePageProcessing;
+		
 		public event AfterReportProcessing OnAfterReportProcessing;
 
 		public string Title { get; set; }
@@ -228,6 +230,13 @@ namespace MonoReports.Model
 		{
 			if (OnBeforePageRender != null) {
 				OnBeforePageRender (rc, p);
+			}
+		}
+		
+		internal void FireOnBeforePageProcessing (ReportContext rc, Page p)
+		{
+			if (OnBeforePageProcessing != null) {
+				OnBeforePageProcessing (rc, p);
 			}
 		}
 
