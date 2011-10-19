@@ -115,14 +115,14 @@ namespace MonoReports.Model.Engine
 			while (!ProcessReportPage ()) {
 				nextPage ();
 			}
-			 
+			 /*
 			foreach (var dc in controlsToEvalAfterReportProcessing) {
 				try {
 					if (reportContext.ExpressionFieldsDict.ContainsKey (dc.FieldName)) 
 						dc.Text = reportContext.ExpressionFieldsDict [dc.FieldName].GetStringValue ("",dc.FieldTextFormat);
 				} catch {}						
 			}
-			 
+			 */
 			if (source != null)
 				source.Reset ();
 
@@ -240,8 +240,10 @@ namespace MonoReports.Model.Engine
 					sectionContext.ExtendedLines.Add (line);
 				}
 				#region assign data
+				/*
 				if (source != null && sectionContext.Control is IDataControl && !sectionContext.Control.WasProcessed) {
 					IDataControl dataControl = sectionContext.Control as IDataControl;
+					
 					if (!string.IsNullOrEmpty (dataControl.FieldName)) {
 
 						switch (dataControl.FieldKind) {
@@ -272,8 +274,10 @@ namespace MonoReports.Model.Engine
 						default:
 							break;
 						}
+						
 					}
 				}
+				*/
 				#endregion
 
 				sectionContext.Y = sectionContext.Control.Top + sectionContext.Span;

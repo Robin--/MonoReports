@@ -36,16 +36,12 @@ namespace MonoReports.Model
 		public ReportContext (Report r)
 		{
 			report = r;
-			ParameterFieldsDict = r.Parameters.ToDictionary(p=>p.Name);
-			DataFieldsDict = r.DataFields.ToDictionary(df=>df.Name);
-			ExpressionFieldsDict = r.ExpressionFields.ToDictionary(ef=>ef.Name);
+			
 		}
 
         public object RendererContext { get; set; }
 		
-		public Dictionary<string,Field> ParameterFieldsDict {get;set;}
-		public Dictionary<string,Field> DataFieldsDict {get;set;}
-		public Dictionary<string,Field> ExpressionFieldsDict {get;set;}
+		
 		
 		public IDataSource DataSource {get;set;}
 				

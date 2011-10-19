@@ -24,18 +24,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoReports.Model.Data
 {
 	public class MonoreportsInteractiveBase : Mono.CSharp.InteractiveBase
 	{
 		
-		public static Report Report {get;set;}
+		static Report  report;
 		
-		public MonoreportsInteractiveBase ()
-		{
-		
+		public static Report Report {			
+			get {
+				return report;
+			}
+			set {
+				report = value;
+				if(report != null){
+					ParameterFieldsDict = report.Parameters.ToDictionary(p=>p.Name);
+					DataFieldsDict = report.DataFields.ToDictionary(df=>df.Name);
+					ExpressionFieldsDict = report.ExpressionFields.ToDictionary(ef=>ef.Name);
+				}else {
+					ParameterFieldsDict = new Dictionary<string, Field>();
+					DataFieldsDict = new Dictionary<string, Field>();
+					ExpressionFieldsDict = new Dictionary<string, Field>();
+				}
+			}
 		}
+		
+		public MonoreportsInteractiveBase ():base()
+		{
+			
+		}
+		
+		public static Dictionary<string,Field> ParameterFieldsDict {get;set;}
+		public static Dictionary<string,Field> DataFieldsDict {get;set;}
+		public static Dictionary<string,Field> ExpressionFieldsDict {get;set;}
 		
 		static ReportContext ctx;
 		
@@ -59,28 +83,28 @@ namespace MonoReports.Model.Data
 		}
 		
 		public static object d(string dataFieldName){
-			return ctx.DataFieldsDict [dataFieldName].DataProvider.GetValue(ctx.DataSource.Current);
+			return DataFieldsDict [dataFieldName].DataProvider.GetValue(ctx.DataSource.Current);
 		}
 		
 		public static T d<T>(string dataFieldName){
-			return (T) ctx.DataFieldsDict [dataFieldName].DataProvider.GetValue(ctx.DataSource.Current);
+			return (T) DataFieldsDict [dataFieldName].DataProvider.GetValue(ctx.DataSource.Current);
 		}
 		
 		public static object p(string parameterFieldName){
-			object o =  ctx.ParameterFieldsDict[parameterFieldName].DefaultValue;
+			object o =  ParameterFieldsDict[parameterFieldName].DefaultValue;
 			return o;
 		}
 		
 		public static T p<T>(string parameterFieldName){
-			return (T) ctx.ParameterFieldsDict [parameterFieldName].DefaultValue;
+			return (T) ParameterFieldsDict [parameterFieldName].DefaultValue;
 		}
 		
 		public static object e(string expressionFieldName){
-			return  ctx.ExpressionFieldsDict[expressionFieldName].DataProvider.GetValue(expressionFieldName);
+			return  ExpressionFieldsDict[expressionFieldName].DataProvider.GetValue(expressionFieldName);
 		}
 		
 		public static T e<T>(string expressionFieldName){
-			return (T) ctx.ExpressionFieldsDict [expressionFieldName].DataProvider.GetValue(expressionFieldName);
+			return (T) ExpressionFieldsDict [expressionFieldName].DataProvider.GetValue(expressionFieldName);
 		}
 		
 		
