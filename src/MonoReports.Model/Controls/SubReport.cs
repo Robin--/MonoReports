@@ -49,9 +49,7 @@ namespace MonoReports.Model.Controls
 			 Report.DetailSection.BackgroundColor = new Color(0.78,0.78,0.78);
 			Report.ReportHeaderSection.Controls.Add (new Controls.TextBlock { FontSize = 12, FontName = "Helvetica", 
 			Text = "11text random text random text 08Random text 33 Random text random WW text random _text Random text random text r 44 andom text Random text random text random text ZZZZ", FontColor = new Color(1,0,0), Location = new Point (0, 10), CanGrow = true, Size = new Model.Size (79, 30) });
-			engine = new ReportEngineOld (this.Report,null) { 
-			IsSubreport = true  
-			};
+			engine = new ReportEngine2(this.Report,null);
 		}
  
 		public Report Report {
@@ -93,9 +91,9 @@ namespace MonoReports.Model.Controls
 			return subreport;
 		}
 		
-		ReportEngineOld engine;
+		ReportEngine2 engine;
 		
-		public ReportEngineOld Engine {
+		public ReportEngine2 Engine {
 			get {
 				return this.engine;
 			}
@@ -107,11 +105,7 @@ namespace MonoReports.Model.Controls
         public bool Finished { get; set; }
 
 		public void ProcessUpToPage(IReportRenderer renderer, double height){
-			
-			engine.ReportRenderer = renderer;
-			engine.reportContext.HeightLeftOnCurrentPage = height;
-            Finished = engine.ProcessReportPage();					
-			 
+		 
 		}
  
 		

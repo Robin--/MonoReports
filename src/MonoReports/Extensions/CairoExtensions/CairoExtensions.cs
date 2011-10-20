@@ -654,7 +654,7 @@ namespace MonoReports.Extensions.CairoExtensions
 		}
 		
 		
-		static double[] dotsStyle = new double[]{1,2};
+	 
 		static double[] dashesStyle = new double[]{3};
 		static double[] dashDotStyle = new double[]{3,1};
 		static double[] dashDotDotStyle = new double[]{3,1,1};

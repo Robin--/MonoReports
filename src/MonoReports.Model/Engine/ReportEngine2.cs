@@ -126,16 +126,15 @@ namespace MonoReports.Model.Engine
 			if (report.PageFooterSection.IsVisible) {
 				pageHeightLeft += report.PageFooterSection.Height;
 				selectSection (report.PageFooterSection);
+				currentSection.AttachBottom = true;
 				processSection ();
 			}			
-			
-			
+						
 			while (pageHeightLeft > 0 && !pageBreak && (dataSourceHasNextRecord || dalayedSections.ContainsKey(report.DetailSection.Name))) {
 					selectSection (report.DetailSection);
 					processSection();
 					nextRecord ();
-			}
-			
+			}			
 									
 			if (!dataSourceHasNextRecord && !pageBreak) {
 				selectSection (report.ReportFooterSection);												
@@ -176,8 +175,7 @@ namespace MonoReports.Model.Engine
 						if(!currentSection.Section.KeepTogether)
 							sectionSplitted = true;
 					}
-					
-					
+ 
 					if (pc.Grow > 0 ) {
 											
 						Tuple<double, double> spanToUpdate = null;
@@ -196,8 +194,6 @@ namespace MonoReports.Model.Engine
 						
 						spanTable.Insert(k,spanToUpdate);
 					}
-				
-					
 					
 					
 					if(bottomMostAfterProcessing == null || bottomMostAfterProcessing.BottomAfterSpanAndGrow < pc.BottomAfterSpanAndGrow) {
@@ -229,10 +225,18 @@ namespace MonoReports.Model.Engine
 				
 				pageHeightUsed += currentSection.Height;
 				pageHeightLeft -= currentSection.Height;
-				 
+				
+				if(currentSection.AttachBottom)
+					currentSection.SectionSpan = pageHeight - currentSection.Height;
+												
 				foreach(var c in currentSection.PageBuffer)
 					c.Top += currentSection.SectionSpan;
 				
+				var sectionBacground = currentSection.Section.CreateControl();				
+				sectionBacground.Height = currentSection.Height;
+				sectionBacground.Top = currentSection.SectionSpan;
+				currentSection.PageBuffer.Add(sectionBacground);
+ 
 				currentPage.Controls.AddRange (currentSection.PageBuffer);
 				
 				if(sectionSplitted) {
@@ -328,6 +332,11 @@ namespace MonoReports.Model.Engine
 		public ProcessedSection () {
 			PageBuffer = new List<Control>();			
 			Controls = new List<ProcessedControl>();			
+		}
+		
+		public bool AttachBottom {
+			get;
+			set;
 		}
 
 		public double Top { get; set; }

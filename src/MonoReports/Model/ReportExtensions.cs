@@ -52,11 +52,7 @@ namespace MonoReports.Model
 		
 		
 		public static void Load (this Report r,string path) {
-			
-			
-			///3tk ENGINE has to be fixed
-			MonoReports.Model.Engine.ReportEngineOld.EvaluatorInit();
-			
+
 			using(System.IO.FileStream file = System.IO.File.OpenRead (path)) {				 
 				byte[] bytes = new byte[file.Length];
 				file.Read (bytes, 0, (int)file.Length);
@@ -298,15 +294,15 @@ IDictionary<string,object> parameters = new Dictionary<string,object>();
 				renderer.RegisterRenderer(typeof(DetailSection), sr);
 				renderer.RegisterRenderer(typeof(PageHeaderSection), sr);
 				renderer.RegisterRenderer(typeof(PageFooterSection), sr);
-				
-				///3tk ENGINE@ has to be fixed
-				MonoReports.Model.Engine.ReportEngineOld engine = new MonoReports.Model.Engine.ReportEngineOld (report,renderer);
+ 
+				MonoReports.Model.Engine.ReportEngine2 engine = new MonoReports.Model.Engine.ReportEngine2(report,renderer);
 				engine.Process ();		
 				
 				Cairo.Context cr1 = new Cairo.Context (pdfSurface);
 				renderer.Context = cr1;
 				cr1.Translate(report.Margin.Left * renderer.UnitMultipilier,report.Margin.Top * renderer.UnitMultipilier);
-				engine.RenderPages(renderer,report);		
+				///3tk NEWENGINE renderer should be moved
+				//engine.RenderPages(renderer,report);		
 				pdfSurface.Finish ();		
 				(cr as IDisposable).Dispose ();
 				(cr1 as IDisposable).Dispose ();

@@ -80,16 +80,14 @@
     <Compile Include="Data\Field.cs" />
     <Compile Include="UnitExtensions.cs" />
     <Compile Include="Engine\SpanInfo.cs" />
-    <Compile Include="Engine\SectionProcessingContext.cs" />
     <Compile Include="Data\ExpressionFieldValueProvider.cs" />
-    <Compile Include="Data\MonoreportsInteractiveBase.cs" />
     <Compile Include="Data\Total.cs" />
     <Compile Include="Data\ExpressionField.cs" />
     <Compile Include="Data\LambdaFieldValueProvider.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="Engine\ReportEngine2.cs" />
     <Compile Include="Engine\IReportEngine.cs" />
-    <Compile Include="Engine\ReportEngineOld.cs" />
+    <Compile Include="Data\ScriptEvaluator.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

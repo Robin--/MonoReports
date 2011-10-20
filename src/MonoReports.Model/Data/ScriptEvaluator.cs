@@ -29,9 +29,17 @@ using System.Linq;
 
 namespace MonoReports.Model.Data
 {
-	public class MonoreportsInteractiveBase : Mono.CSharp.InteractiveBase
+	public class ScriptEvaluator : Mono.CSharp.InteractiveBase
 	{
-		
+		static ScriptEvaluator ()
+		{
+			Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});				
+			Mono.CSharp.Evaluator.LoadAssembly(System.Reflection.Assembly.GetExecutingAssembly().Location);
+			Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.ScriptEvaluator));
+			Mono.CSharp.Evaluator.Run("using System;");
+			Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+		}
+		 
 		static Report  report;
 		
 		public static Report Report {			
@@ -52,10 +60,7 @@ namespace MonoReports.Model.Data
 			}
 		}
 		
-		public MonoreportsInteractiveBase ():base()
-		{
-			
-		}
+	
 		
 		public static Dictionary<string,Field> ParameterFieldsDict {get;set;}
 		public static Dictionary<string,Field> DataFieldsDict {get;set;}
@@ -106,8 +111,7 @@ namespace MonoReports.Model.Data
 		public static T e<T>(string expressionFieldName){
 			return (T) ExpressionFieldsDict [expressionFieldName].DataProvider.GetValue(expressionFieldName);
 		}
-		
-		
+ 
 	}
 }
 
