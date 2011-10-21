@@ -47,6 +47,7 @@ namespace MonoReports.Model.Engine
 		double pageHeight;
 		double pageHeightLeft;
 		double pageHeightUsed;
+		double bottomSectionsHeightUsed;
 		List<Tuple<double,double>> spanTable;
 		internal ReportContext reportContext;
 		bool reportHeaderFished = false;
@@ -131,9 +132,9 @@ namespace MonoReports.Model.Engine
 			}			
 						
 			while (pageHeightLeft > 0 && !pageBreak && (dataSourceHasNextRecord || dalayedSections.ContainsKey(report.DetailSection.Name))) {
-					selectSection (report.DetailSection);
-					processSection();
-					nextRecord ();
+				selectSection (report.DetailSection);
+				processSection();
+				nextRecord ();
 			}			
 									
 			if (!dataSourceHasNextRecord && !pageBreak) {
@@ -226,8 +227,10 @@ namespace MonoReports.Model.Engine
 				pageHeightUsed += currentSection.Height;
 				pageHeightLeft -= currentSection.Height;
 				
-				if(currentSection.AttachBottom)
+				if(currentSection.AttachBottom) {
+					bottomSectionsHeightUsed += currentSection.Height;
 					currentSection.SectionSpan = pageHeight - currentSection.Height;
+				}
 												
 				foreach(var c in currentSection.PageBuffer)
 					c.Top += currentSection.SectionSpan;
@@ -238,7 +241,7 @@ namespace MonoReports.Model.Engine
 				currentSection.PageBuffer.Add(sectionBacground);
  
 				currentPage.Controls.AddRange (currentSection.PageBuffer);
-				
+											
 				if(sectionSplitted) {
 					currentSection.PageBuffer.Clear();
 					foreach(var ctrl in currentSection.Controls) {
@@ -253,6 +256,7 @@ namespace MonoReports.Model.Engine
 			return allControlsFitInSection;
  
 		}
+				
 			
 		void selectSection (Section sect)
 		{
@@ -287,7 +291,7 @@ namespace MonoReports.Model.Engine
 					}
 				}
 			}
-			currentSection.SectionSpan = pageHeightUsed;
+			currentSection.SectionSpan = pageHeightUsed - bottomSectionsHeightUsed;
 		
 		}
 		
