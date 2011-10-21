@@ -217,8 +217,8 @@ namespace MonoReports.Model.Engine
 					
 					if(newHeight > currentSection.Height && currentSection.Section.CanGrow) {
 						
-						if(newHeight > maxHeight) {							
-							currentSection.MarginBottom -= newHeight - maxHeight;
+						if(newHeight > maxHeight) {
+							currentSection.MarginBottom = newHeight - maxHeight;
 							newHeight = maxHeight;
 							dalayedSections [currentSection.Name] = currentSection;
 						}
