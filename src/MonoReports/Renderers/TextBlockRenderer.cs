@@ -42,6 +42,8 @@ namespace MonoReports.Renderers
 		public void Render (Cairo.Context c,Control control)
 		{			
             TextBlock textBlock = control as TextBlock;
+			if(textBlock.Height == 0 || textBlock.Width == 0)
+				return;
 			Rectangle borderRect;			
 			c.Save();
 			borderRect = new Rectangle (textBlock.Location.X * unitMulitipier , textBlock.Location.Y  * unitMulitipier, textBlock.Width  * unitMulitipier, textBlock.Height  * unitMulitipier);	 
