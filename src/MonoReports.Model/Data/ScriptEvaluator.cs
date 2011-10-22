@@ -26,9 +26,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MonoReports.Model.Controls;
 
 namespace MonoReports.Model.Data
 {
+	
+	/// <summary>
+	/// Script evaluator it's a little bit overcomplicated since we can't have Mono.CSharp.InteractiveBase
+	/// instance (it has to be static) as of Mono 2.10 
+	/// </summary>
 	public class ScriptEvaluator : Mono.CSharp.InteractiveBase
 	{
 		static ScriptEvaluator ()
@@ -38,80 +44,110 @@ namespace MonoReports.Model.Data
 			Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.ScriptEvaluator));
 			Mono.CSharp.Evaluator.Run("using System;");
 			Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+			scriptingContextDictionary = new Dictionary<string, ScriptingContext>();
 		}
-		 
-		static Report  report;
+								
+		static Dictionary<string,ScriptingContext> scriptingContextDictionary;
 		
-		public static Report Report {			
-			get {
-				return report;
-			}
+		public static void InitOrUpdateScriptingContextForReport(string reportName, Report report, ReportContext ctx) {
+			scriptingContextDictionary[reportName] = new ScriptingContext(){ReportContext = ctx};
+		}
+		
+		public static void ClearContext(){
+			scriptingContextDictionary.Clear();
+			currentContext = null;
+			scriptingContextName = String.Empty;
+		}
+		
+		static string scriptingContextName;
+		
+		public static string ScriptingContextName {
+			get {return scriptingContextName;}
 			set {
-				report = value;
-				if(report != null){
-					ParameterFieldsDict = report.Parameters.ToDictionary(p=>p.Name);
-					DataFieldsDict = report.DataFields.ToDictionary(df=>df.Name);
-					ExpressionFieldsDict = report.ExpressionFields.ToDictionary(ef=>ef.Name);
-				}else {
-					ParameterFieldsDict = new Dictionary<string, Field>();
-					DataFieldsDict = new Dictionary<string, Field>();
-					ExpressionFieldsDict = new Dictionary<string, Field>();
-				}
+				scriptingContextName = value;
+				currentContext = scriptingContextDictionary[scriptingContextName];
+				reportContext = currentContext.ReportContext;
 			}
+			
 		}
 		
-	
+		static ScriptingContext currentContext;
 		
-		public static Dictionary<string,Field> ParameterFieldsDict {get;set;}
-		public static Dictionary<string,Field> DataFieldsDict {get;set;}
-		public static Dictionary<string,Field> ExpressionFieldsDict {get;set;}
+		static ReportContext reportContext;
 		
-		static ReportContext ctx;
 		
-		public static ReportContext ReportContext {
+		public static void EvalDataControl(IDataControl dataControl) {
+			Field field = null;				
+ 			if (dataControl.FieldKind == FieldKind.Parameter) {
+				if (reportContext.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
+					if(reportContext.Report.ParameterValues.ContainsKey(dataControl.FieldName)) {
+						field = reportContext.Report.ParameterValues[dataControl.FieldName] as Field;
+						dataControl.Text = field.GetStringValue (reportContext.Report.ParameterValues, dataControl.FieldTextFormat);
+					} else {
+						dataControl.Text = field.GetStringValue (null, dataControl.FieldTextFormat);
+					}
+				}
+			} else if (dataControl.FieldKind == FieldKind.Data)   {
+				//3tk ENGINE2 TODO
+			}else {
+			  	//2tk ENGIN2 TODO
+			}
+		}
+	 
+ 
+		
+ 	
+		public static int CurrentPageIndex {
+			get {return reportContext.CurrentPageIndex;}
+		}
+		
+		public static int RowIndex {
+			get {return reportContext.RowIndex;}
+		}
+		
+		public static int NumberOfPages {
+			get {return reportContext.NumberOfPages;}
+		}
+		
+		public static object d(string dataFieldName){
+			return reportContext.DataFieldsDict [dataFieldName].DataProvider.GetValue(reportContext.DataSource.Current);
+		}
+		
+		public static T d<T>(string dataFieldName){
+			return (T) reportContext.DataFieldsDict [dataFieldName].DataProvider.GetValue(reportContext.DataSource.Current);
+		}
+		
+		public static object p(string parameterFieldName){
+			object o =  reportContext.ParameterFieldsDict[parameterFieldName].DefaultValue;
+			return o;
+		}
+		
+		public static T p<T>(string parameterFieldName){
+			return (T) reportContext.ParameterFieldsDict [parameterFieldName].DefaultValue;
+		}
+		
+		public static object e(string expressionFieldName){
+			return  reportContext.ExpressionFieldsDict[expressionFieldName].DataProvider.GetValue(expressionFieldName);
+		}
+		
+		public static T e<T>(string expressionFieldName){
+			return (T) reportContext.ExpressionFieldsDict [expressionFieldName].DataProvider.GetValue(expressionFieldName);
+		}
+ 
+	}
+ 
+	public class ScriptingContext {
+ 
+		ReportContext ctx;
+		
+		public ReportContext ReportContext {
 			get {return ctx;}
 			set {
 				ctx = value;				
 			}
 		}
- 	
-		public static int CurrentPageIndex {
-			get {return ctx.CurrentPageIndex;}
-		}
 		
-		public static int RowIndex {
-			get {return ctx.RowIndex;}
-		}
 		
-		public static int NumberOfPages {
-			get {return ctx.NumberOfPages;}
-		}
-		
-		public static object d(string dataFieldName){
-			return DataFieldsDict [dataFieldName].DataProvider.GetValue(ctx.DataSource.Current);
-		}
-		
-		public static T d<T>(string dataFieldName){
-			return (T) DataFieldsDict [dataFieldName].DataProvider.GetValue(ctx.DataSource.Current);
-		}
-		
-		public static object p(string parameterFieldName){
-			object o =  ParameterFieldsDict[parameterFieldName].DefaultValue;
-			return o;
-		}
-		
-		public static T p<T>(string parameterFieldName){
-			return (T) ParameterFieldsDict [parameterFieldName].DefaultValue;
-		}
-		
-		public static object e(string expressionFieldName){
-			return  ExpressionFieldsDict[expressionFieldName].DataProvider.GetValue(expressionFieldName);
-		}
-		
-		public static T e<T>(string expressionFieldName){
-			return (T) ExpressionFieldsDict [expressionFieldName].DataProvider.GetValue(expressionFieldName);
-		}
- 
 	}
 }
 

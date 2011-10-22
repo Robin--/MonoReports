@@ -88,6 +88,8 @@
     <Compile Include="Engine\ReportEngine2.cs" />
     <Compile Include="Engine\IReportEngine.cs" />
     <Compile Include="Data\ScriptEvaluator.cs" />
+    <Compile Include="Engine\LineProcessedControl.cs" />
+    <Compile Include="Engine\ProcessedControl.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

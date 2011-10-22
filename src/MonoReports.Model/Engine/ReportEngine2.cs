@@ -151,7 +151,7 @@ namespace MonoReports.Model.Engine
 			report.Pages.Add(currentPage);
 		}
 
-		bool  processSection ()
+		bool processSection ()
 		{	
 			ProcessedControl bottomMostAfterProcessing = null;
 			double maxHeight = currentSection.Section.CanGrow ? pageHeightLeft : currentSection.Section.Height;			
@@ -160,7 +160,7 @@ namespace MonoReports.Model.Engine
 				
 			for (int i = 0; i < currentSection.Controls.Count; i++) {
 				ProcessedControl pc = currentSection.Controls [i];	
-				if(!pc.WasProcessed) {
+				if (!pc.WasProcessed) {
 					currentSection.Section.TemplateControl.FireBeforeControlProcessing(reportContext,pc.Control);
 					double span = 0;
 					
@@ -197,7 +197,7 @@ namespace MonoReports.Model.Engine
 						if(spanToUpdate == null) {
 							spanToUpdate = new Tuple<double, double>(pc.BottomBeforeSpanAndGrow,pc.Grow + pc.Span);
 							spanTable.Insert(k,spanToUpdate);
-						}else {							
+						} else {							
 							spanTable[k] = new Tuple<double, double>(pc.BottomBeforeSpanAndGrow, pc.Grow + pc.Span);
 						}
 						
@@ -307,6 +307,8 @@ namespace MonoReports.Model.Engine
 						ProcessedControl pc = null;
 						if (c  is SubReport)
 							pc = new SubreportControl () {Control = c, Section = currentSection };
+						else if(c is Line)
+							pc = new LineProcessedControl () {Control = c, Section = currentSection };
 						else
 							pc = new ProcessedControl () {Control = c, Section = currentSection };
 						
@@ -361,13 +363,16 @@ namespace MonoReports.Model.Engine
 	{
 		public ProcessedSection () {
 			PageBuffer = new List<Control>();			
-			Controls = new List<ProcessedControl>();			
+			Controls = new List<ProcessedControl>();
+			ExtendedLines = new List<Line>();
 		}
 		
 		public bool AttachBottom {
 			get;
 			set;
 		}
+		
+		public List<Line> ExtendedLines {get;set;}
 
 		public double Top { get; set; }
 
@@ -403,59 +408,7 @@ namespace MonoReports.Model.Engine
 		}
 	}
 
-	public class ProcessedControl
-	{	
-		
-		public ProcessedSection Section { get; set; }
-
-		public Control Control { get; set; }
-		
-		public double Span { get; set; }
-		
-		public bool WasProcessed { get; set; }
-		
-		public double Grow { get; set; }				
-		
-		public double BottomBeforeSpanAndGrow { get; set; }
-		
-		public double BottomAfterSpanAndGrow { get; set; }
-
-		public virtual bool Process (IReportRenderer renderer, double span, double maxHeight)
-		{
-			Span = span;
-			BottomBeforeSpanAndGrow = Control.Bottom;
-			Size s = renderer.MeasureControl (Control);
-			
-			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;			
-			bool retVal = false;
-			Control.Top += span;
-			if (Control.Top < maxHeight) {
-				Grow = s.Height - Control.Height;
-				Control.Size = new Size (Control.Width, s.Height);			
-				if (BottomAfterSpanAndGrow <= maxHeight) {				
-					Section.AddControlToPageBuffer (Control);
-					WasProcessed = true;
-					retVal = true;
-				} else {
-					if (!Section.Section.KeepTogether ) {
-						if (Control.Top < maxHeight) {
-							
-							Control[] brokenControlParts = renderer.BreakOffControlAtMostAtHeight (Control, maxHeight-Control.Top);												
-							if (brokenControlParts [0] != null) {
-								Section.AddControlToPageBuffer (brokenControlParts [0]);
-								brokenControlParts [1].Top = maxHeight;
-								double g  = (maxHeight-Control.Top) -  brokenControlParts [0].Height;
-								Grow += g;
-							}
-							Control = brokenControlParts [1];
-						}
-					}					
-				}
-			}
-			
-			return retVal;	
-		}
-	}
+	
 	
 	public class SubreportControl : ProcessedControl
 	{

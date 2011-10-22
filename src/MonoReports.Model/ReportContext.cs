@@ -35,14 +35,38 @@ namespace MonoReports.Model
 	{
 		public ReportContext (Report r)
 		{
-			report = r;
-			
+			Report = r;
 		}
+		
+		
+		public Dictionary<string,Field> ParameterFieldsDict {get;set;}
+		public Dictionary<string,Field> DataFieldsDict {get;set;}
+		public Dictionary<string,Field> ExpressionFieldsDict {get;set;}
+		
+		Report  report;
+		
+		public  Report Report {			
+			get {
+				return report;
+			}
+			set {
+				report = value;
+				if(report != null){
+					ParameterFieldsDict = report.Parameters.ToDictionary(p=>p.Name);
+					DataFieldsDict = report.DataFields.ToDictionary(df=>df.Name);
+					ExpressionFieldsDict = report.ExpressionFields.ToDictionary(ef=>ef.Name);
+				}else {
+					ParameterFieldsDict = new Dictionary<string, Field>();
+					DataFieldsDict = new Dictionary<string, Field>();
+					ExpressionFieldsDict = new Dictionary<string, Field>();
+				}
+			}
+		}
+		
 
         public object RendererContext { get; set; }
 		
-		
-		
+				
 		public IDataSource DataSource {get;set;}
 				
 		
@@ -66,9 +90,7 @@ namespace MonoReports.Model
 			internal set { heightLeftOnCurrentPage = value; }
 		}
 
-
-		Report report;
-		
+ 	
 		public int NumberOfPages {
 			get {return report.Pages.Count;}
 		}
