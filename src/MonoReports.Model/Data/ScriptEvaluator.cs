@@ -50,6 +50,7 @@ namespace MonoReports.Model.Data
 		static Dictionary<string,ScriptingContext> scriptingContextDictionary;
 		
 		public static void InitOrUpdateScriptingContextForReport(string reportName, Report report, ReportContext ctx) {
+			reportContext = ctx;
 			scriptingContextDictionary[reportName] = new ScriptingContext(){ReportContext = ctx};
 		}
 		
@@ -77,21 +78,37 @@ namespace MonoReports.Model.Data
 		
 		
 		public static void EvalDataControl(IDataControl dataControl) {
-			Field field = null;				
- 			if (dataControl.FieldKind == FieldKind.Parameter) {
-				if (reportContext.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
-					if(reportContext.Report.ParameterValues.ContainsKey(dataControl.FieldName)) {
-						field = reportContext.Report.ParameterValues[dataControl.FieldName] as Field;
-						dataControl.Text = field.GetStringValue (reportContext.Report.ParameterValues, dataControl.FieldTextFormat);
-					} else {
-						dataControl.Text = field.GetStringValue (null, dataControl.FieldTextFormat);
-					}
-				}
-			} else if (dataControl.FieldKind == FieldKind.Data)   {
-				//3tk ENGINE2 TODO
-			}else {
-			  	//2tk ENGIN2 TODO
+			Field field = null;
+			
+			switch (dataControl.FieldKind) {
+				case FieldKind.Data: 
+					if (reportContext.DataFieldsDict.ContainsKey (dataControl.FieldName)) {
+						field = reportContext.DataFieldsDict[dataControl.FieldName] as Field;
+						dataControl.Text = field.GetStringValue (reportContext.DataSource.Current, dataControl.FieldTextFormat); 
+					}				
+				break;
+				
+				case FieldKind.Expression:
+					if (reportContext.ExpressionFieldsDict.ContainsKey (dataControl.FieldName)) {
+						field = reportContext.ExpressionFieldsDict[dataControl.FieldName] as Field;
+						dataControl.Text = field.GetStringValue (null, dataControl.FieldTextFormat); 
+					}				
+				break;
+				
+				case FieldKind.Parameter:
+					if (reportContext.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
+						if(reportContext.Report.ParameterValues.ContainsKey(dataControl.FieldName)) {
+							field = reportContext.Report.ParameterValues[dataControl.FieldName] as Field;
+							dataControl.Text = field.GetStringValue (reportContext.Report.ParameterValues, dataControl.FieldTextFormat);
+						} else {
+							dataControl.Text = field.GetStringValue (null, dataControl.FieldTextFormat);
+						}
+					}				
+				break;				
+			default:
+			break;
 			}
+		 
 		}
 	 
  

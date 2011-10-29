@@ -50,6 +50,7 @@ namespace MonoReports.Model.Engine
 		{
 			Span = span;
 			BottomBeforeSpanAndGrow = Control.Bottom;
+			ProcessData();
 			Size s = renderer.MeasureControl (Control);
 			
 			BottomAfterSpanAndGrow = Span + Control.Location.Y + s.Height;			

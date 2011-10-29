@@ -72,6 +72,7 @@ namespace MonoReports.Model.Engine
 		
 		void initProcessing ()
 		{	
+			ScriptEvaluator.InitOrUpdateScriptingContextForReport(this.report.ToString(),report,reportContext);
 			report.Pages.Clear();
 			nextRecord ();			
 			ProcessingState = ProcessingState.Processing;
