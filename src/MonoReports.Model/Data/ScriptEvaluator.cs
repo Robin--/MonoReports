@@ -32,7 +32,7 @@ namespace MonoReports.Model.Data
 {
 	
 	/// <summary>
-	/// Script evaluator it's a little bit overcomplicated since we can't have Mono.CSharp.InteractiveBase
+	/// Script evaluator is a little bit overcomplicated since we can't have Mono.CSharp.InteractiveBase
 	/// instance (it has to be static) as of Mono 2.10 
 	/// </summary>
 	public class ScriptEvaluator : Mono.CSharp.InteractiveBase
@@ -98,10 +98,7 @@ namespace MonoReports.Model.Data
 				case FieldKind.Parameter:
 					if (reportContext.ParameterFieldsDict.ContainsKey (dataControl.FieldName)) {
 						if(reportContext.Report.ParameterValues.ContainsKey(dataControl.FieldName)) {
-							field = reportContext.Report.ParameterValues[dataControl.FieldName] as Field;
-							dataControl.Text = field.GetStringValue (reportContext.Report.ParameterValues, dataControl.FieldTextFormat);
-						} else {
-							dataControl.Text = field.GetStringValue (null, dataControl.FieldTextFormat);
+							dataControl.Text = reportContext.Report.ParameterValues[dataControl.FieldName].ToString();
 						}
 					}				
 				break;				
