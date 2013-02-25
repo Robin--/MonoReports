@@ -44,7 +44,7 @@ namespace MonoReports.Model.Data
 		public void Refresh(){
 			
 			if(!string.IsNullOrEmpty( field.ExpressionScript ))
-				cm = Mono.CSharp.Evaluator.Compile(field.ExpressionScript);
+				cm = MonoReports.Model.Engine.ReportEngine.MainEvaluator.Compile(field.ExpressionScript);
 		}
 		
 		ExpressionField field = null;

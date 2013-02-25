@@ -23,6 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using Mono.CSharp;
 using System.Linq;
 using MonoReports.Model;
 using System.Collections.Generic;
@@ -53,16 +54,18 @@ namespace MonoReports.Model.Engine
 		bool stop = false;
 		public static bool EvaluatorInitWasDone {get;set;}
 		List<IDataControl> controlsToEvalAfterReportProcessing = null;
+		public static Mono.CSharp.Evaluator MainEvaluator;
 		
 		public static void EvaluatorInit ()
 		{
 			if (!MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone) {
-				Mono.CSharp.Evaluator.InitAndGetStartupFiles (new string[] {  });
-				Mono.CSharp.Evaluator.LoadAssembly (System.Reflection.Assembly.GetExecutingAssembly ().Location);
+				Mono.CSharp.ReportPrinter ErrorPrinter = new ConsoleReportPrinter();
+				MainEvaluator = new Mono.CSharp.Evaluator( new CompilerContext( new CompilerSettings(), ErrorPrinter ));
+				MainEvaluator.LoadAssembly (System.Reflection.Assembly.GetExecutingAssembly ().Location);
 				//Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
-				Mono.CSharp.Evaluator.InteractiveBaseClass = (typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
-				Mono.CSharp.Evaluator.Run("using System;");
-				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+				MainEvaluator.InteractiveBaseClass = (typeof(MonoReports.Model.Data.MonoreportsInteractiveBase));
+				MainEvaluator.Run("using System;");
+				MainEvaluator.Run("using MonoReports.Model;");
 				MonoReports.Model.Engine.ReportEngine.EvaluatorInitWasDone = true;
 			}
 		}
@@ -89,12 +92,13 @@ namespace MonoReports.Model.Engine
 			SelectCurrentStateByTemplateSection (Report.PageFooterSection);
 			
 			if (!ReportEngine.EvaluatorInitWasDone) {
-				Mono.CSharp.Evaluator.InitAndGetStartupFiles(new string[]{});
-				Mono.CSharp.Evaluator.LoadAssembly("MonoReports.Model.dll");
+				Mono.CSharp.ReportPrinter ErrorPrinter = new ConsoleReportPrinter();
+				MainEvaluator = new Mono.CSharp.Evaluator( new CompilerContext( new CompilerSettings(), ErrorPrinter ));
+				MainEvaluator.LoadAssembly("MonoReports.Model.dll");
 				//Mono.CSharp.Evaluator.SetInteractiveBaseClass(typeof(MonoreportsInteractiveBase));
-				Mono.CSharp.Evaluator.InteractiveBaseClass = (typeof(MonoreportsInteractiveBase));
-				Mono.CSharp.Evaluator.Run("using System;");
-				Mono.CSharp.Evaluator.Run("using MonoReports.Model;");
+				MainEvaluator.InteractiveBaseClass = (typeof(MonoreportsInteractiveBase));
+				MainEvaluator.Run("using System;");
+				MainEvaluator.Run("using MonoReports.Model;");
 				EvaluatorInitWasDone = true;
 			} 
 			

@@ -104,7 +104,7 @@ namespace MonoReports.Gui.Widgets
 			if(!Report.References.Contains(s)) {			
 				Report.References.Add(s);
 				referencesStore.AddNode(new SimpleTreeNode(s));
-				Mono.CSharp.Evaluator.LoadAssembly(s);			
+				MonoReports.Model.Engine.ReportEngine.MainEvaluator.LoadAssembly(s);			
 			}
 		}
 		
@@ -180,7 +180,7 @@ namespace MonoReports.Gui.Widgets
 			
 			if(!report.Usings.Contains(usingEntry.Text)){
 				string text = usingEntry.Text.Replace(";",String.Empty);
- 				Mono.CSharp.Evaluator.Run("using " + text + ";");			
+				MonoReports.Model.Engine.ReportEngine.MainEvaluator.Run("using " + text + ";");			
 				report.Usings.Add(text);
 				usingsStore.AddNode( new SimpleTreeNode(text));
 			}
