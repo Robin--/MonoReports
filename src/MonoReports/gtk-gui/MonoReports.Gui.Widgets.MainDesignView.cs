@@ -62,7 +62,7 @@ namespace MonoReports.Gui.Widgets
 			// Notebook tab
 			this.designTitleLabel = new global::Gtk.Label ();
 			this.designTitleLabel.Name = "designTitleLabel";
-			this.designTitleLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("desing");
+			this.designTitleLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("design");
 			this.mainNotebook.SetTabLabel (this.designScrolledWindow, this.designTitleLabel);
 			this.designTitleLabel.ShowAll ();
 			// Container child mainNotebook.Gtk.Notebook+NotebookChild
@@ -135,6 +135,7 @@ namespace MonoReports.Gui.Widgets
 			this.jsonRadiobutton = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Json"));
 			this.jsonRadiobutton.CanFocus = true;
 			this.jsonRadiobutton.Name = "jsonRadiobutton";
+			this.jsonRadiobutton.Active = true;
 			this.jsonRadiobutton.DrawIndicator = true;
 			this.jsonRadiobutton.UseUnderline = true;
 			this.jsonRadiobutton.Group = new global::GLib.SList (global::System.IntPtr.Zero);

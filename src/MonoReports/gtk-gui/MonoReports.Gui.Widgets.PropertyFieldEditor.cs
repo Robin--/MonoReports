@@ -52,7 +52,7 @@ namespace MonoReports.Gui.Widgets
 			// Container child table1.Gtk.Table+TableChild
 			this.dafValueLabel = new global::Gtk.Label ();
 			this.dafValueLabel.Name = "dafValueLabel";
-			this.dafValueLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Deault Value");
+			this.dafValueLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Default Value");
 			this.table1.Add (this.dafValueLabel);
 			global::Gtk.Table.TableChild w3 = ((global::Gtk.Table.TableChild)(this.table1 [this.dafValueLabel]));
 			w3.TopAttach = ((uint)(1));
