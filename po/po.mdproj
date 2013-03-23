@@ -12,8 +12,11 @@
         <Translation isoCode="es" />
         <Translation isoCode="en" />
         <Translation isoCode="pl" />
+        <Translation isoCode="ru" />
       </translations>
     </translations>
     <packageName>monorepots</packageName>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
   </PropertyGroup>
 </Project>

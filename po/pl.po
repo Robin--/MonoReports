@@ -2,9 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-11 11:39:15-0300\n"
+"POT-Creation-Date: 2013-03-23 22:16:26+0400\n"
 "PO-Revision-Date: 2011-10-07 10:42:34-0300\n"
-"Last-Translator: Claudio Rodrigo Pereyra Diaz <claudiorodrigo@pereyradiaz.com.ar>\n"
+"Last-Translator: Claudio Rodrigo Pereyra Diaz <claudiorodrigo@pereyradiaz."
+"com.ar>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12,651 +13,620 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: MonoDevelop Gettext addin\n"
 
-#: ../src/MonoReports/Tools/SectionTool.cs:86
+#: ../src/MonoReports/Tools/SectionTool.cs:5
 msgid "Section"
 msgstr ""
 
-#: ../src/MonoReports/Tools/LineTool.cs:168
+#: ../src/MonoReports/Tools/LineTool.cs:20
 msgid "Line"
 msgstr ""
 
-#: ../src/MonoReports/Tools/RectTool.cs:131
+#: ../src/MonoReports/Tools/RectTool.cs:5
 msgid "Rectangle"
 msgstr ""
 
-#: ../src/MonoReports/Tools/ZoomTool.cs:41
+#: ../src/MonoReports/Tools/ZoomTool.cs:1
 msgid "Zoom"
 msgstr ""
 
-#: ../src/MonoReports/Services/DesignService.cs:600
+#: ../src/MonoReports/Services/DesignService.cs:45
 msgid "Choose the pdf file to save"
 msgstr ""
 
-#: ../src/MonoReports/Services/DesignService.cs:600
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:339
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:196
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:242
+#: ../src/MonoReports/Services/DesignService.cs:45
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:15
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:16
 msgid "Cancel"
 msgstr ""
 
-#: ../src/MonoReports/Services/DesignService.cs:600
+#: ../src/MonoReports/Services/DesignService.cs:45
 msgid "Export"
 msgstr ""
 
-#: ../src/MonoReports/Services/DesignService.cs:601
+#: ../src/MonoReports/Services/DesignService.cs:45
 msgid "pdf file"
 msgstr ""
 
-#: ../src/MonoReports/Services/DesignService.cs:605
+#: ../src/MonoReports/Services/DesignService.cs:45
 msgid "untitled_report.pdf"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MainDesignView.cs:181
+#: ../src/MonoReports/Gui/Widgets/MainDesignView.cs:12
 msgid "Page: "
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MainDesignView.cs:243
+#: ../src/MonoReports/Gui/Widgets/MainDesignView.cs:15
 msgid "press x:{0} y:{1} | xroot:{2} yroot:{3}"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MainDesignView.cs:260
+#: ../src/MonoReports/Gui/Widgets/MainDesignView.cs:16
 msgid "move x:{0} y:{1}"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:85
-msgid "desing"
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:1
+msgid "design"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:125
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:1
 msgid "preview"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:148
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:1
 msgid "Datasource:"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:155
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:1
 msgid "Json"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:166
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:1
 msgid "C# code"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:215
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.MainDesignView.cs:1
 msgid "datasource"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:103
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:108
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:7
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:8
 msgid "Report"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:109
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:8
 msgid "Parameters"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:110
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:8
 msgid "Data"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:111
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:8
 msgid "Expressions"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:114
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:8
 msgid "Groups"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:115
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:340
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:8
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Images"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:120
-msgid "Field"
-msgstr ""
-
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:205
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Add data field"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:208
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Add parameter field"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:258
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Add expression field"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:300
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Delete parameter field"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:302
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Delete data field"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:304
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Delete expression field"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:334
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Add image"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:339
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Choose monoreports file to open"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:339
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:242
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:16
 msgid "Open"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:368
+#: ../src/MonoReports/Gui/Widgets/ReportExplorer.cs:15
 msgid "Delete image"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:31
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:1
 msgid "Edit Property"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:62
-msgid "Deault Value"
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:1
+msgid "Default Value"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:86
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:1
 msgid "Name"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:95
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PropertyFieldEditor.cs:1
 msgid "Type"
 msgstr ""
 
-#: ../src/MonoReports/Tools/TextBlockTool.cs:44
+#: ../src/MonoReports/Tools/TextBlockTool.cs:1
 msgid "Text Block"
 msgstr ""
 
-#: ../src/MonoReports/Tools/TextBlockTool.cs:84
+#: ../src/MonoReports/Tools/TextBlockTool.cs:3
 msgid "text"
 msgstr ""
 
-#: ../src/MonoReports/Renderers/TextBlockRenderer.cs:67
+#: ../src/MonoReports/Renderers/TextBlockRenderer.cs:2
 msgid "bottom: {0}"
 msgstr ""
 
-#: ../src/MonoReports/Tools/SubreportTool.cs:49
+#: ../src/MonoReports/Tools/SubreportTool.cs:3
 msgid "Sub Report"
 msgstr ""
 
-#: ../src/MonoReports/Services/CompilerService.cs:164
+#: ../src/MonoReports/Services/CompilerService.cs:13
 msgid "error while running code "
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.TextEditorDialog.cs:19
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.TextEditorDialog.cs:1
 msgid "Edit text"
 msgstr ""
 
-#: ../src/MonoReports/Tools/ImageTool.cs:43
+#: ../src/MonoReports/Tools/ImageTool.cs:1
 msgid "Image"
 msgstr ""
 
-#: ../src/MonoReports/Extensions/PropertyGridEditors/ColorEditor.cs:86
-#: ../src/Propertygrid/PropertyEditors/ColorEditorCell.cs:90
+#: ../src/MonoReports/Extensions/PropertyGridEditors/ColorEditor.cs:3
+#: ../src/Propertygrid/PropertyEditors/ColorEditorCell.cs:18
 msgid "Color editor does not support editing values of type "
 msgstr ""
 
-#: ../src/MonoReports/Tools/LineToolV.cs:50
+#: ../src/MonoReports/Tools/LineToolV.cs:2
 msgid "Vertical Line"
 msgstr ""
 
-#: ../src/MonoReports/Tools/LineToolH.cs:49
+#: ../src/MonoReports/Tools/LineToolH.cs:1
 msgid "Horizonal Line"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:120
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:6
 msgid "Export to pdf"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:196
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:15
 msgid "Choose Monoreports file to save"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:196
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:15
 msgid "Save"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:197
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:243
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:15
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:16
 msgid "Monoreports project"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:200
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:15
 msgid "untiteled.mrp"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:242
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:16
 msgid "Choose the Monoreports file to open"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:263
+#: ../src/MonoReports/Gui/Widgets/MonoreportsDesignerControl.cs:18
 msgid "Monoreports - report designer tool"
 msgstr ""
 
-#: ../src/MonoReports/Extensions/PropertyGridEditors/DoubleMonoreportsConverter.cs:94
+#: ../src/MonoReports/Extensions/PropertyGridEditors/DoubleMonoreportsConverter.cs:10
 msgid " is not a valid value for "
 msgstr ""
 
-#: ../src/MonoReports/Extensions/PropertyGridEditors/DoubleMonoreportsConverter.cs:105
+#: ../src/MonoReports/Extensions/PropertyGridEditors/DoubleMonoreportsConverter.cs:12
 msgid "value"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.ExpressionFieldEditor.cs:31
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.ExpressionFieldEditor.cs:1
 msgid "Expression Editor"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.ExpressionFieldEditor.cs:49
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.ExpressionFieldEditor.cs:1
 msgid "Name:"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.ExpressionFieldEditor.cs:87
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.ExpressionFieldEditor.cs:1
 msgid "Expression Script:"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/PreferencesEditor.cs:39
+#: ../src/MonoReports/Gui/Widgets/PreferencesEditor.cs:1
 msgid "Reference name"
 msgstr ""
 
-#: ../src/MonoReports/Gui/Widgets/PreferencesEditor.cs:40
+#: ../src/MonoReports/Gui/Widgets/PreferencesEditor.cs:1
 msgid "Using Name"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:79
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Settings"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:98
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Page Margin"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:126
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Left"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:135
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Top"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:146
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Right"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:157
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Bottom"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:210
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Page Settings"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:221
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "References:"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:244
-msgid "Seleccione un archivo"
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
+msgid "Select File"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:272
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Usings:"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:340
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Alternative Refereces path"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:367
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Script Settings"
 msgstr ""
 
-#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:381
+#: ../src/MonoReports/gtk-gui/MonoReports.Gui.Widgets.PreferencesEditor.cs:1
 msgid "Debug"
 msgstr ""
 
-#: ../src/MonoReports.Model/Report.cs:60
+#: ../src/MonoReports.Model/Report.cs:2
 msgid "#RowNumber"
 msgstr ""
 
-#: ../src/MonoReports.Model/Report.cs:66
+#: ../src/MonoReports.Model/Report.cs:2
 msgid "#PageNumber"
 msgstr ""
 
-#: ../src/MonoReports.Model/Report.cs:72
+#: ../src/MonoReports.Model/Report.cs:2
 msgid "#NumberOfPages"
 msgstr ""
 
-#: ../src/MonoReports.Model/Report.cs:204
+#: ../src/MonoReports.Model/Report.cs:32
 msgid "Group header "
 msgstr ""
 
-#: ../src/MonoReports.Model/Report.cs:206
+#: ../src/MonoReports.Model/Report.cs:32
 msgid "Group footer "
 msgstr ""
 
-#: ../src/MonoReports.Model/Report.cs:261
+#: ../src/MonoReports.Model/Report.cs:37
 msgid "Datasource can't be null while discovering data fields"
 msgstr ""
 
-#: ../src/MonoReports.Model/Border.cs:97
+#: ../src/MonoReports.Model/Border.cs:3
 msgid "[Border: Left={0}, Top={1}, Right={2}, Bottom={3}, Color={4}]"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/DetailSection.cs:34
+#: ../src/MonoReports.Model/Controls/DetailSection.cs:0
 msgid "Detail"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/PageHeaderSection.cs:36
+#: ../src/MonoReports.Model/Controls/PageHeaderSection.cs:1
 msgid "Page Header"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/PageFooterSection.cs:34
+#: ../src/MonoReports.Model/Controls/PageFooterSection.cs:1
 msgid "Page Footer"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/GroupHeaderSection.cs:34
+#: ../src/MonoReports.Model/Controls/GroupHeaderSection.cs:1
 msgid "Group Header"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/GroupFooterSection.cs:34
+#: ../src/MonoReports.Model/Controls/GroupFooterSection.cs:1
 msgid "Group Footer"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/ReportFooterSection.cs:34
+#: ../src/MonoReports.Model/Controls/ReportFooterSection.cs:1
 msgid "Report Footer"
 msgstr ""
 
-#: ../src/MonoReports.Model/Controls/ReportHeaderSection.cs:34
+#: ../src/MonoReports.Model/Controls/ReportHeaderSection.cs:1
 msgid "Report Header"
 msgstr ""
 
-#: ../src/MonoReports.Model/Size.cs:57
+#: ../src/MonoReports.Model/Size.cs:2
 msgid "[Size: Width={0}, Height={1}]"
 msgstr ""
 
-#: ../src/MonoReports.Model/Point.cs:46
+#: ../src/MonoReports.Model/Point.cs:0
 msgid "[Point: X={0}, Y={1}]"
 msgstr ""
 
-#: ../src/MonoReports.Model/Thickness.cs:77
+#: ../src/MonoReports.Model/Thickness.cs:2
 msgid "[Thickness: Left={0}, Top={1},Right={2}, Bottom={3}]"
 msgstr ""
 
-#: ../src/MonoReports.Model/Data/Field.cs:67
+#: ../src/MonoReports.Model/Data/Field.cs:1
 msgid "Field {0} exp: {1}"
 msgstr ""
 
-#: ../src/Propertygrid/DefaultPropertyTab.cs:48
+#: ../src/Propertygrid/DefaultPropertyTab.cs:34
 msgid "Properties"
 msgstr ""
 
-#: ../src/Propertygrid/EditorManager.cs:107
+#: ../src/Propertygrid/EditorManager.cs:88
 msgid "The property editor {0} must be a Gtk Widget"
 msgstr ""
 
-#: ../src/Propertygrid/EditorManager.cs:116
+#: ../src/Propertygrid/EditorManager.cs:90
 msgid ""
 "The property editor {0} must be a subclass of Stetic.PropertyEditorCell or "
 "implement Stetic.IPropertyEditor"
 msgstr ""
 
-#: ../src/Propertygrid/EventPropertyTab.cs:47
+#: ../src/Propertygrid/EventPropertyTab.cs:34
 msgid "Events"
 msgstr ""
 
-#: ../src/Propertygrid/EventPropertyTab.cs:78
-#: ../src/Propertygrid/EventPropertyTab.cs:81
+#: ../src/Propertygrid/EventPropertyTab.cs:34
 msgid "Check whether a tab can display a component before displaying it"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditorCell.cs:160
+#: ../src/Propertygrid/PropertyEditorCell.cs:4
 msgid "The property editor {0} must implement the interface IPropertyEditor"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyGrid.cs:109
+#: ../src/Propertygrid/PropertyGrid.cs:79
 msgid "Sort in categories"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyGrid.cs:119
+#: ../src/Propertygrid/PropertyGrid.cs:86
 msgid "Sort alphabetically"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyGrid.cs:129
+#: ../src/Propertygrid/PropertyGrid.cs:93
 msgid "Show help panel"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyGrid.cs:171
+#: ../src/Propertygrid/PropertyGrid.cs:126
 msgid "Custom toolbar provider already set"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyGridTree.cs:71
+#: ../src/Propertygrid/PropertyGridTree.cs:8
 msgid "Property"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyGridTree.cs:83
+#: ../src/Propertygrid/PropertyGridTree.cs:8
 msgid "Value"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/BooleanEditorCell.cs:75
+#: ../src/Propertygrid/PropertyEditors/BooleanEditorCell.cs:3
 msgid "Boolean editor does not support editing values of type "
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/CharPropertyEditor.cs:47
+#: ../src/Propertygrid/PropertyEditors/CharPropertyEditor.cs:5
 msgid "Char editor does not support editing values of type "
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:69
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:59
 msgid "(Collection)"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:91
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:78
 msgid "Editor"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:147
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:134
 msgid "Index"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:149
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:136
 msgid "Object"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:345
+#: ../src/Propertygrid/PropertyEditors/CollectionEditor.cs:287
 msgid "(Empty)"
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/EnumerationEditorCell.cs:80
+#: ../src/Propertygrid/PropertyEditors/EnumerationEditorCell.cs:6
 msgid "Enumeration editor does not support editing values of type "
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/FlagsEditorCell.cs:79
+#: ../src/Propertygrid/PropertyEditors/FlagsEditorCell.cs:5
 msgid "Flags editor does not support editing values of type "
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/FloatRange.cs:57
+#: ../src/Propertygrid/PropertyEditors/FloatRange.cs:4
 msgid "FloatRange editor does not support editing values of type "
 msgstr ""
 
-#: ../src/Propertygrid/PropertyEditors/IntRange.cs:92
+#: ../src/Propertygrid/PropertyEditors/IntRange.cs:11
 msgid "IntRange editor does not support editing values of type "
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:45
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "_Reload"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:48
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "_Move"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:51
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "Close _without Saving"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:52
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "Build _without Saving"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:53
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "D_iscard"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:55
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "_Proceed"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:56
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "_Replace"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:58
+#: ../src/Propertygrid/MessageService.cs:2
 msgid "_Overwrite file"
 msgstr ""
 
-#: ../src/Propertygrid/MessageService.cs:477
-#: ../src/Propertygrid/MessageService.cs:488
+#: ../src/Propertygrid/MessageService.cs:4
 msgid "Invalid option id"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:79
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:80
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:139
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:140
-msgid "S_kopiuj"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Copy"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:82
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:83
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:142
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:143
-msgid "Wk_lej"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Paste"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:85
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:86
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:94
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:95
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:112
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:113
-msgid "_Otwórz"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Open"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:88
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:89
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:121
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:122
-msgid "Za_kończ"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Quit"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:91
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:92
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:100
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:101
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "File"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:97
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:98
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:109
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:110
-msgid "_Nowy"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_New"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:103
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:104
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "Edit"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:106
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:107
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "Project"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:115
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:116
-msgid "_Zapisz"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Save"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:118
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:119
-msgid "Zapi_sz jako"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Save as"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:124
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Quit"
+msgstr ""
+
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "View"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:125
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:157
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:158
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "Help"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:127
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:128
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "Execute"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:130
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:131
-msgid "Cof_nij"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Undo"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:133
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:134
-msgid "P_onów"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Reundo"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:136
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:137
-msgid "_Wytnij"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "C_ut"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:145
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:146
-msgid "_Usuń"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Copy"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:148
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:149
-msgid "Po_większ"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Paste"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:151
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:152
-msgid "Po_mniejsz"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Delete"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:154
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:155
-msgid "_Dopasowanie"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Zoom in"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:160
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:161
-msgid "_O programie"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Zoom out"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:163
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:164
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "Normal"
+msgstr ""
+
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_About"
+msgstr ""
+
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "Preferences"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:166
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:167
-msgid "_Zwykły rozmiar"
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
+msgid "_Normal size"
 msgstr ""
 
-#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:172
+#: ../src/MonoReports.Shell/gtk-gui/MainWindow.cs:2
 msgid "Monoreports 0.1.4"
 msgstr ""
